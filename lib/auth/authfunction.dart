@@ -5,6 +5,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:spinner_try/shivanshu/screens/gender_screen.dart';
 import 'package:spinner_try/shivanshu/screens/home_live.dart';
+import 'package:spinner_try/user_model.dart';
 
 Future<UserCredential> signInWithFacebook(context) async {
   try {
@@ -93,15 +94,45 @@ Future<UserCredential?> signInWithGoogle(context) async {
     final UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
     final user = FirebaseAuth.instance.currentUser;
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => GenderScreen(
-          username: '${user!.displayName}',
-          email: '${user.email}',
+
+
+    try {
+    final variable = await fetchUser('${user!.email}');
+      if (variable.id == null || variable.id!.isEmpty) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GenderScreen(
+              username: '${user.displayName}',
+              email: '${user.email}',
+            ),
+          ),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomeLive(),
+          ),
+        );
+      }
+    } catch (e) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomeLive(),
         ),
-      ),
-    );
+      );
+    }
+
+    // } else {
+    //   Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => const HomeLive(),
+    //     ),
+    //   );
+    // }
 
     return userCredential;
   } catch (e) {

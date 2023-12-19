@@ -265,9 +265,9 @@ class _ProfileEditState extends State<ProfileEdit> {
               alignment: Alignment.center,
               child: GestureDetector(
                 onTap: () async {
-                  while (Navigator.of(context).canPop()) {
-                    Navigator.of(context).pop();
-                  }
+                  // while (Navigator.of(context).canPop()) {
+                  //   Navigator.of(context).pop();
+                  // }
                   await FirebaseAuth.instance.signOut();
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
