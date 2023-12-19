@@ -43,6 +43,7 @@ class _AddButtonPageState extends State<AddButtonPage> {
 
   final PageController _pageViewController = PageController();
   TextEditingController roomIdController = TextEditingController();
+  TextEditingController roomNameController = TextEditingController();
   TextEditingController audioIdController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,15 @@ class _AddButtonPageState extends State<AddButtonPage> {
       extendBody: true,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: LoadingIconButton(
-        onPressed: joinRoom,
+        onPressed: () async {
+          if (roomNameController.text.isEmpty &&
+              roomIdController.text.isEmpty) {
+            showMsg(
+                context, 'Room name can\'t be empty when creating a new room');
+            return;
+          }
+          await joinRoom();
+        },
         style: IconButton.styleFrom(
           backgroundColor: const Color.fromARGB(255, 224, 93, 211),
           iconSize: 40,
@@ -77,10 +86,14 @@ class _AddButtonPageState extends State<AddButtonPage> {
               },
               children: [
                 LiveVideoRoomPage(
-                    controller: roomIdController, onChanged: changeImage),
+                  controller: roomIdController,
+                  nameController: roomNameController,
+                  onChanged: changeImage,
+                ),
                 LiveVideoRoomPage(
                   showVideoButton: false,
                   controller: audioIdController,
+                  nameController: roomNameController,
                   onChanged: changeImage,
                 ),
               ],
@@ -163,8 +176,11 @@ class _AddButtonPageState extends State<AddButtonPage> {
             'You do not posses an email. An email is required to join/create a room');
         return;
       }
-      room =
-          Room(roomType: selectedIndex == 0 ? RoomType.video : RoomType.audio);
+      assert(
+          roomNameController.text.isNotEmpty, "Room name shouldn't be empty");
+      room = Room(
+          roomType: selectedIndex == 0 ? RoomType.video : RoomType.audio,
+          name: roomNameController.text);
     }
     try {
       if (enteredRoomID.isEmpty) {

@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/models/firestore/firestore_document.dart';
@@ -14,9 +13,11 @@ class Room extends FirestoreDocument {
   String? admin; // userId of admin
   bool askBeforeJoining = false; // default is a public room
   late RoomType roomType;
+  String name = "";
 
   Room({
     this.admin,
+    this.name = "",
     required this.roomType,
     this.askBeforeJoining = false,
   }) : super(path: Room.firestorePath);
@@ -25,6 +26,7 @@ class Room extends FirestoreDocument {
   void loadFromJson(Map<String, dynamic> data) {
     super.loadFromJson(data);
     id = data['id'] ?? id;
+    name = data['name'] ?? name;
     admin = data['admin'] ?? admin;
     roomType = RoomType.values[data['roomType'] ?? roomType.index];
     askBeforeJoining = data['askBeforeJoining'] ?? askBeforeJoining;
@@ -35,6 +37,7 @@ class Room extends FirestoreDocument {
     return super.toJson()
       ..addAll({
         "admin": admin,
+        "name": name,
         "askBeforeJoining": askBeforeJoining,
         "roomType": roomType.index,
       });

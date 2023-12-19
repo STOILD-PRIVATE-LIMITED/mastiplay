@@ -8,12 +8,14 @@ import 'package:spinner_try/shivanshu/utils.dart';
 class LiveVideoRoomPage extends StatefulWidget {
   final bool showVideoButton;
   final TextEditingController controller;
+  final TextEditingController nameController;
   final void Function(File? newImgUrl) onChanged;
   const LiveVideoRoomPage({
     super.key,
     this.showVideoButton = true,
     required this.controller,
     required this.onChanged,
+    required this.nameController,
   });
 
   @override
@@ -25,6 +27,22 @@ class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
   TextEditingController roomIDController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    Widget imageWidget = image == null
+        ? (currentUser.photo.isEmpty
+            ? Image.asset(
+                'assets/dummy_person.png',
+                width: 100,
+                fit: BoxFit.cover,
+              )
+            : Image.network(
+                currentUser.photo,
+                fit: BoxFit.cover,
+              ))
+        : Image.file(
+            File(image!.path),
+            width: 100,
+            fit: BoxFit.cover,
+          );
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
@@ -52,33 +70,49 @@ class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              height: 100.sp,
-              width: 100.sp,
-              decoration: const BoxDecoration(
-                shape: BoxShape.rectangle,
-                border: Border.fromBorderSide(
-                  BorderSide(width: 1),
-                ),
-              ),
-              clipBehavior: Clip.hardEdge,
-              margin: const EdgeInsets.all(8.0),
-              child: image == null
-                  ? (currentUser.photo.isEmpty
-                      ? Image.asset(
-                          'assets/dummy_person.png',
-                          width: 100,
-                          fit: BoxFit.fitWidth,
-                        )
-                      : Image.network(
-                          currentUser.photo,
-                          fit: BoxFit.cover,
-                        ))
-                  : Image.file(
-                      File(image!.path),
-                      width: 100,
-                      fit: BoxFit.fitWidth,
+            GestureDetector(
+              onTap: () async {
+                final String? source = await askUser(
+                    context, 'Where to take your photo from?',
+                    custom: {
+                      'gallery': const Icon(Icons.photo_rounded),
+                      'camera': const Icon(Icons.photo_camera_rounded),
+                    });
+                if (source == null) return;
+                ImagePicker()
+                    .pickImage(
+                  source: source == 'camera'
+                      ? ImageSource.camera
+                      : ImageSource.gallery,
+                  preferredCameraDevice: CameraDevice.front,
+                )
+                    .then((value) {
+                  if (value == null) return;
+                  setState(() => image = value);
+                  widget.onChanged(image == null ? null : File(image!.path));
+                });
+              },
+              child: Container(
+                  height: 100.sp,
+                  width: 100.sp,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    border: Border.fromBorderSide(
+                      BorderSide(width: 1),
                     ),
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  margin: const EdgeInsets.all(8.0),
+                  child: Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      Positioned.fill(child: imageWidget),
+                      const Icon(
+                        Icons.edit_rounded,
+                        color: Colors.white,
+                      )
+                    ],
+                  )),
             ),
             Column(
               mainAxisSize: MainAxisSize.min,
@@ -88,9 +122,9 @@ class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
                 SizedBox(
                   width: 160,
                   child: TextField(
-                    controller: widget.controller,
+                    controller: widget.nameController,
                     decoration: InputDecoration(
-                      hintText: 'Enter Room ID',
+                      hintText: 'Enter Room Name',
                       hintStyle: const TextStyle(color: Colors.black),
                       isDense: true,
                       filled: true,
@@ -112,19 +146,11 @@ class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
                 ),
                 const SizedBox(height: 12),
                 SizedBox(
-                  width: 130,
+                  width: 160,
                   child: TextField(
-                    readOnly: true,
-                    onTap: () async {
-                      final picker = ImagePicker();
-                      image =
-                          await picker.pickImage(source: ImageSource.gallery);
-                      widget
-                          .onChanged(image == null ? null : File(image!.path));
-                      setState(() {});
-                    },
+                    controller: widget.controller,
                     decoration: InputDecoration(
-                      hintText: 'Change Cover',
+                      hintText: 'Enter Room Id',
                       hintStyle: const TextStyle(color: Colors.black),
                       isDense: true,
                       filled: true,
@@ -134,7 +160,7 @@ class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
                         vertical: 5,
                       ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(3),
                         borderSide: BorderSide.none,
                       ),
                     ),
@@ -144,6 +170,40 @@ class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
                     ),
                   ),
                 ),
+                // const SizedBox(height: 12),
+                // SizedBox(
+                //   width: 130,
+                //   child: TextField(
+                //     readOnly: true,
+                //     onTap: () async {
+                //       final picker = ImagePicker();
+                //       image =
+                //           await picker.pickImage(source: ImageSource.gallery);
+                //       widget
+                //           .onChanged(image == null ? null : File(image!.path));
+                //       setState(() {});
+                //     },
+                //     decoration: InputDecoration(
+                //       hintText: 'Change Cover',
+                //       hintStyle: const TextStyle(color: Colors.black),
+                //       isDense: true,
+                //       filled: true,
+                //       fillColor: Colors.black12,
+                //       contentPadding: const EdgeInsets.symmetric(
+                //         horizontal: 10,
+                //         vertical: 5,
+                //       ),
+                //       border: OutlineInputBorder(
+                //         borderRadius: BorderRadius.circular(20),
+                //         borderSide: BorderSide.none,
+                //       ),
+                //     ),
+                //     style: const TextStyle(
+                //       decorationColor: Colors.black12,
+                //       color: Colors.black,
+                //     ),
+                //   ),
+                // ),
               ],
             )
           ],
