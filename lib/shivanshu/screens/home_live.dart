@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:spinner_try/screen/moments.dart';
-import 'package:spinner_try/shivanshu/profile_screens/profile_screen.dart';
 import 'package:spinner_try/shivanshu/screens/home_page.dart';
 import 'package:spinner_try/shivanshu/screens/messages_screen.dart';
 import 'package:spinner_try/shivanshu/widgets/bottom_nav_bar.dart';

@@ -15,7 +15,6 @@ import 'package:spinner_try/shivanshu/screens/wallet_screen.dart';
 import 'package:spinner_try/shivanshu/user_level/user_level_page.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 
-import '../noble_center/noble_center_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

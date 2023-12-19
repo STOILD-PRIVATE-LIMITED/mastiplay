@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:spinner_try/screen/room.dart';
 import 'package:spinner_try/screen/trending_list.dart';
 import 'package:spinner_try/shivanshu/screens/audio_live_screen.dart';
-import 'package:spinner_try/shivanshu/screens/following_page.dart';
 import 'package:spinner_try/shivanshu/screens/home_live_screen.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/widgets/tab_view.dart';
