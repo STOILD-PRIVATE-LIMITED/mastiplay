@@ -527,7 +527,6 @@ class VideoRoom extends StatelessWidget {
                             ),
                             child: TextFormField(
                               decoration: InputDecoration(
-                                // fillColor: Colors.black12,
                                 filled: true,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
