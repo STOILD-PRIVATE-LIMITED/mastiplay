@@ -10,15 +10,14 @@ class UserModel {
   final DateTime? dob;
   final String country;
 
-  const UserModel({
-    this.dob,
-    this.id,
-    required this.name,
-    required this.photo,
-    this.gender = 1,
-    required this.email,
-    required this.country
-  });
+  const UserModel(
+      {this.dob,
+      this.id,
+      required this.name,
+      required this.photo,
+      this.gender = 1,
+      required this.email,
+      required this.country});
 
   factory UserModel.fromSnapahot(
       DocumentSnapshot<Map<String, dynamic>> document) {
