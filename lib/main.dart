@@ -43,29 +43,29 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: navigatorKey,
-      debugShowCheckedModeBanner: false,
-      title: 'Spinner Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 224, 93, 211),
+        navigatorKey: navigatorKey,
+        debugShowCheckedModeBanner: false,
+        title: 'Spinner Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 224, 93, 211),
+          ),
+          useMaterial3: true,
+          fontFamily: 'assets/fontsSofiaProRegular.ttf',
         ),
-        useMaterial3: true,
-        fontFamily: 'assets/fontsSofiaProRegular.ttf',
-      ),
 
-      home: const MyAuth(),
-      // home: const ProfileEdit(),
-      // home: HomeScreennn(),
-      // home: const HomeLive()
-      // home: VideoCallApp(),
-      // home: const NobelCenter(),
-      // home: const AnotherNodelCenter(),
-      // home: JackpotScreen(
-      //   items: animals.map((e) => Text(e)).toList(),
-      //   itemHeight: 30,
-      // ),
-    );
+        // home: const MyAuth(),
+        // home: const ProfileEdit(),
+        // home: HomeScreennn(),
+        home: const HomeLive()
+        // home: VideoCallApp(),
+        // home: const NobelCenter(),
+        // home: const AnotherNodelCenter(),
+        // home: JackpotScreen(
+        //   items: animals.map((e) => Text(e)).toList(),
+        //   itemHeight: 30,
+        // ),
+        );
   }
 }
 
