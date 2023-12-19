@@ -94,10 +94,9 @@ Future<UserCredential?> signInWithGoogle(context) async {
     final UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
     final user = FirebaseAuth.instance.currentUser;
-
-
     try {
-    final variable = await fetchUser('${user!.email}');
+      await fetchUser('${user!.email}');
+    final variable = await fetchUser('${user.email}');
       if (variable.id == null || variable.id!.isEmpty) {
         Navigator.pushReplacement(
           context,
@@ -110,6 +109,7 @@ Future<UserCredential?> signInWithGoogle(context) async {
         );
       } else {
         Navigator.pushReplacement(
+
           context,
           MaterialPageRoute(
             builder: (context) => const HomeLive(),
@@ -124,16 +124,6 @@ Future<UserCredential?> signInWithGoogle(context) async {
         ),
       );
     }
-
-    // } else {
-    //   Navigator.pushReplacement(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => const HomeLive(),
-    //     ),
-    //   );
-    // }
-
     return userCredential;
   } catch (e) {
     if (kDebugMode) {
