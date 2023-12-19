@@ -13,7 +13,14 @@ import 'package:spinner_try/shivanshu/utils/image.dart';
 class BirthdayScreen extends StatefulWidget {
   final String name;
   final String gender;
-  const BirthdayScreen({super.key, required this.name, required this.gender});
+  final String email;
+
+  const BirthdayScreen({
+    super.key,
+    required this.name,
+    required this.gender,
+    required this.email,
+  });
 
   @override
   State<BirthdayScreen> createState() => _BirthdayScreenState();
@@ -63,6 +70,9 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     _selectedDate;
     country;
     imgUrl;
+    
+    widget.email;
+    
   }
 
   @override
@@ -75,7 +85,10 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
             Navigator.pop(context);
           },
         ),
-        title: const Text('Complete Information'),
+        title: Text(
+          'Complete Information',
+          style: TextStyle(fontSize: 15.sp),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -91,7 +104,6 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                 clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  // color: Colors.black12.withOpacity(0.05),
                 ),
                 child: InkWell(
                   onTap: () async {
@@ -108,8 +120,6 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                           ? ImageSource.camera
                           : ImageSource.gallery,
                       preferredCameraDevice: CameraDevice.front,
-                      // imageQuality: 50,
-                      // maxWidth: 200,
                     )
                         .then((value) {
                       if (value == null) return;

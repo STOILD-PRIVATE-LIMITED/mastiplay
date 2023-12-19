@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:spinner_try/shivanshu/models/firestore/firestore_document.dart';
+import 'shivanshu/models/firestore/firestore_document.dart';
 
 class UserModel {
   final String? id;
@@ -8,6 +8,7 @@ class UserModel {
   final String photo;
   final int gender;
   final DateTime? dob;
+  final String country;
 
   const UserModel({
     this.dob,
@@ -16,6 +17,7 @@ class UserModel {
     required this.photo,
     this.gender = 1,
     required this.email,
+    required this.country
   });
 
   factory UserModel.fromSnapahot(
@@ -26,12 +28,14 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> data) {
     return UserModel(
-        id: data['id'] ?? (-1).toString(),
-        photo: data["photo"] ?? "",
-        name: data["name"],
-        email: data["email"],
-        dob: data['dob'],
-        gender: data['gender']);
+      id: data['id'] ?? (-1).toString(),
+      photo: data["photo"] ?? "",
+      name: data["name"],
+      email: data["email"],
+      dob: data['dob'],
+      gender: data['gender'],
+      country: data['country'],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -42,6 +46,7 @@ class UserModel {
       "photo": photo,
       'dob': dob,
       'gender': gender,
+      'country': country,
     };
   }
 }

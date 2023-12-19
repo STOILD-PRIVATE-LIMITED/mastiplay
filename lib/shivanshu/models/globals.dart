@@ -8,4 +8,4 @@ import 'package:spinner_try/user_model.dart';
 final auth = FirebaseAuth.instance;
 final firestore = FirebaseFirestore.instance;
 final storage = FirebaseStorage.instance;
-UserModel currentUser = const UserModel(name: "", photo: "", email: "");
+UserModel currentUser = const UserModel(name: "", photo: "", email: "",country: "");

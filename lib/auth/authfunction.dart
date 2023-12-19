@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:spinner_try/auth.dart';
+import 'package:spinner_try/shivanshu/screens/gender_screen.dart';
 import '../screen/home.dart';
 import '../shivanshu/screens/home_live.dart';
 
@@ -32,7 +33,7 @@ Future<UserCredential> signInWithFacebook(context) async {
     if (kDebugMode) {
       print('Firebase Auth Exception: ${e.message}');
     }
-    rethrow; 
+    rethrow;
   } catch (e) {
     if (kDebugMode) {
       print('Other Exception: $e');
@@ -93,11 +94,14 @@ Future<UserCredential?> signInWithGoogle(context) async {
 
     final UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
-
+    final user = FirebaseAuth.instance.currentUser;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const MyAuth(),
+        builder: (context) => GenderScreen(
+          username: '${user!.displayName}',
+          email: '${user.email}',
+        ),
       ),
     );
 
