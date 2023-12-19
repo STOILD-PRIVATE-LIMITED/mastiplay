@@ -33,7 +33,7 @@ class UserModel {
       email: data["email"],
       dob: data['dob'],
       gender: data['gender'] ?? 1,
-      country: data['country'],
+      country: data['country'] ?? "",
     );
   }
 

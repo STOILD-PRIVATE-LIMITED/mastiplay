@@ -111,6 +111,9 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
         transaction.set(db.collection('users').doc(widget.email), data);
       },
     ).whenComplete(() {
+      while (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
