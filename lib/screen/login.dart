@@ -62,75 +62,136 @@ class _LoginState extends State<Login> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        // signInWithFacebook(context);
-                        signInWithGoogle(context);
-                      },
-                      child: Container(
-                        height: height / 12,
-                        width: width / 2.2,
-                        padding: EdgeInsets.symmetric(horizontal: width / 30),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              "assets/facebook.png",
-                              height: height / 20,
+                    !isChecked
+                        ? Container(
+                            height: height / 12,
+                            width: width / 2.2,
+                            padding:
+                                EdgeInsets.symmetric(horizontal: width / 30),
+                            decoration: BoxDecoration(
+                              color: Colors.white38,
+                              borderRadius: BorderRadius.circular(40),
                             ),
-                            const SizedBox(
-                              width: 10,
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  "assets/facebook.png",
+                                  height: height / 20,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "FACEBOOK",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: height / 55,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
-                            Text(
-                              "FACEBOOK",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: height / 55,
-                                  fontWeight: FontWeight.bold),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              // signInWithFacebook(context);
+                              signInWithGoogle(context);
+                            },
+                            child: Container(
+                              height: height / 12,
+                              width: width / 2.2,
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: width / 30),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(40),
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    "assets/facebook.png",
+                                    height: height / 20,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "FACEBOOK",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: height / 55,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) {
-                            return const LoginOrRegister();
-                          },
-                        ));
-                      },
-                      child: Container(
-                        height: height / 12,
-                        width: width / 2.2,
-                        padding: EdgeInsets.symmetric(horizontal: width / 30),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              "assets/user.png",
-                              height: height / 20,
+                          ),
+                    !isChecked
+                        ? Container(
+                            height: height / 12,
+                            width: width / 2.2,
+                            padding:
+                                EdgeInsets.symmetric(horizontal: width / 30),
+                            decoration: BoxDecoration(
+                              color: Colors.white38,
+                              borderRadius: BorderRadius.circular(40),
                             ),
-                            const SizedBox(
-                              width: 10,
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  "assets/user.png",
+                                  height: height / 20,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "PASSWORD",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: height / 55,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
-                            Text(
-                              "PASSWORD",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: height / 55,
-                                  fontWeight: FontWeight.bold),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushReplacement(MaterialPageRoute(
+                                builder: (context) {
+                                  return const LoginOrRegister();
+                                },
+                              ));
+                            },
+                            child: Container(
+                              height: height / 12,
+                              width: width / 2.2,
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: width / 30),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(40),
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    "assets/user.png",
+                                    height: height / 20,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "PASSWORD",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: height / 55,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
+                          ),
                   ],
                 ),
                 SizedBox(
@@ -139,74 +200,135 @@ class _LoginState extends State<Login> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) {
-                            return const MobileNumber();
-                          },
-                        ));
-                      },
-                      child: Container(
-                        height: height / 12,
-                        width: width / 2.2,
-                        padding: EdgeInsets.symmetric(horizontal: width / 30),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              "assets/phone.png",
-                              height: height / 20,
+                    !isChecked
+                        ? Container(
+                            height: height / 12,
+                            width: width / 2.2,
+                            padding:
+                                EdgeInsets.symmetric(horizontal: width / 30),
+                            decoration: BoxDecoration(
+                              color: Colors.white38,
+                              borderRadius: BorderRadius.circular(40),
                             ),
-                            const SizedBox(
-                              width: 10,
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  "assets/phone.png",
+                                  height: height / 20,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "PHONE",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: height / 55,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
-                            Text(
-                              "PHONE",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: height / 55,
-                                  fontWeight: FontWeight.bold),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushReplacement(MaterialPageRoute(
+                                builder: (context) {
+                                  return const MobileNumber();
+                                },
+                              ));
+                            },
+                            child: Container(
+                              height: height / 12,
+                              width: width / 2.2,
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: width / 30),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(40),
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    "assets/phone.png",
+                                    height: height / 20,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "PHONE",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: height / 55,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        signInWithGoogle(context);
-                      },
-                      child: Container(
-                        height: height / 12,
-                        width: width / 2.2,
-                        padding: EdgeInsets.symmetric(horizontal: width / 30),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              "assets/google.png",
-                              height: height / 20,
+                          ),
+                    !isChecked
+                        ? Container(
+                            height: height / 12,
+                            width: width / 2.2,
+                            padding:
+                                EdgeInsets.symmetric(horizontal: width / 30),
+                            decoration: BoxDecoration(
+                              color: Colors.white38,
+                              borderRadius: BorderRadius.circular(40),
                             ),
-                            const SizedBox(
-                              width: 10,
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  "assets/google.png",
+                                  height: height / 20,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "GOOGLE",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: height / 55,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
-                            Text(
-                              "GOOGLE",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: height / 55,
-                                  fontWeight: FontWeight.bold),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              signInWithGoogle(context);
+                            },
+                            child: Container(
+                              height: height / 12,
+                              width: width / 2.2,
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: width / 30),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(40),
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    "assets/google.png",
+                                    height: height / 20,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "GOOGLE",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: height / 55,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
+                          ),
                   ],
                 ),
               ],

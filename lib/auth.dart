@@ -59,8 +59,10 @@ class _MyAuthState extends State<MyAuth> {
                           ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) => const Login()));
+                                MaterialPageRoute(
+                                  builder: (context) => const Login(),
+                                ),
+                              );
                             },
                             child: const Text('Login Again'),
                           ),
@@ -76,8 +78,10 @@ class _MyAuthState extends State<MyAuth> {
                           ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) => const Login()));
+                                MaterialPageRoute(
+                                  builder: (context) => const Login(),
+                                ),
+                              );
                             },
                             child: const Text('Login Again'),
                           ),
