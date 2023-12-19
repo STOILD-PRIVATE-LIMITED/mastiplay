@@ -34,7 +34,7 @@ class UserModel {
       dob: data['dob'],
       gender: data['gender'],
       country: data['country'],
-    );
+     ?? 1);
   }
 
   Map<String, dynamic> toJson() {
