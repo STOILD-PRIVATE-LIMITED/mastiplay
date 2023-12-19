@@ -54,10 +54,10 @@ class MyApp extends StatelessWidget {
           fontFamily: 'assets/fontsSofiaProRegular.ttf',
         ),
 
-        // home: const MyAuth(),
+        home: const MyAuth(),
         // home: const ProfileEdit(),
         // home: HomeScreennn(),
-        home: const HomeLive()
+        // home: const HomeLive()
         // home: VideoCallApp(),
         // home: const NobelCenter(),
         // home: const AnotherNodelCenter(),
