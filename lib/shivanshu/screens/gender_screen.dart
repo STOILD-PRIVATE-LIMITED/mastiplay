@@ -4,7 +4,9 @@ import 'package:spinner_try/shivanshu/screens/family_room_page.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 
 class GenderScreen extends StatefulWidget {
-  const GenderScreen({super.key});
+  final String username;
+  final String email;
+  const GenderScreen({super.key, required this.username, required this.email});
 
   @override
   State<GenderScreen> createState() => _GenderScreenState();
@@ -29,10 +31,19 @@ class _GenderScreenState extends State<GenderScreen> {
         BirthdayScreen(
           name: name,
           gender: selectedIndex == 0 ? 'Male' : 'Female',
+          email: widget.email,
         ));
   }
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    name = widget.username;
+    print(widget.email);
+    print(widget.username);
+  }
 
   @override
   Widget build(BuildContext context) {
