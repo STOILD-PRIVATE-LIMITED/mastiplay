@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:animated_icon/animated_icon.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 // import 'package:flutter/foundation.dart' as foundation;
@@ -461,28 +459,29 @@ class _AudioPageState extends State<AudioPage> {
               padding: const EdgeInsets.only(
                 top: 20.0,
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AudioRoom(
-                    room: widget.room,
-                    url: widget.url,
-                  ),
-                  Expanded(
-                    child: LiveChatBuilder(
-                      builder: (ctx, messages) {
-                        log(messages.toString());
-                        return ListView.builder(
-                          itemBuilder: (context, index) {
-                            return Text(messages[index]['message'].toString());
-                          },
-                          itemCount: messages.length,
-                        );
-                      },
-                    ),
-                  ),
-                ],
+              child: AudioRoom(
+                room: widget.room,
+                url: widget.url,
               ),
+              // Column(
+              //   mainAxisSize: MainAxisSize.min,
+              //   children: [
+
+              //     // Expanded(
+              //     //   child: LiveChatBuilder(
+              //     //     builder: (ctx, messages) {
+              //     //       log(messages.toString());
+              //     //       return ListView.builder(
+              //     //         itemBuilder: (context, index) {
+              //     //           return Text(messages[index]['message'].toString());
+              //     //         },
+              //     //         itemCount: messages.length,
+              //     //       );
+              //     //     },
+              //     //   ),
+              //     // ),
+              //   ],
+              // ),
             ),
             bottomNavigationBar: Row(
               // setState(() {

@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:email_otp/email_otp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spinner_try/components/button.dart';
 import 'package:spinner_try/components/textfield.dart';
@@ -11,12 +14,10 @@ import 'package:spinner_try/shivanshu/models/firestore/firestore_document.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils/image.dart';
 import 'package:spinner_try/shivanshu/utils/profile_image.dart';
-import 'package:email_otp/email_otp.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 
 import 'auth.dart';
 import 'shivanshu/screens/home_live.dart';
+
 // class Register extends StatefulWidget {
 //   final Function()? onTap;
 //   static String verify = "";
@@ -330,7 +331,7 @@ class _RegisterState extends State<Register> {
           data: obj,
         ),
         digitCount: 8,
-        uniqueCondition: (doc, id) async {
+        uniqueCondition: (transaction, id) async {
           final doc = await FirebaseFirestore.instance
               .collection('users')
               .where('id', isEqualTo: id)
@@ -341,14 +342,14 @@ class _RegisterState extends State<Register> {
           transaction.set(
             db.collection('users').doc(obj['email']),
             data
-              ..addAll({
+              ..addAll(<String, dynamic>{
                 'id': id,
                 'updatedAt': DateTime.now().toIso8601String(),
               }),
           );
         },
       ).whenComplete(() {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) {

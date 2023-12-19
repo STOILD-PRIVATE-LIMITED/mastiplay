@@ -14,7 +14,7 @@ class UserModel {
     this.id,
     required this.name,
     required this.photo,
-    required this.gender,
+    this.gender = 1,
     required this.email,
   });
 
@@ -26,13 +26,12 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> data) {
     return UserModel(
-      id: data['id'] ?? (-1).toString(),
-      photo: data["photo"] ?? "",
-      name: data["name"],
-      email: data["email"],
-      dob: data['dob'],
-      gender: data['gender']
-    );
+        id: data['id'] ?? (-1).toString(),
+        photo: data["photo"] ?? "",
+        name: data["name"],
+        email: data["email"],
+        dob: data['dob'],
+        gender: data['gender']);
   }
 
   Map<String, dynamic> toJson() {
@@ -42,7 +41,7 @@ class UserModel {
       "email": email,
       "photo": photo,
       'dob': dob,
-      'gender':gender,
+      'gender': gender,
     };
   }
 }

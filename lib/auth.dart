@@ -17,12 +17,11 @@ class _MyAuthState extends State<MyAuth> {
   final _db = FirebaseFirestore.instance;
 
   Future<UserModel> getUser(email) async {
-    final snapshot =
-        await _db.collection("users").where("email", isEqualTo: email).get();
-    if (snapshot.docs.isEmpty) {
+    final snapshot = await _db.collection("users").doc(email).get();
+    if (snapshot.exists) {
       throw Exception("User not found");
     }
-    final ItemData = snapshot.docs.map((e) => UserModel.fromSnapahot(e)).single;
+    final ItemData = UserModel.fromSnapahot(snapshot);
     return ItemData;
   }
 

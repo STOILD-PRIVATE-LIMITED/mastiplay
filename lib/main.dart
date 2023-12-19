@@ -8,7 +8,6 @@ import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/widgets/highlight_wheel.dart';
 
 import 'firebase_options.dart';
-import 'screen/profile_edit.dart';
 // import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class DevHttpOverrides extends HttpOverrides {

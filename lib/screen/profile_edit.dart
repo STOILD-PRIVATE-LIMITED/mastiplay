@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:spinner_try/user_model.dart';
 
 import '../auth.dart';
-import '../model/user_model.dart';
 
 class ProfileEdit extends StatefulWidget {
   const ProfileEdit({super.key});
@@ -23,17 +23,16 @@ class _ProfileEditState extends State<ProfileEdit> {
   String name = '';
   String photoUrl = '';
 
-  List<UserModell> users = [];
+  List<UserModel> users = [];
   getProfile() async {
     final user = FirebaseAuth.instance.currentUser;
     final email = user!.email;
     final snapshot =
         await db.collection("users").where("email", isEqualTo: email).get();
-    users = snapshot.docs
-        .map<UserModell>((e) => UserModell.fromSnapahot(e))
-        .toList();
+    users =
+        snapshot.docs.map<UserModel>((e) => UserModel.fromSnapahot(e)).toList();
     name = users[0].name;
-    photoUrl = users[0].userProfileImage;
+    photoUrl = users[0].photo;
     setState(() {});
   }
 
