@@ -1,2 +1,2 @@
-git clone https://github.com/ShivanshuKGupta/mastiplay.git
+git clone https://github.com/STOILD-PRIVATE-LIMITED/mastiplay.git
 git checkout dev
