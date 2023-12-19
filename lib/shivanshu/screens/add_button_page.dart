@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,8 +34,6 @@ class _AddButtonPageState extends State<AddButtonPage> {
     super.initState();
     if (widget.selectedIndex == 0) {
       roomIdController.text = widget.roomID ?? "";
-    } else {
-      audioIdController.text = widget.roomID ?? "";
     }
     WidgetsBinding.instance.addPostFrameCallback((_) =>
         _pageViewController.animateToPage(widget.selectedIndex,
@@ -44,7 +43,6 @@ class _AddButtonPageState extends State<AddButtonPage> {
   final PageController _pageViewController = PageController();
   TextEditingController roomIdController = TextEditingController();
   TextEditingController roomNameController = TextEditingController();
-  TextEditingController audioIdController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,10 +50,16 @@ class _AddButtonPageState extends State<AddButtonPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: LoadingIconButton(
         onPressed: () async {
+          log("roomIdController.text = ${roomIdController.text}");
           if (roomNameController.text.isEmpty &&
               roomIdController.text.isEmpty) {
             showMsg(
                 context, 'Room name can\'t be empty when creating a new room');
+            return;
+          } else if (roomNameController.text.isNotEmpty &&
+              roomIdController.text.isNotEmpty) {
+            showMsg(context,
+                'Room name and id can\'t be specified at the same time');
             return;
           }
           await joinRoom();
@@ -92,7 +96,7 @@ class _AddButtonPageState extends State<AddButtonPage> {
                 ),
                 LiveVideoRoomPage(
                   showVideoButton: false,
-                  controller: audioIdController,
+                  controller: roomIdController,
                   nameController: roomNameController,
                   onChanged: changeImage,
                 ),
@@ -163,10 +167,8 @@ class _AddButtonPageState extends State<AddButtonPage> {
   Future<void> joinRoom([Room? room]) async {
     String enteredRoomID = room?.id ?? "";
     if (room == null) {
-      enteredRoomID =
-          selectedIndex == 0 ? roomIdController.text : audioIdController.text;
-      audioIdController.text = audioIdController.text.trim();
       roomIdController.text = roomIdController.text.trim();
+      enteredRoomID = roomIdController.text;
       if (FirebaseAuth.instance.currentUser == null) {
         showMsg(context, 'You are\'nt logged in yet.');
         return;
@@ -176,8 +178,6 @@ class _AddButtonPageState extends State<AddButtonPage> {
             'You do not posses an email. An email is required to join/create a room');
         return;
       }
-      assert(
-          roomNameController.text.isNotEmpty, "Room name shouldn't be empty");
       room = Room(
           roomType: selectedIndex == 0 ? RoomType.video : RoomType.audio,
           name: roomNameController.text);
@@ -185,13 +185,16 @@ class _AddButtonPageState extends State<AddButtonPage> {
     try {
       if (enteredRoomID.isEmpty) {
         try {
+          assert(roomNameController.text.isNotEmpty,
+              "Room name shouldn't be empty");
           await room.create();
         } catch (e) {
           if (e.toString().contains("You already have a room!") &&
               context.mounted) {
             showMsg(context, 'You already have a room!');
             askUser(context, 'Do you want to join your previous room?',
-                description: 'You cannot create 2 rooms at the same time.',
+                description:
+                    'Room name: \t${room.name}\nRoom id: \t${room.id}\nCreation Day: \t${ddmmyyyy(room.updatedAt)}\n',
                 yes: true,
                 cancel: true,
                 custom: {

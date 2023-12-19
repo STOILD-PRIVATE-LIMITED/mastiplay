@@ -23,6 +23,10 @@ class LiveVideoRoomPage extends StatefulWidget {
 }
 
 class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
+  void onChanged() {
+    setState(() {});
+  }
+
   XFile? image;
   TextEditingController roomIDController = TextEditingController();
   @override
@@ -122,6 +126,7 @@ class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
                 SizedBox(
                   width: 160,
                   child: TextField(
+                    // enabled: widget.nameController.text.isEmpty,
                     controller: widget.nameController,
                     decoration: InputDecoration(
                       hintText: 'Enter Room Name',
@@ -148,6 +153,7 @@ class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
                 SizedBox(
                   width: 160,
                   child: TextField(
+                    // enabled: widget.controller.text.isEmpty,
                     controller: widget.controller,
                     decoration: InputDecoration(
                       hintText: 'Enter Room Id',

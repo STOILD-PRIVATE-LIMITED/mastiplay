@@ -28,9 +28,7 @@ class FirestoreDocument {
   }
 
   Map<String, dynamic> toJson() {
-    log("Hehe");
     data['updatedAt'] = updatedAt.toIso8601String();
-    log("Huraay");
     return data;
   }
 
@@ -114,7 +112,7 @@ Future<String> randomSet(
   if (!doc.path!.endsWith('/')) {
     doc.path = '${doc.path!}/';
   }
-  doc.data['updatedAt'] = DateTime.now().toIso8601String();
+  doc.updatedAt = DateTime.now();
   CollectionReference collection =
       FirebaseFirestore.instance.collection(doc.path!);
   await FirebaseFirestore.instance

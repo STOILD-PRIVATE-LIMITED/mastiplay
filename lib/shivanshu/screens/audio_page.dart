@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animated_icon/animated_icon.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 // import 'package:flutter/foundation.dart' as foundation;
@@ -26,13 +28,6 @@ class _AudioPageState extends State<AudioPage> {
   void dispose() {
     _controller.dispose();
     super.dispose();
-  }
-
-  _onBackspacePressed() {
-    _controller
-      ..text = _controller.text.characters.toString()
-      ..selection = TextSelection.fromPosition(
-          TextPosition(offset: _controller.text.length));
   }
 
   @override
@@ -72,12 +67,14 @@ class _AudioPageState extends State<AudioPage> {
                               as ImageProvider,
                       backgroundColor: Colors.transparent,
                     ),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.room.admin ?? "Error",
+                            widget.room.name,
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
@@ -459,29 +456,63 @@ class _AudioPageState extends State<AudioPage> {
               padding: const EdgeInsets.only(
                 top: 20.0,
               ),
-              child: AudioRoom(
-                room: widget.room,
-                url: widget.url,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AudioRoom(
+                    room: widget.room,
+                    url: widget.url,
+                  ),
+                  Expanded(
+                    child: LiveChatBuilder(
+                      builder: (ctx, messages) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListView.builder(
+                            reverse: true,
+                            itemBuilder: (context, index) {
+                              String photo =
+                                  messages[index]['userData']['photo'] ?? "";
+                              return Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundImage: photo.isEmpty
+                                        ? null
+                                        : NetworkImage(photo),
+                                    radius: 10,
+                                    child: photo.isNotEmpty
+                                        ? null
+                                        : const Icon(
+                                            Icons.person_rounded,
+                                            size: 15,
+                                          ),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    "${messages[index]['userData']['name']}: ",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${messages[index]['message']}",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                            itemCount: messages.length,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-              // Column(
-              //   mainAxisSize: MainAxisSize.min,
-              //   children: [
-
-              //     // Expanded(
-              //     //   child: LiveChatBuilder(
-              //     //     builder: (ctx, messages) {
-              //     //       log(messages.toString());
-              //     //       return ListView.builder(
-              //     //         itemBuilder: (context, index) {
-              //     //           return Text(messages[index]['message'].toString());
-              //     //         },
-              //     //         itemCount: messages.length,
-              //     //       );
-              //     //     },
-              //     //   ),
-              //     // ),
-              //   ],
-              // ),
             ),
             bottomNavigationBar: Row(
               // setState(() {
