@@ -18,7 +18,7 @@ class _MyAuthState extends State<MyAuth> {
 
   Future<UserModel> getUser(email) async {
     final snapshot = await _db.collection("users").doc(email).get();
-    if (snapshot.exists) {
+    if (!snapshot.exists) {
       throw Exception("User not found");
     }
     final itemData = UserModel.fromSnapahot(snapshot);
