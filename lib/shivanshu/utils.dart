@@ -9,7 +9,10 @@ Widget shaderWidget(
   BuildContext context, {
   required Widget child,
   TextStyle? style,
-  colors = const [Colors.deepPurpleAccent, Colors.blue],
+  colors = const [
+    Colors.deepPurpleAccent,
+    Colors.blue,
+  ],
 }) {
   return ShaderMask(
     blendMode: BlendMode.srcATop,
@@ -476,8 +479,7 @@ Future<void> shareLink(String link, [String? msg]) async {
   msg ??= "Masti Play.";
   if (true) {
     await FlutterShare.share(title: 'Share App', text: msg);
-  } 
-  else {
+  } else {
     await FlutterShare.share(title: 'Share App', text: msg, linkUrl: link);
   }
 }
