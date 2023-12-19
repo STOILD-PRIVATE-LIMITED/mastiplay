@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_share/flutter_share.dart';
@@ -477,7 +476,8 @@ Future<void> shareLink(String link, [String? msg]) async {
   msg ??= "Masti Play.";
   if (true) {
     await FlutterShare.share(title: 'Share App', text: msg);
-  } else {
+  } 
+  else {
     await FlutterShare.share(title: 'Share App', text: msg, linkUrl: link);
   }
 }
