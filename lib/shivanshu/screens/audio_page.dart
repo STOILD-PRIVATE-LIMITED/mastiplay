@@ -475,31 +475,45 @@ class _AudioPageState extends State<AudioPage> {
                                   messages[index]['userData']['photo'] ?? "";
                               return Row(
                                 children: [
-                                  CircleAvatar(
-                                    backgroundImage: photo.isEmpty
-                                        ? null
-                                        : NetworkImage(photo),
-                                    radius: 10,
-                                    child: photo.isNotEmpty
-                                        ? null
-                                        : const Icon(
-                                            Icons.person_rounded,
-                                            size: 15,
-                                          ),
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    "${messages[index]['userData']['name']}: ",
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
+                                  Card(
+                                    color: Colors.black26,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
-                                  ),
-                                  Text(
-                                    "${messages[index]['message']}",
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      // fontWeight: FontWeight.bold,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          CircleAvatar(
+                                            backgroundImage: photo.isEmpty
+                                                ? null
+                                                : NetworkImage(photo),
+                                            radius: 10,
+                                            child: photo.isNotEmpty
+                                                ? null
+                                                : const Icon(
+                                                    Icons.person_rounded,
+                                                    size: 15,
+                                                  ),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Text(
+                                            "${messages[index]['userData']['name']}: ",
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            "${messages[index]['message']}",
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              // fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -514,160 +528,163 @@ class _AudioPageState extends State<AudioPage> {
                 ],
               ),
             ),
-            bottomNavigationBar: Row(
-              // setState(() {
-              //   showEmojiKeyboard = !showEmojiKeyboard;
-              //   if (showEmojiKeyboard) {
-              //     EmojiPicker(
-              //       textEditingController: controller,
-              //       config: Config(
-              //         columns: 7,
-              //         initCategory: Category.SMILEYS,
-              //         bgColor: const Color(0xFF21242D),
-              //       ),
-              //     );
-              //   }
-              // });
-              // onTap: () {
-              //   setState(() {
-              //     if (showEmojiKeyboard) {
+            bottomNavigationBar: Card(
+              color: Colors.black26,
+              child: Row(
+                // setState(() {
+                //   showEmojiKeyboard = !showEmojiKeyboard;
+                //   if (showEmojiKeyboard) {
+                //     EmojiPicker(
+                //       textEditingController: controller,
+                //       config: Config(
+                //         columns: 7,
+                //         initCategory: Category.SMILEYS,
+                //         bgColor: const Color(0xFF21242D),
+                //       ),
+                //     );
+                //   }
+                // });
+                // onTap: () {
+                //   setState(() {
+                //     if (showEmojiKeyboard) {
 
-              //     setState(() {
-              //       showEmojiKeyboard = false;
-              //     });
-              //     }
-              //   });
-              // },
-              // showMsg(context, "In Developement");
-              children: [
-                IconButton(
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.black12,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        emojiShowing = !emojiShowing;
-                      });
-                    },
-                    icon: Image.asset('assets/smile.png')),
-                Expanded(
-                  child: Container(
-                    width: width,
-                    height: height / 15,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: TextFormField(
-                      controller: _controller,
-                      onFieldSubmitted: (value) {
-                        if (value.isNotEmpty) {
-                          sendMessage(
-                            value,
-                            widget.room.id,
-                          );
-                          _controller.clear();
-                        }
+                //     setState(() {
+                //       showEmojiKeyboard = false;
+                //     });
+                //     }
+                //   });
+                // },
+                // showMsg(context, "In Developement");
+                children: [
+                  IconButton(
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.black12,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          emojiShowing = !emojiShowing;
+                        });
                       },
-                      decoration: InputDecoration(
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                            width: 1,
-                            color: Colors.transparent,
+                      icon: Image.asset('assets/smile.png')),
+                  Expanded(
+                    child: Container(
+                      width: width,
+                      height: height / 15,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: TextFormField(
+                        controller: _controller,
+                        onFieldSubmitted: (value) {
+                          if (value.isNotEmpty) {
+                            sendMessage(
+                              value,
+                              widget.room.id,
+                            );
+                            _controller.clear();
+                          }
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: const BorderSide(
+                              width: 1,
+                              color: Colors.transparent,
+                            ),
                           ),
-                        ),
-                        hintText: "Hii...",
-                        hintStyle: TextStyle(
-                          fontSize: height / 50,
-                          color: Colors.black45,
-                        ),
-                        suffixIcon: Image.asset('assets/Voice.png'),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: width / 30,
-                          vertical: height / 100,
+                          hintText: "Hii...",
+                          hintStyle: TextStyle(
+                            fontSize: height / 50,
+                            color: Colors.black45,
+                          ),
+                          suffixIcon: Image.asset('assets/Voice.png'),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: width / 30,
+                            vertical: height / 100,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                IconButton(
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.black12,
+                  IconButton(
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.black12,
+                    ),
+                    onPressed: () {
+                      // showModalBottomSheet(
+                      //     backgroundColor: const Color(0xFF21242D),
+                      //     context: context,
+                      //     builder: (context) {
+                      //       return AudioGo(
+                      //         roomID: room.id,
+                      //       );
+                      //     });
+                      shareRoomLink(widget.room.id);
+                    },
+                    icon: Image.asset(
+                      'assets/Send1.png',
+                      height: 20.sp,
+                    ),
                   ),
-                  onPressed: () {
-                    // showModalBottomSheet(
-                    //     backgroundColor: const Color(0xFF21242D),
-                    //     context: context,
-                    //     builder: (context) {
-                    //       return AudioGo(
-                    //         roomID: room.id,
-                    //       );
-                    //     });
-                    shareRoomLink(widget.room.id);
-                  },
-                  icon: Image.asset(
-                    'assets/Send1.png',
-                    height: 20.sp,
+                  IconButton(
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.black12,
+                    ),
+                    onPressed: () {
+                      showMsg(context, "In Developement");
+                    },
+                    icon: Image.asset('assets/PK.png'),
                   ),
-                ),
-                IconButton(
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.black12,
+                  IconButton(
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.black12,
+                    ),
+                    onPressed: () {
+                      showMsg(context, "In Developement");
+                    },
+                    icon: Image.asset('assets/game_logo.png'),
                   ),
-                  onPressed: () {
-                    showMsg(context, "In Developement");
-                  },
-                  icon: Image.asset('assets/PK.png'),
-                ),
-                IconButton(
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.black12,
+                  IconButton(
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.black12,
+                    ),
+                    onPressed: () {
+                      showMsg(context, "In Developement");
+                    },
+                    icon: Image.asset('assets/gift.png'),
                   ),
-                  onPressed: () {
-                    showMsg(context, "In Developement");
-                  },
-                  icon: Image.asset('assets/game_logo.png'),
-                ),
-                IconButton(
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.black12,
-                  ),
-                  onPressed: () {
-                    showMsg(context, "In Developement");
-                  },
-                  icon: Image.asset('assets/gift.png'),
-                ),
-                // Offstage(
-                //   offstage: !emojiShowing,
-                //   child: SizedBox(
-                //     height: 250,
-                //     child: EmojiPicker(
-                //         textEditingController: _controller,
-                //         onBackspacePressed: _onBackspacePressed,
-                //         config: Config(
-                //           columns: 7,
-                //           emojiSizeMax: 32 *
-                //               (foundation.defaultTargetPlatform ==
-                //                       TargetPlatform.iOS
-                //                   ? 1.30
-                //                   : 1.0),
-                //           verticalSpacing: 0,
-                //           horizontalSpacing: 0,
-                //           gridPadding: EdgeInsets.zero,
-                //           initCategory: Category.RECENT,
-                //           categoryIcons: const CategoryIcons(),
-                //           buttonMode: ButtonMode.MATERIAL,
-                //           checkPlatformCompatibility: true,
-                //         ), //
-                //         config: Config(
-                //           //
-                //           checkPlatformCompatibility: true,
-                //         )),
-                //   ),
-                // ),
-              ],
+                  // Offstage(
+                  //   offstage: !emojiShowing,
+                  //   child: SizedBox(
+                  //     height: 250,
+                  //     child: EmojiPicker(
+                  //         textEditingController: _controller,
+                  //         onBackspacePressed: _onBackspacePressed,
+                  //         config: Config(
+                  //           columns: 7,
+                  //           emojiSizeMax: 32 *
+                  //               (foundation.defaultTargetPlatform ==
+                  //                       TargetPlatform.iOS
+                  //                   ? 1.30
+                  //                   : 1.0),
+                  //           verticalSpacing: 0,
+                  //           horizontalSpacing: 0,
+                  //           gridPadding: EdgeInsets.zero,
+                  //           initCategory: Category.RECENT,
+                  //           categoryIcons: const CategoryIcons(),
+                  //           buttonMode: ButtonMode.MATERIAL,
+                  //           checkPlatformCompatibility: true,
+                  //         ), //
+                  //         config: Config(
+                  //           //
+                  //           checkPlatformCompatibility: true,
+                  //         )),
+                  //   ),
+                  // ),
+                ],
+              ),
             ),
           )
         ],

@@ -111,10 +111,14 @@ class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
                     alignment: Alignment.bottomRight,
                     children: [
                       Positioned.fill(child: imageWidget),
-                      const Icon(
-                        Icons.edit_rounded,
-                        color: Colors.white,
-                      )
+                      CircleAvatar(
+                        backgroundColor: Colors.black38,
+                        radius: 18,
+                        child: const Icon(
+                          Icons.edit_rounded,
+                          color: Colors.white,
+                        ),
+                      ),
                     ],
                   )),
             ),
