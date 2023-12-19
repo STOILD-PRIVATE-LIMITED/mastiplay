@@ -21,8 +21,8 @@ class _MyAuthState extends State<MyAuth> {
     if (snapshot.exists) {
       throw Exception("User not found");
     }
-    final ItemData = UserModel.fromSnapahot(snapshot);
-    return ItemData;
+    final itemData = UserModel.fromSnapahot(snapshot);
+    return itemData;
   }
 
   @override
@@ -34,7 +34,7 @@ class _MyAuthState extends State<MyAuth> {
           if (snapshot.hasData) {
             final FirebaseAuth auth = FirebaseAuth.instance;
             final User? user = auth.currentUser;
-            final email = user?.email;
+            final email = user!.email;
             return FutureBuilder(
               future: getUser(email),
               builder: (context, snapshot1) {

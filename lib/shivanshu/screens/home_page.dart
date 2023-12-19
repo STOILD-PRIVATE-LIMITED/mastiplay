@@ -110,89 +110,89 @@ class _HomePageState extends State<HomePage> {
               //     width: width),
             ],
           ),
-          SafeArea(
-            child: InkWell(
-              onTap: () {
-                navigatorPush(context, const FollowingPage());
-              },
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 113, 218, 118),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    bottomLeft: Radius.circular(20),
-                  ),
-                ),
-                padding: const EdgeInsets.only(
-                  left: 8,
-                  top: 2,
-                  bottom: 2,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            child: CircleAvatar(
-                              radius: 14,
-                              backgroundImage: NetworkImage(
-                                imgUrls[0],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: CircleAvatar(
-                              radius: 14,
-                              backgroundImage: NetworkImage(
-                                imgUrls[1],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            child: CircleAvatar(
-                              radius: 14,
-                              backgroundImage: NetworkImage(
-                                imgUrls[2],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            right: 0,
-                            bottom: 0,
-                            child: CircleAvatar(
-                              radius: 14,
-                              backgroundImage: NetworkImage(
-                                imgUrls[0],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 3,
-                    ),
-                    Text(
-                      '116 followers\nin the rooms',
-                      style: textTheme(context).bodySmall!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          // SafeArea(
+          //   child: InkWell(
+          //     onTap: () {
+          //       navigatorPush(context, const FollowingPage());
+          //     },
+          //     child: Container(
+          //       decoration: const BoxDecoration(
+          //         color: Color.fromARGB(255, 113, 218, 118),
+          //         borderRadius: BorderRadius.only(
+          //           topLeft: Radius.circular(20),
+          //           bottomLeft: Radius.circular(20),
+          //         ),
+          //       ),
+          //       padding: const EdgeInsets.only(
+          //         left: 8,
+          //         top: 2,
+          //         bottom: 2,
+          //       ),
+          //       child: Row(
+          //         mainAxisSize: MainAxisSize.min,
+          //         children: [
+          //           SizedBox(
+          //             width: 40,
+          //             height: 40,
+          //             child: Stack(
+          //               children: [
+          //                 Positioned(
+          //                   top: 0,
+          //                   left: 0,
+          //                   child: CircleAvatar(
+          //                     radius: 14,
+          //                     backgroundImage: NetworkImage(
+          //                       imgUrls[0],
+          //                     ),
+          //                   ),
+          //                 ),
+          //                 Positioned(
+          //                   top: 0,
+          //                   right: 0,
+          //                   child: CircleAvatar(
+          //                     radius: 14,
+          //                     backgroundImage: NetworkImage(
+          //                       imgUrls[1],
+          //                     ),
+          //                   ),
+          //                 ),
+          //                 Positioned(
+          //                   bottom: 0,
+          //                   left: 0,
+          //                   child: CircleAvatar(
+          //                     radius: 14,
+          //                     backgroundImage: NetworkImage(
+          //                       imgUrls[2],
+          //                     ),
+          //                   ),
+          //                 ),
+          //                 Positioned(
+          //                   right: 0,
+          //                   bottom: 0,
+          //                   child: CircleAvatar(
+          //                     radius: 14,
+          //                     backgroundImage: NetworkImage(
+          //                       imgUrls[0],
+          //                     ),
+          //                   ),
+          //                 ),
+          //               ],
+          //             ),
+          //           ),
+          //           const SizedBox(
+          //             width: 3,
+          //           ),
+          //           Text(
+          //             '116 followers\nin the rooms',
+          //             style: textTheme(context).bodySmall!.copyWith(
+          //                   fontWeight: FontWeight.bold,
+          //                 ),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

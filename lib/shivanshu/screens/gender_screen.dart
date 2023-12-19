@@ -24,7 +24,6 @@ class _GenderScreenState extends State<GenderScreen> {
       return;
     }
     _formKey.currentState!.save();
-    // send these to next screen
     navigatorPush(
         context,
         BirthdayScreen(
