@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:spinner_try/shivanshu/screens/gender_screen.dart';
-import '../screen/home.dart';
+import 'package:spinner_try/shivanshu/screens/home_live.dart';
 
 Future<UserCredential> signInWithFacebook(context) async {
   try {
@@ -17,7 +17,7 @@ Future<UserCredential> signInWithFacebook(context) async {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const HomePage(),
+          builder: (context) => const HomeLive(),
         ),
       );
       return await FirebaseAuth.instance.signInWithCredential(credential);
@@ -53,7 +53,7 @@ class AuthServices {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const HomePage(),
+          builder: (context) => const HomeLive(),
         ),
       );
     } on FirebaseAuthException catch (e) {
@@ -114,41 +114,3 @@ Future<UserCredential?> signInWithGoogle(context) async {
     return null;
   }
 }
-
-  // static signupUser(String password, name, email, BuildContext context) async {
-  //   try {
-  //     UserCredential userCredential = await FirebaseAuth.instance
-  //         .createUserWithEmailAndPassword(email: email, password: password);
-  //     await FirebaseAuth.instance.currentUser!.updateDisplayName(email);
-  //     await FirebaseAuth.instance.currentUser!.updateEmail(email);
-  //     await FirestoreServices.saveUser(name, userCredential.user!.uid, email);
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(
-  //         content: Text('Registration Successful'),
-  //       ),
-  //     );
-  //     // Get.toNamed(NameRoutes.homeScreen);
-  //   } on FirebaseAuthException catch (e) {
-  //     if (e.code == 'weak-password') {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //           content: Text('Password Provided is too weak'),
-  //         ),
-  //       );
-  //     } else if (e.code == 'email-already-in-use') {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //           content: Text('Email Provided already Exists'),
-  //         ),
-  //       );
-  //     }
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(
-  //         content: Text(
-  //           e.toString(),
-  //         ),
-  //       ),
-  //     );
-  //   }
-  // }

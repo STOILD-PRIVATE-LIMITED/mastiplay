@@ -298,8 +298,8 @@ class _AudioLiveState extends State<AudioLive> {
                 ),
                 const SizedBox(height: 10),
                 if (rooms.isNotEmpty)
-                  SizedBox(
-                    height: widget.height / 2.3,
+                  Expanded(
+                    // height: widget.height / 2.3,
                     child: GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -312,24 +312,16 @@ class _AudioLiveState extends State<AudioLive> {
                       itemCount: rooms.length,
                       itemBuilder: (context, index) {
                         return InkWell(
-                          onTap: (){
+                          onTap: () {
                             navigatorPush(
-          context,
-          rooms[index].roomType == RoomType.audio
-              ? AudioPage(
-                  room: rooms[index],
-                )
-              : VideoRoom(
-                  room: rooms[index],
-                )
-        );
-                            // navigatorPush(
-                            //     context,
-                            //     AddButtonPage(
-                            //       roomID: rooms[index].id,
-                            //       selectedIndex:
-                            //           1 - rooms[index].roomType.index,
-                            //     ));
+                                context,
+                                rooms[index].roomType == RoomType.audio
+                                    ? AudioPage(
+                                        room: rooms[index],
+                                      )
+                                    : VideoRoom(
+                                        room: rooms[index],
+                                      ));
                           },
                           child: Container(
                             decoration: BoxDecoration(boxShadow: [
