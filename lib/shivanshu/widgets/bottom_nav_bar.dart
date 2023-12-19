@@ -83,7 +83,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           'assets/nav_bar_bg.png',
           width: MediaQuery.of(context).size.width,
           // height: MediaQuery.of(context).size.height / 5,
-          // fit: BoxFit.cover,
+          fit: BoxFit.fitWidth,
         ),
         Positioned(
           left: 0,
