@@ -7,8 +7,44 @@ import 'package:spinner_try/shivanshu/utils.dart';
 
 // TODO: set this to some global server
 // The below represents the server address of the server running the socket.io server
-const String websocketUrl = "https://3.7.66.245:8080";
+const String websocketUrl = "https://192.168.9.64:8080";
 Socket? socket;
+
+void sendMessage(String msg, String roomId) {
+  assert(socket != null, "Socket is not yet initialized!");
+  socket!.emit('message', {
+    'channel': roomId,
+    'message': msg,
+  });
+}
+
+class LiveChatBuilder extends StatefulWidget {
+  final Widget Function(
+      BuildContext context, List<Map<String, dynamic>> messages) builder;
+  const LiveChatBuilder({super.key, required this.builder});
+
+  @override
+  State<LiveChatBuilder> createState() => _LiveChatBuilderState();
+}
+
+class _LiveChatBuilderState extends State<LiveChatBuilder> {
+  @override
+  void initState() {
+    super.initState();
+    socket!.on('broadcastMsg', (data) {
+      setState(() {
+        messages.add(data);
+      });
+    });
+  }
+
+  List<Map<String, dynamic>> messages = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.builder(context, messages);
+  }
+}
 
 class WebRtcController {
   WebRtcController({

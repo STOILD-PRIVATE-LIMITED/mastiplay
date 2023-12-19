@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animated_icon/animated_icon.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 // import 'package:flutter/foundation.dart' as foundation;
@@ -7,11 +9,12 @@ import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/webRTC/audio_room.dart';
+import 'package:spinner_try/webRTC/web_rtc.dart';
 
 class AudioPage extends StatefulWidget {
   final Room room;
   final String? url;
-  AudioPage({super.key, required this.room, this.url});
+  const AudioPage({super.key, required this.room, this.url});
 
   @override
   State<AudioPage> createState() => _AudioPageState();
@@ -458,161 +461,183 @@ class _AudioPageState extends State<AudioPage> {
               padding: const EdgeInsets.only(
                 top: 20.0,
               ),
-              child: AudioRoom(
-                room: widget.room,
-                url: widget.url,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AudioRoom(
+                    room: widget.room,
+                    url: widget.url,
+                  ),
+                  Expanded(
+                    child: LiveChatBuilder(
+                      builder: (ctx, messages) {
+                        log(messages.toString());
+                        return ListView.builder(
+                          itemBuilder: (context, index) {
+                            return Text(messages[index]['message'].toString());
+                          },
+                          itemCount: messages.length,
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-            bottomNavigationBar: Padding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-              child: Row(
-                // setState(() {
-                //   showEmojiKeyboard = !showEmojiKeyboard;
-                //   if (showEmojiKeyboard) {
-                //     EmojiPicker(
-                //       textEditingController: controller,
-                //       config: Config(
-                //         columns: 7,
-                //         initCategory: Category.SMILEYS,
-                //         bgColor: const Color(0xFF21242D),
-                //       ),
-                //     );
-                //   }
-                // });
-                // onTap: () {
-                //   setState(() {
-                //     if (showEmojiKeyboard) {
+            bottomNavigationBar: Row(
+              // setState(() {
+              //   showEmojiKeyboard = !showEmojiKeyboard;
+              //   if (showEmojiKeyboard) {
+              //     EmojiPicker(
+              //       textEditingController: controller,
+              //       config: Config(
+              //         columns: 7,
+              //         initCategory: Category.SMILEYS,
+              //         bgColor: const Color(0xFF21242D),
+              //       ),
+              //     );
+              //   }
+              // });
+              // onTap: () {
+              //   setState(() {
+              //     if (showEmojiKeyboard) {
 
-                //     setState(() {
-                //       showEmojiKeyboard = false;
-                //     });
-                //     }
-                //   });
-                // },
-                // showMsg(context, "In Developement");
-                children: [
-                  IconButton(
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.black12,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          emojiShowing = !emojiShowing;
-                        });
+              //     setState(() {
+              //       showEmojiKeyboard = false;
+              //     });
+              //     }
+              //   });
+              // },
+              // showMsg(context, "In Developement");
+              children: [
+                IconButton(
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.black12,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        emojiShowing = !emojiShowing;
+                      });
+                    },
+                    icon: Image.asset('assets/smile.png')),
+                Expanded(
+                  child: Container(
+                    width: width,
+                    height: height / 15,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: TextFormField(
+                      controller: _controller,
+                      onFieldSubmitted: (value) {
+                        if (value.isNotEmpty) {
+                          sendMessage(
+                            value,
+                            widget.room.id,
+                          );
+                          _controller.clear();
+                        }
                       },
-                      icon: Image.asset('assets/smile.png')),
-                  Expanded(
-                    child: Container(
-                      width: width,
-                      height: height / 15,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: TextFormField(
-                        controller: _controller,
-                        decoration: InputDecoration(
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide: const BorderSide(
-                              width: 1,
-                              color: Colors.transparent,
-                            ),
+                      decoration: InputDecoration(
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            width: 1,
+                            color: Colors.transparent,
                           ),
-                          hintText: "Hii...",
-                          hintStyle: TextStyle(
-                            fontSize: height / 50,
-                            color: Colors.black45,
-                          ),
-                          suffixIcon: Image.asset('assets/Voice.png'),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: width / 30,
-                            vertical: height / 100,
-                          ),
+                        ),
+                        hintText: "Hii...",
+                        hintStyle: TextStyle(
+                          fontSize: height / 50,
+                          color: Colors.black45,
+                        ),
+                        suffixIcon: Image.asset('assets/Voice.png'),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: width / 30,
+                          vertical: height / 100,
                         ),
                       ),
                     ),
                   ),
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.black12,
-                    ),
-                    onPressed: () {
-                      // showModalBottomSheet(
-                      //     backgroundColor: const Color(0xFF21242D),
-                      //     context: context,
-                      //     builder: (context) {
-                      //       return AudioGo(
-                      //         roomID: room.id,
-                      //       );
-                      //     });
-                      shareRoomLink(widget.room.id);
-                    },
-                    icon: Image.asset(
-                      'assets/Send1.png',
-                      height: 20.sp,
-                    ),
+                ),
+                IconButton(
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.black12,
                   ),
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.black12,
-                    ),
-                    onPressed: () {
-                      showMsg(context, "In Developement");
-                    },
-                    icon: Image.asset('assets/PK.png'),
+                  onPressed: () {
+                    // showModalBottomSheet(
+                    //     backgroundColor: const Color(0xFF21242D),
+                    //     context: context,
+                    //     builder: (context) {
+                    //       return AudioGo(
+                    //         roomID: room.id,
+                    //       );
+                    //     });
+                    shareRoomLink(widget.room.id);
+                  },
+                  icon: Image.asset(
+                    'assets/Send1.png',
+                    height: 20.sp,
                   ),
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.black12,
-                    ),
-                    onPressed: () {
-                      showMsg(context, "In Developement");
-                    },
-                    icon: Image.asset('assets/game_logo.png'),
+                ),
+                IconButton(
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.black12,
                   ),
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.black12,
-                    ),
-                    onPressed: () {
-                      showMsg(context, "In Developement");
-                    },
-                    icon: Image.asset('assets/gift.png'),
+                  onPressed: () {
+                    showMsg(context, "In Developement");
+                  },
+                  icon: Image.asset('assets/PK.png'),
+                ),
+                IconButton(
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.black12,
                   ),
-                  // Offstage(
-                  //   offstage: !emojiShowing,
-                  //   child: SizedBox(
-                  //     height: 250,
-                  //     child: EmojiPicker(
-                  //         textEditingController: _controller,
-                  //         onBackspacePressed: _onBackspacePressed,
-                  //         config: Config(
-                  //           columns: 7,
-                  //           emojiSizeMax: 32 *
-                  //               (foundation.defaultTargetPlatform ==
-                  //                       TargetPlatform.iOS
-                  //                   ? 1.30
-                  //                   : 1.0),
-                  //           verticalSpacing: 0,
-                  //           horizontalSpacing: 0,
-                  //           gridPadding: EdgeInsets.zero,
-                  //           initCategory: Category.RECENT,
-                  //           categoryIcons: const CategoryIcons(),
-                  //           buttonMode: ButtonMode.MATERIAL,
-                  //           checkPlatformCompatibility: true,
-                  //         ), //
-                  //         config: Config(
-                  //           //
-                  //           checkPlatformCompatibility: true,
-                  //         )),
-                  //   ),
-                  // ),
-                ],
-              ),
+                  onPressed: () {
+                    showMsg(context, "In Developement");
+                  },
+                  icon: Image.asset('assets/game_logo.png'),
+                ),
+                IconButton(
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.black12,
+                  ),
+                  onPressed: () {
+                    showMsg(context, "In Developement");
+                  },
+                  icon: Image.asset('assets/gift.png'),
+                ),
+                // Offstage(
+                //   offstage: !emojiShowing,
+                //   child: SizedBox(
+                //     height: 250,
+                //     child: EmojiPicker(
+                //         textEditingController: _controller,
+                //         onBackspacePressed: _onBackspacePressed,
+                //         config: Config(
+                //           columns: 7,
+                //           emojiSizeMax: 32 *
+                //               (foundation.defaultTargetPlatform ==
+                //                       TargetPlatform.iOS
+                //                   ? 1.30
+                //                   : 1.0),
+                //           verticalSpacing: 0,
+                //           horizontalSpacing: 0,
+                //           gridPadding: EdgeInsets.zero,
+                //           initCategory: Category.RECENT,
+                //           categoryIcons: const CategoryIcons(),
+                //           buttonMode: ButtonMode.MATERIAL,
+                //           checkPlatformCompatibility: true,
+                //         ), //
+                //         config: Config(
+                //           //
+                //           checkPlatformCompatibility: true,
+                //         )),
+                //   ),
+                // ),
+              ],
             ),
           )
         ],
@@ -640,6 +665,7 @@ class _AudioUserTileState extends State<AudioUserTile> {
       children: [
         IconButton(
           style: IconButton.styleFrom(
+            padding: EdgeInsets.zero,
             tapTargetSize: MaterialTapTargetSize.padded,
             backgroundColor: const Color.fromARGB(255, 206, 195, 195),
           ),
@@ -658,7 +684,7 @@ class _AudioUserTileState extends State<AudioUserTile> {
                 )
               : CircleAvatar(
                   backgroundImage: NetworkImage(widget.imgUrl!),
-                  radius: 20,
+                  radius: 14,
                 ),
         ),
         AnimateIcon(
@@ -676,11 +702,13 @@ class _AudioUserTileState extends State<AudioUserTile> {
           iconType: IconType.continueAnimation,
           animateIcon: AnimateIcons.loading3,
         ),
-        Text(
-          widget.name,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+        FittedBox(
+          child: Text(
+            widget.name,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ],

@@ -6,11 +6,15 @@ class UserModel {
   final String name;
   final String email;
   final String photo;
+  final int gender;
+  final DateTime? dob;
 
   const UserModel({
+    this.dob,
     this.id,
     required this.name,
     required this.photo,
+    required this.gender,
     required this.email,
   });
 
@@ -26,6 +30,8 @@ class UserModel {
       photo: data["photo"] ?? "",
       name: data["name"],
       email: data["email"],
+      dob: data['dob'],
+      gender: data['gender']
     );
   }
 
@@ -35,6 +41,8 @@ class UserModel {
       "name": name,
       "email": email,
       "photo": photo,
+      'dob': dob,
+      'gender':gender,
     };
   }
 }

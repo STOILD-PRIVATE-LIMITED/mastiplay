@@ -64,7 +64,8 @@ class _LoginState extends State<Login> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        signInWithFacebook(context);
+                        // signInWithFacebook(context);
+                        signInWithGoogle(context);
                       },
                       child: Container(
                         height: height / 12,

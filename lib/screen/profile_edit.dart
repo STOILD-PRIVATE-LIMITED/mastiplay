@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../auth.dart';
+import '../model/user_model.dart';
 
 class ProfileEdit extends StatefulWidget {
   const ProfileEdit({super.key});
@@ -16,6 +18,31 @@ class ProfileEdit extends StatefulWidget {
 class _ProfileEditState extends State<ProfileEdit> {
   String selectedGender = 'Male';
   File? img;
+  final db = FirebaseFirestore.instance;
+
+  String name = '';
+  String photoUrl = '';
+
+  List<UserModell> users = [];
+  getProfile() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final email = user!.email;
+    final snapshot =
+        await db.collection("users").where("email", isEqualTo: email).get();
+    users = snapshot.docs
+        .map<UserModell>((e) => UserModell.fromSnapahot(e))
+        .toList();
+    name = users[0].name;
+    photoUrl = users[0].userProfileImage;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getProfile();
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -52,8 +79,11 @@ class _ProfileEditState extends State<ProfileEdit> {
                   CircleAvatar(
                     radius: height / 15,
                     backgroundImage: img == null
-                        ? const AssetImage("assets/background.jpg")
-                        : FileImage(img!) as ImageProvider,
+                        // ? const AssetImage("assets/background.jpg")
+                        ? photoUrl.isEmpty
+                            ? const AssetImage("assets/background.jpg")
+                            : NetworkImage(photoUrl) as ImageProvider
+                        : FileImage(img!),
                   ),
                   Positioned(
                     bottom: 1,
@@ -110,7 +140,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("UserName",
+                    Text(name.isEmpty ? "UserName" : name,
                         style: TextStyle(
                             fontSize: height / 50, color: Colors.grey)),
                     Icon(
@@ -222,7 +252,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   child: Text(
                     "Save",
                     style: TextStyle(
-                      color: Colors.pink ,
+                      color: Colors.pink,
                       fontSize: height / 50,
                     ),
                   ),

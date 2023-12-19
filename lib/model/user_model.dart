@@ -9,13 +9,6 @@ class UserModell {
     required this.name,
     required this.userProfileImage,
   });
-  // factory UserModel.fromSnapshot(DocumentSnapshot doc) {
-  //   return UserModel(
-  //     email: doc['email'],
-  //     name: doc['name'],
-  //     userProfileImage: doc['photo'],
-  //   );
-  // }
   factory UserModell.fromSnapahot(
       DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
