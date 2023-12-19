@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:animated_icon/animated_icon.dart';
-import 'package:emoji_keyboard_flutter/emoji_keyboard_flutter.dart';
+// import 'package:emoji_keyboard_flutter/emoji_keyboard_flutter.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 // import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
@@ -670,17 +670,17 @@ class _AudioPageState extends State<AudioPage> {
                     },
                     icon: Image.asset('assets/gift.png'),
                   ),
-                  Offstage(
-                    offstage: !emojiShowing,
-                    child: SizedBox(
-                      height: 250,
-                      child: EmojiKeyboard(
-                        emotionController: _controller,
-                        showEmojiKeyboard: emojiShowing,
-                        darkMode: true,
-                      )
-                    ),
-                  ),
+                  // Offstage(
+                  //   offstage: !emojiShowing,
+                  //   child: SizedBox(
+                  //     height: 250,
+                  //     child: EmojiKeyboard(
+                  //       emotionController: _controller,
+                  //       showEmojiKeyboard: emojiShowing,
+                  //       darkMode: true,
+                  //     )
+                  //   ),
+                  // ),
                 ],
               ),
             ),
