@@ -54,8 +54,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           fontFamily: 'assets/fontsSofiaProRegular.ttf',
         ),
-
-        home: const MyAuth(),
+        home: const MyAuth()
         // home: const ProfileEdit(),
         // home: HomeScreennn(),
         // home: const HomeLive()
