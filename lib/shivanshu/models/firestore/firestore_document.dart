@@ -28,7 +28,10 @@ class FirestoreDocument {
   }
 
   Map<String, dynamic> toJson() {
-    return data..addAll({'updatedAt': updatedAt.toIso8601String()});
+    log("Hehe");
+    data['updatedAt'] = updatedAt.toIso8601String();
+    log("Huraay");
+    return data;
   }
 
   // this fetches the document from firestore
@@ -121,6 +124,7 @@ Future<String> randomSet(
           (i == 0 ? 1 : 0) +
           math.Random().nextInt(i == 0 ? 9 : 10);
     }
+    log("Random id generated: $newId");
     // checking ...
     uniqueCondition ??= (transaction, id) async {
       DocumentSnapshot documentSnapshot =
@@ -131,8 +135,11 @@ Future<String> randomSet(
       transaction.set(collection.doc(id.toString()), data);
     };
     if (await uniqueCondition!(transaction, newId)) {
+      log("Unique Condition is true");
+      log("Calling docSet");
       await docSet!(transaction, newId, doc.toJson());
     } else {
+      log("Unique Condition is false");
       throw Exception('Document with ID $newId already exists.');
     }
   });

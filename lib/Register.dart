@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,7 +18,7 @@ import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 
 import 'auth.dart';
 import 'shivanshu/screens/home_live.dart';
-
+/*
 // class Register extends StatefulWidget {
 //   final Function()? onTap;
 //   static String verify = "";
@@ -257,6 +258,7 @@ import 'shivanshu/screens/home_live.dart';
 //         ),
 //       );
 // }
+*/
 
 class Register extends StatefulWidget {
   final Function()? onTap;
@@ -332,21 +334,20 @@ class _RegisterState extends State<Register> {
         ),
         digitCount: 8,
         uniqueCondition: (transaction, id) async {
+          log("uniqueCondition called for id: $id");
           final doc = await FirebaseFirestore.instance
               .collection('users')
               .where('id', isEqualTo: id)
               .get();
+          log("uniqueCondition is ${doc.docs.isEmpty}");
           return doc.docs.isEmpty;
         },
         docSet: (transaction, id, data) async {
-          transaction.set(
-            db.collection('users').doc(obj['email']),
-            data
-              ..addAll(<String, dynamic>{
-                'id': id,
-                'updatedAt': DateTime.now().toIso8601String(),
-              }),
-          );
+          log("docSet called for id: $id");
+          data['id'] = id.toString();
+          data['updatedAt'] = DateTime.now().toIso8601String();
+          log("Adding things was succesful");
+          transaction.set(db.collection('users').doc(obj['email']), data);
         },
       ).whenComplete(() {
         Navigator.pushReplacement(
