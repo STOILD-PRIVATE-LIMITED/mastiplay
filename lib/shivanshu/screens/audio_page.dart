@@ -459,10 +459,10 @@ class _AudioPageState extends State<AudioPage> {
               padding: const EdgeInsets.only(
                 top: 20.0,
               ),
-              child: AudioRoom(
-                room: widget.room,
-                url: widget.url,
-              ),
+              // child: AudioRoom(
+              //   room: widget.room,
+              //   url: widget.url,
+              // ),
               // Column(
               //   mainAxisSize: MainAxisSize.min,
               //   children: [
