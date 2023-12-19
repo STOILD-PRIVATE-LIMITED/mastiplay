@@ -458,69 +458,84 @@ class _AudioPageState extends State<AudioPage> {
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AudioRoom(
                     room: widget.room,
                     url: widget.url,
                   ),
                   Expanded(
-                    child: LiveChatBuilder(
-                      builder: (ctx, messages) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListView.builder(
-                            reverse: true,
-                            itemBuilder: (context, index) {
-                              String photo =
-                                  messages[index]['userData']['photo'] ?? "";
-                              return Row(
-                                children: [
-                                  Card(
-                                    color: Colors.black26,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          CircleAvatar(
-                                            backgroundImage: photo.isEmpty
-                                                ? null
-                                                : NetworkImage(photo),
-                                            radius: 10,
-                                            child: photo.isNotEmpty
-                                                ? null
-                                                : const Icon(
-                                                    Icons.person_rounded,
-                                                    size: 15,
-                                                  ),
-                                          ),
-                                          SizedBox(width: 5),
-                                          Text(
-                                            "${messages[index]['userData']['name']}: ",
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            "${messages[index]['message']}",
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return LiveChatBuilder(
+                          builder: (ctx, messages) {
+                            return SizedBox(
+                              height: constraints.maxHeight,
+                              width: constraints.maxWidth,
+                              child: ListView.builder(
+                                reverse: true,
+                                itemCount: messages.length,
+                                itemBuilder: (ctx, index) {
+                                  final message = messages[index];
+                                  final photo = message['userData']['photo'];
+                                  return SizedBox(
+                                    height: 50,
+                                    width: constraints.maxWidth,
+                                    child: ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundImage: photo.isEmpty
+                                            ? null
+                                            : NetworkImage(photo),
+                                        radius: 10,
+                                        child: photo.isNotEmpty
+                                            ? null
+                                            : const Icon(
+                                                Icons.person_rounded,
+                                                size: 15,
+                                              ),
                                       ),
+                                      // leading: Padding(
+                                      //             padding: const EdgeInsets.all(8.0),
+                                      //             child: Row(
+                                      //               mainAxisSize: MainAxisSize.min,
+                                      //               children: [
+                                      //                 CircleAvatar(
+                                      //                   backgroundImage: photo.isEmpty
+                                      //                       ? null
+                                      //                       : NetworkImage(photo),
+                                      //                   radius: 10,
+                                      //                   child: photo.isNotEmpty
+                                      //                       ? null
+                                      //                       : const Icon(
+                                      //                           Icons.person_rounded,
+                                      //                           size: 15,
+                                      //                         ),
+                                      //                 ),
+                                      //                 SizedBox(width: 5),
+                                      //                 SizedBox(
+                                      //                   width: width / 3 * 2,
+                                      //                   child: Expanded(
+                                      //                     child: Text(
+                                      //                       "${messages[index]['userData']['name']}: ${messages[index]['message']}",
+                                      //                       style: const TextStyle(
+                                      //                         color: Colors.white,
+                                      //                         // fontWeight: FontWeight.bold,
+                                      //                       ),
+                                      //                     ),
+                                      //                   ),
+                                      //                 ),
+                                      //               ],
+                                      //             ),
+                                      //           ),
+                                      // title:
+                                      //     Text(message['message']['userData']['name']),
+                                      // subtitle: Text(message['message']['message']),
                                     ),
-                                  ),
-                                ],
-                              );
-                            },
-                            itemCount: messages.length,
-                          ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
                         );
                       },
                     ),
@@ -547,7 +562,6 @@ class _AudioPageState extends State<AudioPage> {
                 // onTap: () {
                 //   setState(() {
                 //     if (showEmojiKeyboard) {
-
                 //     setState(() {
                 //       showEmojiKeyboard = false;
                 //     });

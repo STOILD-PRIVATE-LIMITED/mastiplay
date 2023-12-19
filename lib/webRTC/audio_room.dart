@@ -32,17 +32,17 @@ class _AudioRoomState extends State<AudioRoom> {
     return WebRTCWidget(
       onExit: () async {
         if (widget.room.admin == auth.currentUser!.email) {
-          if (await askUser(context, 'Do you want to delete the room as well?',
-                  no: true,
-                  custom: {
-                    "delete": const Icon(
-                      Icons.delete_forever_rounded,
-                      color: Colors.red,
-                    )
-                  }) ==
-              'delete') {
-            await widget.room.delete();
-          }
+          // if (await askUser(context, 'Do you want to delete the room as well?',
+          //         no: true,
+          //         custom: {
+          //           "delete": const Icon(
+          //             Icons.delete_forever_rounded,
+          //             color: Colors.red,
+          //           )
+          //         }) ==
+          //     'delete') {
+          //   await widget.room.delete();
+          // }
         }
       },
       controller: controller,
@@ -57,8 +57,7 @@ class _AudioRoomState extends State<AudioRoom> {
         return GridView.count(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount:
-              widget.maxParticipants~/2,
+          crossAxisCount: widget.maxParticipants ~/ 2,
           childAspectRatio: 1,
           children: [
             AudioUserTile(
