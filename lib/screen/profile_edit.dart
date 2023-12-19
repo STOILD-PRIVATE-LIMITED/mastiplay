@@ -51,15 +51,15 @@ class _ProfileEditState extends State<ProfileEdit> {
       backgroundColor: const Color(0xFFf7f8fc),
       appBar: AppBar(
         backgroundColor: const Color(0xFFf7f8fc),
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            size: height / 40,
-          ),
-        ),
+        // leading: GestureDetector(
+        //   onTap: () {
+        //     // Navigator.pop(context);
+        //   },
+        //   child: Icon(
+        //     Icons.arrow_back_ios,
+        //     size: height / 40,
+        //   ),
+        // ),
         title: Text(
           "Edit Profile",
           style: TextStyle(fontSize: height / 40),
