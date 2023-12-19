@@ -99,8 +99,8 @@ class _HomeLiveState extends State<HomeLive> {
                   ),
                 ),
                 if (rooms.isNotEmpty)
-                  SizedBox(
-                    height: widget.height / 2.3,
+                  Expanded(
+                    // height: widget.height / 2.3,
                     child: GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
