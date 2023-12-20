@@ -47,9 +47,8 @@ class Message extends StatelessWidget {
                   child: FutureBuilder(
                     future: fetchUser(msg.from),
                     builder: (ctx, snapshot) {
-                      final userData = !snapshot.hasData
-                          ? const UserModel()
-                          : snapshot.data!;
+                      final userData =
+                          !snapshot.hasData ? UserModel() : snapshot.data!;
                       return GestureDetector(
                         onTap: userData.photo.isEmpty
                             ? null
@@ -113,7 +112,7 @@ class Message extends StatelessWidget {
                                 future: fetchUser(msg.from),
                                 builder: (context, snapshot) {
                                   final userData = !snapshot.hasData
-                                      ? const UserModel()
+                                      ? UserModel()
                                       : snapshot.data!;
                                   return GestureDetector(
                                     onTap: () {

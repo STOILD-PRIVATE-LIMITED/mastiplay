@@ -78,18 +78,20 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     // imgUrl;
     // widget.email;
     final db = FirebaseFirestore.instance;
-    randomSet(
+
+    currentUser = UserModel(
+      email: widget.email,
+      name: widget.name,
+      photo: imgUrl ?? '',
+      gender: (widget.gender == 'Male') ? 0 : 1,
+      dob: _selectedDate,
+      country: country!.name.toString(),
+    );
+    final id = await randomSet(
       FirestoreDocument(
         id: widget.email,
         path: 'users',
-        data: UserModel(
-          email: widget.email,
-          name: widget.name,
-          photo: imgUrl ?? '',
-          gender: (widget.gender == 'Male') ? 0 : 1,
-          dob: _selectedDate,
-          country: country!.name.toString(),
-        ).toJson(),
+        data: currentUser.toJson(),
       ),
       digitCount: 8,
       uniqueCondition: (transaction, id) async {
@@ -122,8 +124,9 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
           },
         ),
       );
-      setState(() {});
+      // setState(() {});
     });
+    currentUser.id = id.toString();
   }
 
   @override

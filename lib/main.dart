@@ -82,6 +82,7 @@ class NewAuth extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           fetchUser(auth.currentUser!.email!).then((value) {
+            currentUser = value;
             if (value.id == null || value.id!.isEmpty) {
               Navigator.pushReplacement(
                   context,

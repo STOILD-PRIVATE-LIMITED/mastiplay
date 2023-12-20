@@ -738,8 +738,9 @@ class _AudioUserTileState extends State<AudioUserTile> {
           animateIcon: AnimateIcons.loading3,
         ),
         FittedBox(
+          fit: BoxFit.scaleDown,
           child: Text(
-            widget.name,
+            widget.name.isEmpty ? "Name is empty" : widget.name,
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
