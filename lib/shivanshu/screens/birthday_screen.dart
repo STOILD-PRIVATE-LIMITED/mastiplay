@@ -40,6 +40,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   File? img;
 
   void _submitForm() async {
+    print('$img + ${widget.name} + $country + $_selectedDate ${widget.email}');
     if (_selectedDate == null) {
       showMsg(context, "Choose a birthday please.");
       return;
@@ -69,7 +70,6 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
               auth.currentUser!.email!,
             );
     }
-
 
     // widget.name;
     // widget.gender;
@@ -116,7 +116,9 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const HomeLive();
+            return HomeLive(
+              email: widget.email,
+            );
           },
         ),
       );

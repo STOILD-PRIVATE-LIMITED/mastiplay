@@ -3,12 +3,14 @@ import 'package:spinner_try/shivanshu/screens/add_button_page.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 
 class BottomNavBar extends StatefulWidget {
+  final String email;
   final int defaultSelectedIndex;
   final void Function(int index) onTap;
   const BottomNavBar({
     super.key,
     this.defaultSelectedIndex = 0,
     required this.onTap,
+    required this.email
   });
 
   @override
@@ -122,7 +124,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
           bottom: MediaQuery.of(context).size.height / 20,
           child: IconButton(
             onPressed: () {
-              navigatorPush(context, const AddButtonPage());
+              navigatorPush(context, AddButtonPage(
+                email: widget.email,
+              ));
             },
             style: IconButton.styleFrom(
               elevation: 10,

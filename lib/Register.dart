@@ -109,7 +109,9 @@ class _RegisterState extends State<Register> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return const HomeLive();
+              return HomeLive(
+                email: emailController.text,
+              );
             },
           ),
         );

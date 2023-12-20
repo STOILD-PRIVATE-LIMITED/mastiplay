@@ -15,6 +15,7 @@ class GenderScreen extends StatefulWidget {
 class _GenderScreenState extends State<GenderScreen> {
   String name = "";
   int? selectedIndex;
+  TextEditingController nameController = TextEditingController();
 
   void _submitForm() {
     final isValid = _formKey.currentState!.validate();
@@ -29,7 +30,7 @@ class _GenderScreenState extends State<GenderScreen> {
     navigatorPush(
         context,
         BirthdayScreen(
-          name: name,
+          name: widget.username,
           gender: selectedIndex == 0 ? 'Male' : 'Female',
           email: widget.email,
         ));
@@ -68,9 +69,9 @@ class _GenderScreenState extends State<GenderScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  TextFormField(
+                  TextField(
+                    controller: nameController,
                     decoration: InputDecoration(
-                      // labelText: 'NickName',
                       hintText: 'NickName',
                       hintStyle: const TextStyle(color: Colors.black26),
                       fillColor: Colors.black12.withOpacity(0.05),
@@ -83,10 +84,6 @@ class _GenderScreenState extends State<GenderScreen> {
                     ),
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.next,
-                    validator: Validate.name,
-                    onFieldSubmitted: (value) {
-                      name = value;
-                    },
                   ),
                   SizedBox(height: 30.sp),
                   Row(
