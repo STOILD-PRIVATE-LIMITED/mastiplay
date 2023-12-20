@@ -166,6 +166,7 @@ class _AddButtonPageState extends State<AddButtonPage> {
 
   Future<void> joinRoom([Room? room]) async {
     String enteredRoomID = room?.id ?? "";
+    String? url;
     if (room == null) {
       roomIdController.text = roomIdController.text.trim();
       enteredRoomID = roomIdController.text;
@@ -179,8 +180,14 @@ class _AddButtonPageState extends State<AddButtonPage> {
         return;
       }
       room = Room(
-          roomType: selectedIndex == 0 ? RoomType.video : RoomType.audio,
-          name: roomNameController.text);
+        roomType: selectedIndex == 0 ? RoomType.video : RoomType.audio,
+        name: roomNameController.text,
+      );
+      if (image != null) {
+        url = await uploadImage(
+            context, image!, 'rooms', auth.currentUser!.email!);
+        room.imgUrl = url;
+      }
     }
     try {
       if (enteredRoomID.isEmpty) {
@@ -211,6 +218,10 @@ class _AddButtonPageState extends State<AddButtonPage> {
                   showMsg(context,
                       'You cannot join a video room as an audio room.');
                   return;
+                }
+                if (url != null) {
+                  room.imgUrl = url;
+                  room.update();
                 }
                 joinRoom(room);
               } else if (response == 'delete previous') {
@@ -249,17 +260,12 @@ class _AddButtonPageState extends State<AddButtonPage> {
       }
       return;
     }
-    String? url;
-    if (image != null) {
-      url =
-          await uploadImage(context, image!, 'rooms', auth.currentUser!.email!);
-    }
+    // Navigating to the required page
     if (context.mounted) {
       if (selectedIndex == 0) {
         navigatorPush(
           context,
           VideoRoom(
-            url: url,
             room: room,
           ),
         );
@@ -267,7 +273,6 @@ class _AddButtonPageState extends State<AddButtonPage> {
         await navigatorPush(
           context,
           AudioPage(
-            url: url,
             room: room,
           ),
         );

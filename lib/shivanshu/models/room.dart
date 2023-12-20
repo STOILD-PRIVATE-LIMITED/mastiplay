@@ -14,11 +14,13 @@ class Room extends FirestoreDocument {
   bool askBeforeJoining = false; // default is a public room
   late RoomType roomType;
   String name = "";
+  String? imgUrl;
 
   Room({
     this.admin,
     this.name = "",
     required this.roomType,
+    this.imgUrl,
     this.askBeforeJoining = false,
   }) : super(path: Room.firestorePath);
 
@@ -27,6 +29,7 @@ class Room extends FirestoreDocument {
     super.loadFromJson(data);
     id = data['id'] ?? id;
     name = data['name'] ?? name;
+    imgUrl = data['imgUrl'] ?? imgUrl;
     admin = data['admin'] ?? admin;
     roomType = RoomType.values[data['roomType'] ?? roomType.index];
     askBeforeJoining = data['askBeforeJoining'] ?? askBeforeJoining;
@@ -38,6 +41,7 @@ class Room extends FirestoreDocument {
       ..addAll({
         "admin": admin,
         "name": name,
+        "imgUrl": imgUrl,
         "askBeforeJoining": askBeforeJoining,
         "roomType": roomType.index,
       });

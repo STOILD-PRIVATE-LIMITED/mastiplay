@@ -9,7 +9,6 @@ import 'package:spinner_try/shivanshu/screens/audio_page.dart';
 import 'package:spinner_try/shivanshu/screens/home_page.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/widgets/scroll_builder.dart';
-import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/video_room.dart';
 
 class AudioLive extends StatefulWidget {
@@ -264,12 +263,6 @@ class _AudioLiveState extends State<AudioLive> {
                         e.data()['updatedAt'],
                       )))
                   .toList();
-              // final docs = await FirestoreCollection(id: 'rooms').get(
-              //   start: lastDoc,
-              //   limit: 4,
-              //   orderBy: 'updatedAt',
-              //   descending: true,
-              // );
               log("lastDoc=$lastUpdatedAt");
               final List<Room> rooms = docs
                   .map((e) => Room(roomType: RoomType.audio)
@@ -300,168 +293,140 @@ class _AudioLiveState extends State<AudioLive> {
                 ),
                 const SizedBox(height: 10),
                 if (rooms.isNotEmpty)
-                  Expanded(
-                    // height: widget.height / 2.3,
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 2,
-                        mainAxisSpacing: 2,
-                      ),
-                      itemCount: rooms.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            navigatorPush(
-                                context,
-                                rooms[index].roomType == RoomType.audio
-                                    ? AudioPage(
-                                        room: rooms[index],
-                                      )
-                                    : VideoRoom(
-                                        room: rooms[index],
-                                      ));
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(.1),
-                                blurRadius: 2,
-                              ),
-                            ]),
-                            child: Stack(
-                              children: [
-                                Container(
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.black12,
-                                        width: 1,
-                                      ),
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.white),
-                                  child: rooms[index].admin == null
-                                      ? const Text(
-                                          'Error: No Admin Found for this room')
-                                      : FutureBuilder(
-                                          future:
-                                              fetchUser(rooms[index].admin!),
-                                          builder: (context, snapshot) {
-                                            return snapshot.hasData &&
-                                                    snapshot
-                                                        .data!.photo.isNotEmpty
-                                                ? Image.network(
-                                                    snapshot.data!.photo,
-                                                    filterQuality:
-                                                        FilterQuality.high,
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                : Image.asset(
-                                                    'assets/dummy_person.png',
-                                                    fit: BoxFit.cover,
-                                                  );
-                                          },
-                                        ),
-                                  // Image.asset(
-                                  //   rooms[index].id,
-                                  //   filterQuality: FilterQuality.high,
-                                  //   fit: BoxFit.cover,
-                                  //   height: height / 5,
-                                  // ),
-                                ),
-                                Positioned(
-                                  right: 10.sp,
-                                  top: widget.height / 80,
-                                  child: Container(
-                                    child: Timer(
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      startTime: rooms[index].updatedAt,
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: widget.height / 18,
-                                  left: widget.width / 50,
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 5,
-                                    ),
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      gradient: LinearGradient(
-                                        begin: AlignmentDirectional.centerStart,
-                                        end: AlignmentDirectional.centerEnd,
-                                        colors: [
-                                          const Color(0xFFE05DD3)
-                                              .withOpacity(.7),
-                                          const Color(0xFFE05DD3)
-                                              .withOpacity(.7),
-                                        ],
-                                      ),
-                                    ),
-                                    child: Text(
-                                      "Live",
-                                      style: TextStyle(
-                                        fontSize: widget.height / 80,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                // Positioned(
-                                //   bottom: widget.height / 25,
-                                //   left: widget.width / 6,
-                                //   child: Text(
-                                //     rooms[index].admin!,
-                                //     style: TextStyle(
-                                //       fontSize: widget.height / 70,
-                                //       color: Colors.black,
-                                //       fontWeight: FontWeight.bold,
-                                //     ),
-                                //   ),
-                                // ),
-                                Positioned(
-                                  bottom: widget.height / 50,
-                                  left: widget.width / 30,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.black38,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Image.asset(
-                                          'assets/Home_white.png',
-                                          height: widget.height / 80,
-                                        ),
-                                        SizedBox(
-                                          width: widget.width / 40,
-                                        ),
-                                        Text(
-                                          rooms[index].admin!,
-                                          overflow: TextOverflow.fade,
-                                          style: TextStyle(
-                                              fontSize: widget.height / 80,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 2,
+                      mainAxisSpacing: 2,
                     ),
+                    itemCount: rooms.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          navigatorPush(
+                              context,
+                              rooms[index].roomType == RoomType.audio
+                                  ? AudioPage(
+                                      room: rooms[index],
+                                    )
+                                  : VideoRoom(
+                                      room: rooms[index],
+                                    ));
+                        },
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(.1),
+                                      blurRadius: 2,
+                                    ),
+                                  ],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                clipBehavior: Clip.hardEdge,
+                                child: rooms[index].imgUrl == null
+                                    ? Image.asset(
+                                        'assets/dummy_person.png',
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.network(
+                                        rooms[index].imgUrl!,
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                            ),
+                            Positioned(
+                              right: 10.sp,
+                              top: widget.height / 80,
+                              child: Container(
+                                child: Timer(
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  startTime: rooms[index].updatedAt,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: widget.height / 18,
+                              left: widget.width / 50,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 5,
+                                ),
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  gradient: LinearGradient(
+                                    begin: AlignmentDirectional.centerStart,
+                                    end: AlignmentDirectional.centerEnd,
+                                    colors: [
+                                      const Color(0xFFE05DD3).withOpacity(.7),
+                                      const Color(0xFFE05DD3).withOpacity(.7),
+                                    ],
+                                  ),
+                                ),
+                                child: Text(
+                                  "Live",
+                                  style: TextStyle(
+                                    fontSize: widget.height / 80,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Positioned(
+                            //   bottom: widget.height / 25,
+                            //   left: widget.width / 6,
+                            //   child: Text(
+                            //     rooms[index].admin!,
+                            //     style: TextStyle(
+                            //       fontSize: widget.height / 70,
+                            //       color: Colors.black,
+                            //       fontWeight: FontWeight.bold,
+                            //     ),
+                            //   ),
+                            // ),
+                            Positioned(
+                              bottom: widget.height / 50,
+                              left: widget.width / 30,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black38,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/Home_white.png',
+                                      height: widget.height / 80,
+                                    ),
+                                    SizedBox(
+                                      width: widget.width / 40,
+                                    ),
+                                    Text(
+                                      rooms[index].name,
+                                      overflow: TextOverflow.fade,
+                                      style: TextStyle(
+                                          fontSize: widget.height / 80,
+                                          color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 const SizedBox(height: 10),
               ];

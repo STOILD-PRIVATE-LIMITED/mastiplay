@@ -14,8 +14,7 @@ import 'package:spinner_try/webRTC/web_rtc.dart';
 
 class AudioPage extends StatefulWidget {
   final Room room;
-  final String? url;
-  const AudioPage({super.key, required this.room, this.url});
+  const AudioPage({super.key, required this.room});
 
   @override
   State<AudioPage> createState() => _AudioPageState();
@@ -62,10 +61,13 @@ class _AudioPageState extends State<AudioPage> {
                   children: [
                     CircleAvatar(
                       radius: 20,
-                      backgroundImage: currentUser.photo.isNotEmpty
-                          ? NetworkImage(currentUser.photo)
-                          : const AssetImage('assets/dummy_person.png')
-                              as ImageProvider,
+                      backgroundImage: widget.room.imgUrl != null &&
+                              widget.room.imgUrl!.isNotEmpty
+                          ? NetworkImage(widget.room.imgUrl!)
+                          : (currentUser.photo.isNotEmpty
+                              ? NetworkImage(currentUser.photo)
+                              : const AssetImage('assets/dummy_person.png')
+                                  as ImageProvider),
                       backgroundColor: Colors.transparent,
                     ),
                     const SizedBox(width: 10),
@@ -463,7 +465,6 @@ class _AudioPageState extends State<AudioPage> {
                 children: [
                   AudioRoom(
                     room: widget.room,
-                    url: widget.url,
                   ),
                   Expanded(
                     child: LayoutBuilder(

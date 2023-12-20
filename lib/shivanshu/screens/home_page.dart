@@ -84,9 +84,11 @@ class _HomePageState extends State<HomePage> {
           PageView(
             controller: _pageView,
             onPageChanged: (value) {
-              setState(() {
-                widget.selectedTab = value;
-              });
+              if (context.mounted) {
+                setState(() {
+                  widget.selectedTab = value;
+                });
+              }
             },
             children: [
               HomeLive(

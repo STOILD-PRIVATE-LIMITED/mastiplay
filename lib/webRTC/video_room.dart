@@ -9,10 +9,9 @@ import 'package:spinner_try/webRTC/web_rtc.dart';
 
 class VideoRoom extends StatelessWidget {
   final Room room;
-  final String? url;
 
   final _controller = TextEditingController();
-  VideoRoom({super.key, required this.room, this.url});
+  VideoRoom({super.key, required this.room});
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +36,7 @@ class VideoRoom extends StatelessWidget {
         video: iAmAdmin,
         audio: true,
       ),
-      userData: currentUser.toJson()
-        ..addAll({'photo': url ?? currentUser.photo}),
+      userData: currentUser.toJson(),
       roomId: room.id,
       builder: (context, roomId, usersData, videoViews, myUserData, myVideoView,
           controls) {

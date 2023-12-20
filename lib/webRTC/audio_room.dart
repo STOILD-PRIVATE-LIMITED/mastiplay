@@ -10,11 +10,9 @@ import 'package:spinner_try/webRTC/web_rtc.dart';
 class AudioRoom extends StatefulWidget {
   final Room room;
   final int maxParticipants;
-  final String? url;
   const AudioRoom({
     super.key,
     required this.room,
-    this.url,
     this.maxParticipants = 8,
   });
 
@@ -46,10 +44,7 @@ class _AudioRoomState extends State<AudioRoom> {
         }
       },
       controller: controller,
-      userData: currentUser.toJson()
-        ..addAll({
-          'photo': widget.url ?? currentUser.photo,
-        }),
+      userData: currentUser.toJson(),
       roomId: widget.room.id,
       builder: (context, roomId, usersData, videoViews, myUserData, myVideoView,
           controls) {
