@@ -48,7 +48,7 @@ class MessageData {
       "from": from,
       "indicative": indicative,
       "createdAt": createdAt.millisecondsSinceEpoch,
-      "deletedAt": deletedAt == null ? null : deletedAt!.millisecondsSinceEpoch,
+      "deletedAt": deletedAt?.millisecondsSinceEpoch,
       if (modifiedAt != null) "modifiedAt": modifiedAt!.millisecondsSinceEpoch,
       "readBy": readBy.toList()
     };
@@ -75,7 +75,7 @@ Future<void> addMeInReadBy(ChatData chat, MessageData msg) async {
   final chatMessages = firestore.doc(chat.path).collection("chat");
   await chatMessages
       .doc(msg.id)
-      .update({'readBy': msg.readBy..add(currentUser.email)});
+      .update({'readBy': msg.readBy..add(auth.currentUser!.email!)});
 }
 
 Future<MessageData?> fetchLastMessage(String path, {Source? src}) async {
@@ -98,10 +98,10 @@ Future<void> addMessage(ChatData chat, MessageData msg) async {
     ..add(chat.owner)
     ..forEach((email) async {
       // for now I'm also sending a notification to myself in debug mode
-      if (email == currentUser.email && !kDebugMode) return;
+      if (email == auth.currentUser!.email && !kDebugMode) return;
       // await sendNotification(
       //   toEmail: email,
-      //   title: currentUser.name ?? currentUser.email,
+      //   title: currentUser.name ?? auth.currentUser!.email,
       //   body: msg.txt,
       //   data: {
       //     'path': "${chat.path}/chat/${msg.id}",

@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:spinner_try/chat/widgets/profile_preview.dart';
 
 import 'shivanshu/models/firestore/firestore_document.dart';
 
@@ -7,21 +9,22 @@ class UserModel {
   final String name;
   final String email;
   final String photo;
+  final String? phoneNumber;
   final int gender;
   final DateTime? dob;
   final String country;
   final String? frame;
 
-  const UserModel({
-    this.dob,
-    this.id,
-    required this.name,
-    required this.photo,
-    this.gender = 1,
-    required this.email,
-    required this.country,
-    this.frame
-  });
+  const UserModel(
+      {this.dob,
+      this.phoneNumber,
+      this.id,
+      this.name = "",
+      this.photo = "",
+      this.gender = 1,
+      this.email = "",
+      this.country = "",
+      this.frame = ""});
 
   factory UserModel.fromSnapahot(
       DocumentSnapshot<Map<String, dynamic>> document) {
@@ -31,15 +34,15 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> data) {
     return UserModel(
-      id: data['id'] ?? (-1).toString(),
-      photo: data["photo"] ?? "",
-      name: data["name"],
-      email: data["email"],
-      dob: data['dob'] != null ? (data['dob'] as Timestamp).toDate() : null,
-      gender: data['gender'] ?? 1,
-      country: data['country'] ?? "",
-      frame: data['frame'] ?? ""
-    );
+        id: data['id'] ?? (-1).toString(),
+        photo: data["photo"] ?? "",
+        name: data["name"],
+        phoneNumber: data["phoneNumber"],
+        email: data["email"],
+        dob: data['dob'] != null ? (data['dob'] as Timestamp).toDate() : null,
+        gender: data['gender'] ?? 1,
+        country: data['country'] ?? "",
+        frame: data['frame'] ?? "");
   }
 
   Map<String, dynamic> toJson() {
@@ -48,10 +51,11 @@ class UserModel {
       "name": name,
       "email": email,
       "photo": photo,
+      "phoneNumber": phoneNumber,
       'dob': dob,
       'gender': gender,
       'country': country,
-      'frame':frame
+      'frame': frame
     };
   }
 }
@@ -59,4 +63,30 @@ class UserModel {
 Future<UserModel> fetchUser(String email) async {
   final doc = (await FirestoreDocument(id: email, path: "users").fetch());
   return UserModel.fromJson(doc.data);
+}
+
+Future<List<UserModel>> fetchUsers(List<String> emails) async {
+  List<Future<UserModel>> futures = [];
+  for (String email in emails) {
+    futures.add(fetchUser(email));
+  }
+  List<UserModel> users = await Future.wait(futures);
+  return users;
+}
+
+Future showUserPreview(BuildContext context, UserModel user) {
+  return Navigator.of(context).push(
+    DialogRoute(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        contentPadding: const EdgeInsets.only(
+          top: 40,
+          bottom: 20,
+          right: 10,
+          left: 10,
+        ),
+        content: ProfilePreview(user: user),
+      ),
+    ),
+  );
 }
