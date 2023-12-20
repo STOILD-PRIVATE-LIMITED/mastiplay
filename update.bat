@@ -11,8 +11,3 @@ git push -u origin
 git branch -d dev
 git branch dev
 git checkout dev
-
-@echo off
-echo.
-echo Last Commit Message:
-git log -1 --pretty=%B
