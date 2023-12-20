@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/chat/widgets/profile_preview.dart';
+import 'package:spinner_try/shivanshu/utils.dart';
 
 import 'shivanshu/models/firestore/firestore_document.dart';
 
@@ -52,7 +53,7 @@ class UserModel {
       "email": email,
       "photo": photo,
       "phoneNumber": phoneNumber,
-      'dob': dob,
+      'dob': dob?.toJson(),
       'gender': gender,
       'country': country,
       'frame': frame
