@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:spinner_try/chat/models/message.dart';
+import 'package:spinner_try/chat/screens/chat_screen.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
+import 'package:spinner_try/shivanshu/utils.dart';
 
 class ChatData {
   String title;
@@ -37,15 +39,15 @@ showChat(
   required String id,
   required List<String> emails,
 }) {
-  // return navigatorPush(
-  //   context,
-  //   ChatScreen(
-  //     chat: ChatData(
-  //       owner: currentUser.email!,
-  //       receivers: emails,
-  //       title: id,
-  //       path: 'chats/$id',
-  //     ),
-  //   ),
-  // );
+  return navigatorPush(
+    context,
+    ChatScreen(
+      chat: ChatData(
+        owner: auth.currentUser!.email!,
+        receivers: emails,
+        title: id,
+        path: 'chats/$id',
+      ),
+    ),
+  );
 }

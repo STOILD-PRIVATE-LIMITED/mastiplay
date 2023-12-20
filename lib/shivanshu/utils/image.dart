@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:spinner_try/chat/models/message.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 
 /// Ask the user for an image
@@ -63,7 +64,7 @@ Future<String?> getLocalImageOnCloud(context,
       ),
     ),
   );
-  return uploadImage(context, imageFile, currentUser.email, fileName);
+  return uploadImage(context, imageFile, auth.currentUser!.email!, fileName);
 }
 
 Future<String?> uploadImage(
@@ -160,4 +161,9 @@ Future<String?> uploadImage(
         }),
   );
   return downloadURL;
+}
+
+bool isImage(MessageData msg) {
+  RegExp regex = RegExp(r"!\[.*\]\(.*\)");
+  return regex.hasMatch(msg.txt);
 }
