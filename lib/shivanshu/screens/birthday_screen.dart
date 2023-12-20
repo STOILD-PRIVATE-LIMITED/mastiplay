@@ -67,7 +67,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
               context,
               img!,
               'images',
-              auth.currentUser!.email!,
+              widget.email,
             );
     }
 
