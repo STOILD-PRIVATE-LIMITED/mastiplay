@@ -11,7 +11,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  bool isChecked = false;
+  bool isChecked = true;
 
   @override
   Widget build(BuildContext context) {

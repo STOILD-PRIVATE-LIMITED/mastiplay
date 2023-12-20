@@ -492,7 +492,7 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
     // log("got session_description = ${session_description} for $peer_id");
     final desc = RTCSessionDescription(
         remoteDescription['sdp'], remoteDescription['type']);
-    var stuff = await peer.setRemoteDescription(desc);
+    await peer.setRemoteDescription(desc);
     log("setRemoteDescription succeeded");
 
     if (remoteDescription['type'] == "offer") {

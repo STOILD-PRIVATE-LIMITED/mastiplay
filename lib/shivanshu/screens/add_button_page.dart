@@ -14,13 +14,11 @@ import 'package:spinner_try/shivanshu/widgets/tab_view.dart';
 import 'package:spinner_try/webRTC/video_room.dart';
 
 class AddButtonPage extends StatefulWidget {
+  final String email;
   final int selectedIndex;
   final String? roomID;
-  const AddButtonPage({
-    super.key,
-    this.selectedIndex = 0,
-    this.roomID,
-  });
+  const AddButtonPage(
+      {super.key, this.selectedIndex = 0, this.roomID, required this.email});
 
   @override
   State<AddButtonPage> createState() => _AddButtonPageState();
@@ -170,7 +168,7 @@ class _AddButtonPageState extends State<AddButtonPage> {
     if (room == null) {
       roomIdController.text = roomIdController.text.trim();
       enteredRoomID = roomIdController.text;
-      if (FirebaseAuth.instance.currentUser == null) {
+      if (FirebaseAuth.instance.currentUser == null && widget.email.isEmpty) {
         showMsg(context, 'You are\'nt logged in yet.');
         return;
       }

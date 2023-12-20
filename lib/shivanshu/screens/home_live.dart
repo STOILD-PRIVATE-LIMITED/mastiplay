@@ -7,7 +7,8 @@ import 'package:spinner_try/shivanshu/widgets/bottom_nav_bar.dart';
 import '../../screen/profile_edit.dart';
 
 class HomeLive extends StatefulWidget {
-  const HomeLive({super.key});
+  final String email;
+  const HomeLive({super.key, required this.email});
 
   @override
   State<HomeLive> createState() => _HomeLiveState();
@@ -19,7 +20,6 @@ class _HomeLiveState extends State<HomeLive> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // extendBody: true,
       body: PageView(
         controller: _pageViewController,
         onPageChanged: (i) {
@@ -35,6 +35,7 @@ class _HomeLiveState extends State<HomeLive> {
         ],
       ),
       bottomNavigationBar: BottomNavBar(
+        email: widget.email,
         key: UniqueKey(),
         onTap: (i) {
           setState(() {

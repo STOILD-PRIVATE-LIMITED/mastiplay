@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/screens/home_live.dart';
 
 class UserHome extends StatefulWidget {
+  
   var name;
   var email;
   var photo;
@@ -21,6 +22,6 @@ class UserHome extends StatefulWidget {
 class _UserHomeState extends State<UserHome> {
   @override
   Widget build(BuildContext context) {
-    return const HomeLive();
+    return HomeLive(email: widget.email,);
   }
 }
