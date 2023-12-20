@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,8 +14,8 @@ import 'package:spinner_try/components/button.dart';
 import 'package:spinner_try/components/textfield.dart';
 import 'package:spinner_try/shivanshu/models/firestore/firestore_document.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
+import 'package:spinner_try/shivanshu/screens/gender_screen.dart';
 import 'package:spinner_try/shivanshu/utils/image.dart';
-import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'shivanshu/screens/home_live.dart';
 
 class Register extends StatefulWidget {
@@ -135,8 +134,11 @@ class _RegisterState extends State<Register> {
       signIn();
       Navigator.push(
         context,
-        CupertinoPageRoute(
-          builder: (context) => const HomeLive(),
+        MaterialPageRoute(
+          builder: (context) => GenderScreen(
+            username: nameController.text,
+            email: usernameController.text,
+          ),
         ),
       );
     }
@@ -155,12 +157,12 @@ class _RegisterState extends State<Register> {
       otp = data['otp'];
       setState(() {});
     } else {
-      throw Exception('Failed to send OTP to your mail: ${usernameController.text}');
+      throw Exception(
+          'Failed to send OTP to your mail: ${usernameController.text}');
     }
   }
 
   void signUp() async {
-    final email = usernameController.text;
     final phone = phoneController.text;
 
     try {
@@ -181,20 +183,23 @@ class _RegisterState extends State<Register> {
           ),
         );
       } else {
-        var res1 =
-            await db.collection("users").where("email", isEqualTo: email).get();
-        if (res1.docs.isNotEmpty) {
-          Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("This email is already registered"),
-            ),
-          );
-        } else {
-          setState(() {
-            isverified = true;
-          });
-        }
+        setState(() {
+          isverified = true;
+        });
+        // var res1 =
+        //     await db.collection("users").where("email", isEqualTo: email).get();
+        // if (res1.docs.isNotEmpty) {
+        //   Navigator.pop(context);
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     const SnackBar(
+        //       content: Text("This email is already registered"),
+        //     ),
+        //   );
+        // } else {
+        //   setState(() {
+        //     isverified = true;
+        //   });
+        // }
       }
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
@@ -310,29 +315,29 @@ class _RegisterState extends State<Register> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 23),
-                        child: Text(
-                          "Profile Photo",
-                          style:
-                              TextStyle(color: Colors.grey[700], fontSize: 18),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  ProfileImage(
-                    img: _image1,
-                    onChanged: (File fileImage) {
-                      setState(() {
-                        _image1 = fileImage;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 20),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     Container(
+                  //       margin: const EdgeInsets.symmetric(horizontal: 23),
+                  //       child: Text(
+                  //         "Profile Photo",
+                  //         style:
+                  //             TextStyle(color: Colors.grey[700], fontSize: 18),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // const SizedBox(height: 20),
+                  // ProfileImage(
+                  //   img: _image1,
+                  //   onChanged: (File fileImage) {
+                  //     setState(() {
+                  //       _image1 = fileImage;
+                  //     });
+                  //   },
+                  // ),
+                  // const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
