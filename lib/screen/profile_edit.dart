@@ -5,9 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
+import 'package:spinner_try/screen/login.dart';
 import 'package:spinner_try/user_model.dart';
 
-import '../auth.dart';
 
 class ProfileEdit extends StatefulWidget {
   const ProfileEdit({super.key});
@@ -388,7 +388,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                     await FirebaseAuth.instance.signOut();
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => const MyAuth(),
+                        builder: (context) => const Login(),
                       ),
                     );
                   },
