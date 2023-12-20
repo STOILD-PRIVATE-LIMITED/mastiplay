@@ -10,15 +10,18 @@ class UserModel {
   final int gender;
   final DateTime? dob;
   final String country;
+  final String? frame;
 
-  const UserModel(
-      {this.dob,
-      this.id,
-      required this.name,
-      required this.photo,
-      this.gender = 1,
-      required this.email,
-      required this.country});
+  const UserModel({
+    this.dob,
+    this.id,
+    required this.name,
+    required this.photo,
+    this.gender = 1,
+    required this.email,
+    required this.country,
+    this.frame
+  });
 
   factory UserModel.fromSnapahot(
       DocumentSnapshot<Map<String, dynamic>> document) {
@@ -35,6 +38,7 @@ class UserModel {
       dob: data['dob'] != null ? (data['dob'] as Timestamp).toDate() : null,
       gender: data['gender'] ?? 1,
       country: data['country'] ?? "",
+      frame: data['frame'] ?? ""
     );
   }
 
@@ -47,6 +51,7 @@ class UserModel {
       'dob': dob,
       'gender': gender,
       'country': country,
+      'frame':frame
     };
   }
 }
