@@ -8,4 +8,3 @@ git push -u origin
 git branch -d dev
 git branch dev
 git checkout dev
-flutter
