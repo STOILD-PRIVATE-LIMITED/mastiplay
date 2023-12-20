@@ -493,3 +493,9 @@ String ddmmyyyy(DateTime dateTime) {
 String timeFrom(DateTime dateTime) {
   return "${dateTime.hour > 12 ? dateTime.hour - 12 : dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')} ${dateTime.hour < 12 ? 'am' : 'pm'}";
 }
+
+extension DateTimeExtensions on DateTime {
+  int toJson() {
+    return millisecondsSinceEpoch ~/ 1000;
+  }
+}

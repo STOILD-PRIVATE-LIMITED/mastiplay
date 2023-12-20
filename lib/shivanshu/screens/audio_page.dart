@@ -475,7 +475,9 @@ class _AudioPageState extends State<AudioPage> {
                             return SizedBox(
                               height: constraints.maxHeight,
                               width: constraints.maxWidth * 4 / 5,
-                              child: ListView.builder(
+                              child: ListView.separated(
+                                separatorBuilder: (ctx, index) =>
+                                    const SizedBox(height: 5),
                                 reverse: true,
                                 itemCount: messages.length,
                                 itemBuilder: (ctx, index) {
