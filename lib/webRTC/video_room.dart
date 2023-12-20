@@ -10,7 +10,9 @@ import 'package:spinner_try/webRTC/web_rtc.dart';
 class VideoRoom extends StatelessWidget {
   final Room room;
   final String? url;
-  const VideoRoom({super.key, required this.room, this.url});
+
+  final _controller = TextEditingController();
+  VideoRoom({super.key, required this.room, this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -100,12 +102,14 @@ class VideoRoom extends StatelessWidget {
                                     as ImageProvider,
                             backgroundColor: Colors.transparent,
                           ),
+                          const SizedBox(width: 5),
                           Expanded(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  room.admin ?? "Error",
+                                  room.name,
                                   style: const TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
@@ -484,29 +488,93 @@ class VideoRoom extends StatelessWidget {
                     //   ),
                   ),
                   backgroundColor: Colors.transparent,
-                  floatingActionButton: GlassWidget(
-                    radius: 50,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        for (int i = 0; i < usersData.length; ++i)
-                          AudioUserTile(
-                            imgUrl: usersData[i]['photo'],
-                            name: usersData[i].isEmpty
-                                ? "Error"
-                                : (usersData[i]['name'] ??
-                                    usersData[i]['email'] ??
-                                    "Anonymous"),
-                          ),
-                      ],
-                    ),
+                  body: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return LiveChatBuilder(
+                        builder: (ctx, messages) {
+                          messages = messages.reversed.toList();
+                          return SizedBox(
+                            height: constraints.maxHeight,
+                            width: constraints.maxWidth * 4 / 5,
+                            child: ListView.builder(
+                              reverse: true,
+                              itemCount: messages.length,
+                              itemBuilder: (ctx, index) {
+                                final String message =
+                                    messages[index]['message'] ?? "Error";
+                                final userData = messages[index]['userData'];
+                                final photo = userData['photo'];
+                                return ListTile(
+                                  contentPadding: const EdgeInsets.only(
+                                      left: 10, right: 10),
+                                  dense: true,
+                                  horizontalTitleGap: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  minVerticalPadding: 5,
+                                  tileColor: Colors.black38,
+                                  leading: CircleAvatar(
+                                    backgroundImage: photo.isEmpty
+                                        ? null
+                                        : NetworkImage(photo),
+                                    radius: 10,
+                                    child: photo.isNotEmpty
+                                        ? null
+                                        : const Icon(
+                                            Icons.person_rounded,
+                                            size: 15,
+                                          ),
+                                  ),
+                                  title: RichText(
+                                    text: TextSpan(children: [
+                                      TextSpan(
+                                        text: "${userData['name']}: ",
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: message,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          // fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ]),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
-                  bottomNavigationBar: Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
+                  floatingActionButton: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      for (int i = 0; i < usersData.length; ++i)
+                        AudioUserTile(
+                          imgUrl: usersData[i]['photo'],
+                          name: usersData[i].isEmpty
+                              ? "Error"
+                              : (usersData[i]['name'] ??
+                                  usersData[i]['email'] ??
+                                  "Anonymous"),
+                        ),
+                    ],
+                  ),
+                  bottomNavigationBar: Card(
+                    elevation: 0,
+                    color: Colors.black26,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40)),
                     child: Row(
                       children: [
                         IconButton(
@@ -526,6 +594,16 @@ class VideoRoom extends StatelessWidget {
                               borderRadius: BorderRadius.circular(50),
                             ),
                             child: TextFormField(
+                              controller: _controller,
+                              onFieldSubmitted: (value) {
+                                if (value.isNotEmpty) {
+                                  sendMessage(
+                                    value,
+                                    room.id,
+                                  );
+                                  _controller.clear();
+                                }
+                              },
                               decoration: InputDecoration(
                                 filled: true,
                                 border: OutlineInputBorder(

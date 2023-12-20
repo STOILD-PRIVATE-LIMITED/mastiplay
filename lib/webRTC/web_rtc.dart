@@ -30,16 +30,27 @@ class LiveChatBuilder extends StatefulWidget {
 }
 
 class _LiveChatBuilderState extends State<LiveChatBuilder> {
+  void broadCastMsg(data) {
+    log("Received a broadcast msg: $data");
+    if (context.mounted) {
+      setState(() {
+        messages.add(data);
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     log("Setting up socket listeners for chat");
-    socket!.on('broadcastMsg', (data) {
-      log("Received a broadcast msg: $data");
-      setState(() {
-        messages.add(data);
-      });
-    });
+    socket!.on('broadcastMsg', broadCastMsg);
+  }
+
+  @override
+  void dispose() {
+    log("Removing socket listeners for chat");
+    socket?.off('broadcastMsg', broadCastMsg);
+    super.dispose();
   }
 
   List<Map<String, dynamic>> messages = [];

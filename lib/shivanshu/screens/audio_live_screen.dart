@@ -234,7 +234,9 @@ class _AudioLiveState extends State<AudioLive> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          setState(() {});
+          if (context.mounted) {
+            setState(() {});
+          }
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
