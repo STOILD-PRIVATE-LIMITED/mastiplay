@@ -57,42 +57,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           fontFamily: 'assets/fontsSofiaProRegular.ttf',
         ),
-        home: StreamBuilder(
-          stream: auth.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              fetchUser(auth.currentUser!.email!).then((value) {
-                if (value.id == null || value.id!.isEmpty) {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => GenderScreen(
-                                email: auth.currentUser!.email!,
-                              )));
-                } else {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => HomeLive(
-                                email: auth.currentUser!.email!,
-                              )));
-                }
-              });
-              return Scaffold(
-                body: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text("You're logged in"),
-                      circularProgressIndicator(),
-                    ],
-                  ),
-                ),
-              );
-            }
-            return const Login();
-          },
-        )
+        home: const NewAuth()
         // home: const ProfileEdit(),
         // home: HomeScreennn(),
         // home: const HomeLive()
@@ -104,6 +69,50 @@ class MyApp extends StatelessWidget {
         //   itemHeight: 30,
         // ),
         );
+  }
+}
+
+class NewAuth extends StatelessWidget {
+  const NewAuth({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: auth.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          fetchUser(auth.currentUser!.email!).then((value) {
+            if (value.id == null || value.id!.isEmpty) {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => GenderScreen(
+                            email: auth.currentUser!.email!,
+                          )));
+            } else {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HomeLive(
+                            email: auth.currentUser!.email!,
+                          )));
+            }
+          });
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("You're logged in"),
+                  circularProgressIndicator(),
+                ],
+              ),
+            ),
+          );
+        }
+        return const Login();
+      },
+    );
   }
 }
 

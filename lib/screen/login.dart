@@ -156,8 +156,7 @@ class _LoginState extends State<Login> {
                           )
                         : GestureDetector(
                             onTap: () {
-                              Navigator.of(context)
-                                  .pushReplacement(MaterialPageRoute(
+                              Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) {
                                   return const LoginOrRegister();
                                 },
@@ -231,8 +230,7 @@ class _LoginState extends State<Login> {
                           )
                         : GestureDetector(
                             onTap: () {
-                              Navigator.of(context)
-                                  .pushReplacement(MaterialPageRoute(
+                              Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) {
                                   return const MobileNumber();
                                 },

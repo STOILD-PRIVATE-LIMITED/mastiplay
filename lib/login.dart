@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/components/button.dart';
 import 'package:spinner_try/components/textfield.dart';
+import 'package:spinner_try/main.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/loading_elevated_button.dart';
 
@@ -44,6 +45,14 @@ class _LoginState extends State<Login> {
           email: usernameController.text, password: passwordController.text);
 
       Navigator.pop(context);
+      while (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const NewAuth(),
+        ),
+      );
       // pop the loading circle
     } on FirebaseAuthException catch (e) {
       // pop the loading circle
