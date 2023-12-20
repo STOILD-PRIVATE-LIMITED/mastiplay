@@ -70,11 +70,6 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
             );
     }
 
-    @override
-    void initState() {
-      super.initState();
-      print(widget.email);
-    }
 
     // widget.name;
     // widget.gender;
