@@ -6,17 +6,17 @@ import 'package:spinner_try/shivanshu/utils.dart';
 import 'shivanshu/models/firestore/firestore_document.dart';
 
 class UserModel {
-  final String? id;
-  final String name;
-  final String email;
-  final String photo;
-  final String? phoneNumber;
-  final int gender;
-  final DateTime? dob;
-  final String country;
-  final String? frame;
+  String? id;
+  String name;
+  String email;
+  String photo;
+  String? phoneNumber;
+  int gender;
+  DateTime? dob;
+  String country;
+  String? frame;
 
-  const UserModel(
+  UserModel(
       {this.dob,
       this.phoneNumber,
       this.id,
