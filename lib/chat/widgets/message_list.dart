@@ -19,16 +19,16 @@ class _MessageListState extends State<MessageList> {
   @override
   Widget build(BuildContext context) {
     // TODO: add more functionality like edit a message and send messages in reference to other messages
-    return StreamBuilder(
-      stream: firestore.collection("${widget.chat.path}/chat").snapshots(),
-      builder: (ctx, snapshot) {
+    return FutureBuilder(
+      future: fetchMessages(widget.chat.id, "some-id", 10),
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: circularProgressIndicator());
         }
 
         if (!snapshot.hasData ||
             snapshot.data == null ||
-            snapshot.data!.size == 0) {
+            snapshot.data!.isEmpty) {
           return Center(
             child: Text(
               'Send your first message',
@@ -37,9 +37,7 @@ class _MessageListState extends State<MessageList> {
           );
         }
 
-        widget.chat.messages = snapshot.data!.docs
-            .map((e) => MessageData.load(e.id, e.data()))
-            .toList();
+        widget.chat.messages = snapshot.data!.map((e) => e).toList();
         widget.chat.messages = widget.chat.messages.reversed.toList();
         for (final msg in widget.chat.messages) {
           if (msg.readBy.contains(auth.currentUser!.email)) break;

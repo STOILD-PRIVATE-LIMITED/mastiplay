@@ -102,10 +102,7 @@ class ProfilePreview extends StatelessWidget {
                       (auth.currentUser!.email!.compareTo(user.email) < 0)
                           ? "${auth.currentUser!.email}-${user.email}"
                           : "${user.email}-${auth.currentUser!.email}";
-                  firestore.collection('chats').doc(id).set({
-                    'recipients': [auth.currentUser!.email, user.email],
-                  });
-                  showChat(context, id: id, emails: [user.email]);
+                  showChat(context, chatId: id, emails: [user.email]);
                 },
                 icon: const Icon(Icons.chat_rounded),
               ),

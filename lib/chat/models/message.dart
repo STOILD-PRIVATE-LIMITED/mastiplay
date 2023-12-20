@@ -1,6 +1,8 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:spinner_try/shivanshu/models/globals.dart';
+import 'package:http/http.dart' as http;
 
 import 'chat.dart';
 
@@ -42,7 +44,7 @@ class MessageData {
     this.deletedAt,
   });
 
-  Map<String, dynamic> encode() {
+  Map<String, dynamic> toJson() {
     return {
       "txt": txt,
       "from": from,
@@ -52,6 +54,22 @@ class MessageData {
       if (modifiedAt != null) "modifiedAt": modifiedAt!.millisecondsSinceEpoch,
       "readBy": readBy.toList()
     };
+  }
+
+  factory MessageData.fromJson(Map<String, dynamic> json) {
+    return MessageData(
+      id: json['id'],
+      txt: json['txt'],
+      from: json['from'],
+      indicative: json['indicative'],
+      createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt']),
+      deletedAt: json['deletedAt'] == null
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(json['deletedAt']),
+      modifiedAt: json['modifiedAt'] == null
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(json['modifiedAt']),
+    );
   }
 
   MessageData.load(this.id, Map<String, dynamic> data) {
@@ -72,54 +90,43 @@ class MessageData {
 }
 
 Future<void> addMeInReadBy(ChatData chat, MessageData msg) async {
-  final chatMessages = firestore.doc(chat.path).collection("chat");
-  await chatMessages
-      .doc(msg.id)
-      .update({'readBy': msg.readBy..add(auth.currentUser!.email!)});
+  log("TODO: addMeInReadBy is still pending!!!!!!");
+  // final chatMessages = await http.get(Uri.parse('${chatServer}/api/chats/${chat.id}/chat/${msg.id}'));
+  // await chatMessages
+  //     .doc(msg.id)
+  //     .update({'readBy': msg.readBy..add(auth.currentUser!.email!)});
 }
 
 Future<MessageData?> fetchLastMessage(String path, {Source? src}) async {
-  final response = await firestore
-      .collection('$path/chat')
-      .orderBy('createdAt', descending: true)
-      .limit(1)
-      .get(src == null ? null : GetOptions(source: src));
-  for (final doc in response.docs) {
-    return MessageData.load(doc.id, doc.data());
-  }
+  log("This function is still pending.");
+  // final response = await firestore
+  //     .collection('$path/chat')
+  //     .orderBy('createdAt', descending: true)
+  //     .limit(1)
+  //     .get(src == null ? null : GetOptions(source: src));
+  // for (final doc in response.docs) {
+  //   return MessageData.load(doc.id, doc.data());
+  // }
   return null;
 }
 
 Future<void> addMessage(ChatData chat, MessageData msg) async {
-  final chatMessages = firestore.doc(chat.path).collection("chat");
-  msg.id = DateTime.now().millisecondsSinceEpoch.toString();
-  await chatMessages.doc(msg.id).set(msg.encode());
-  chat.receivers.map((e) => e).toList()
-    ..add(chat.owner)
-    ..forEach((email) async {
-      // for now I'm also sending a notification to myself in debug mode
-      if (email == auth.currentUser!.email && !kDebugMode) return;
-      // await sendNotification(
-      //   toEmail: email,
-      //   title: currentUser.name ?? auth.currentUser!.email,
-      //   body: msg.txt,
-      //   data: {
-      //     'path': "${chat.path}/chat/${msg.id}",
-      //     'type': 'message',
-      //   },
-      // );
-    });
+  await http.post(Uri.parse('$chatServer/api/chats/${chat.id}/messages'),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: json.encode(msg.toJson()));
 }
 
 Future<void> deleteMessage(ChatData chat, MessageData msg) async {
-  if (msg.deletedAt == null) {
-    msg.deletedAt = DateTime.now();
-  } else {
-    msg.deletedAt = null;
-  }
-  final chatMessages = firestore.doc(chat.path).collection("chat");
-  await chatMessages.doc(msg.id).update({
-    'deletedAt':
-        msg.deletedAt == null ? null : msg.deletedAt!.millisecondsSinceEpoch
-  });
+  await http.post(
+    Uri.parse('$chatServer/api/chats/${chat.id}/messages/${msg.id}'),
+    body: {"action": "delete"},
+  );
+}
+
+Future<List<MessageData>> fetchMessages(
+    String chatID, String start, int limit) async {
+  log("This function for fetchMessages is still pending.");
+  return [];
 }
