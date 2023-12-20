@@ -1,45 +1,45 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:spinner_try/shivanshu/screens/gender_screen.dart';
 import 'package:spinner_try/shivanshu/screens/home_live.dart';
 import 'package:spinner_try/user_model.dart';
 
-Future<UserCredential> signInWithFacebook(context) async {
-  try {
-    LoginResult loginResult = await FacebookAuth.instance.login();
+// Future<UserCredential> signInWithFacebook(context) async {
+//   try {
+//     LoginResult loginResult = await FacebookAuth.instance.login();
 
-    if (loginResult.status == LoginStatus.success) {
-      final AccessToken accessToken = loginResult.accessToken!;
-      final OAuthCredential credential =
-          FacebookAuthProvider.credential(accessToken.token);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomeLive(),
-        ),
-      );
-      return await FirebaseAuth.instance.signInWithCredential(credential);
-    } else {
-      throw FirebaseAuthException(
-        code: '!!!!Facebook Login Failed!!!!',
-        message: '!!!!The Facebook login was not successful.!!!!',
-      );
-    }
-  } on FirebaseAuthException catch (e) {
-    if (kDebugMode) {
-      print('Firebase Auth Exception: ${e.message}');
-    }
-    rethrow;
-  } catch (e) {
-    if (kDebugMode) {
-      print('Other Exception: $e');
-    }
-    rethrow;
-  }
-}
+//     if (loginResult.status == LoginStatus.success) {
+//       final AccessToken accessToken = loginResult.accessToken!;
+//       final OAuthCredential credential =
+//           FacebookAuthProvider.credential(accessToken.token);
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(
+//           builder: (context) => const HomeLive(),
+//         ),
+//       );
+//       return await FirebaseAuth.instance.signInWithCredential(credential);
+//     } else {
+//       throw FirebaseAuthException(
+//         code: '!!!!Facebook Login Failed!!!!',
+//         message: '!!!!The Facebook login was not successful.!!!!',
+//       );
+//     }
+//   } on FirebaseAuthException catch (e) {
+//     if (kDebugMode) {
+//       print('Firebase Auth Exception: ${e.message}');
+//     }
+//     rethrow;
+//   } catch (e) {
+//     if (kDebugMode) {
+//       print('Other Exception: $e');
+//     }
+//     rethrow;
+//   }
+// }
 
 class AuthServices {
   static signinUser(String email, String password, context) async {
@@ -54,7 +54,9 @@ class AuthServices {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const HomeLive(),
+          builder: (context) => HomeLive(
+            email: email,
+          ),
         ),
       );
     } on FirebaseAuthException catch (e) {
@@ -96,7 +98,7 @@ Future<UserCredential?> signInWithGoogle(context) async {
     final user = FirebaseAuth.instance.currentUser;
     try {
       await fetchUser('${user!.email}');
-    final variable = await fetchUser('${user.email}');
+      final variable = await fetchUser('${user.email}');
       if (variable.id == null || variable.id!.isEmpty) {
         Navigator.pushReplacement(
           context,
@@ -109,10 +111,11 @@ Future<UserCredential?> signInWithGoogle(context) async {
         );
       } else {
         Navigator.pushReplacement(
-
           context,
           MaterialPageRoute(
-            builder: (context) => const HomeLive(),
+            builder: (context) => HomeLive(
+              email: '${user.email}',
+            ),
           ),
         );
       }
@@ -120,7 +123,9 @@ Future<UserCredential?> signInWithGoogle(context) async {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const HomeLive(),
+          builder: (context) => HomeLive(
+            email: '${user!.email}',
+          ),
         ),
       );
     }
