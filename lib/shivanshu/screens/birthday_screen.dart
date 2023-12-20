@@ -69,17 +69,20 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
               auth.currentUser!.email!,
             );
     }
-    // send these to next screen
-    widget.name;
-    widget.gender;
-    _selectedDate;
-    country;
-    imgUrl;
 
-    widget.email;
+    @override
+    void initState() {
+      super.initState();
+      print(widget.email);
+    }
 
+    // widget.name;
+    // widget.gender;
+    // _selectedDate;
+    // country;
+    // imgUrl;
+    // widget.email;
     final db = FirebaseFirestore.instance;
-
     randomSet(
       FirestoreDocument(
         id: widget.email,

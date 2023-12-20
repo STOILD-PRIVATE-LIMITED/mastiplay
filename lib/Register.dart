@@ -27,7 +27,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
 
   final passwordController = TextEditingController();
 
@@ -64,13 +64,13 @@ class _RegisterState extends State<Register> {
   void signIn() async {
     try {
       final db = FirebaseFirestore.instance;
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: usernameController.text,
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
         password: passwordController.text,
       );
       final Map<String, String?> obj = {
         "name": nameController.text,
-        "email": usernameController.text,
+        "email": emailController.text,
         "photo": await uploadImage(
           context,
           _image1,
@@ -131,13 +131,12 @@ class _RegisterState extends State<Register> {
 
   void verify() async {
     if (otpController.text == otp.toString()) {
-      signIn();
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => GenderScreen(
             username: nameController.text,
-            email: usernameController.text,
+            email: emailController.text,
           ),
         ),
       );
@@ -150,7 +149,7 @@ class _RegisterState extends State<Register> {
     final response =
         await http.post(Uri.parse("https://3.7.66.245:8080/api/otp"), headers: {
       'Content-Type': 'application/json',
-      'email': usernameController.text,
+      'email': emailController.text,
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -158,57 +157,60 @@ class _RegisterState extends State<Register> {
       setState(() {});
     } else {
       throw Exception(
-          'Failed to send OTP to your mail: ${usernameController.text}');
+          'Failed to send OTP to your mail: ${emailController.text}');
     }
   }
 
   void signUp() async {
-    final phone = phoneController.text;
+    await getOtpFromUrl();
+    setState(() {
+      isverified = true;
+    });
 
-    try {
-      final db = FirebaseFirestore.instance;
-      await getOtpFromUrl();
-      var res = await db
-          .collection("users")
-          .where(
-            "number",
-            isEqualTo: phone.toString(),
-          )
-          .get();
-      if (res.docs.isNotEmpty) {
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("This number is already registered"),
-          ),
-        );
-      } else {
-        setState(() {
-          isverified = true;
-        });
-        // var res1 =
-        //     await db.collection("users").where("email", isEqualTo: email).get();
-        // if (res1.docs.isNotEmpty) {
-        //   Navigator.pop(context);
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     const SnackBar(
-        //       content: Text("This email is already registered"),
-        //     ),
-        //   );
-        // } else {
-        //   setState(() {
-        //     isverified = true;
-        //   });
-        // }
-      }
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.code),
-        ),
-      );
-    }
+    // try {
+    //   final db = FirebaseFirestore.instance;
+    //   await getOtpFromUrl();
+    //   var res = await db
+    //       .collection("users")
+    //       .where(
+    //         "number",
+    //         isEqualTo: phone.toString(),
+    //       )
+    //       .get();
+    //   if (res.docs.isNotEmpty) {
+    //     Navigator.pop(context);
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       const SnackBar(
+    //         content: Text("This number is already registered"),
+    //       ),
+    //     );
+    //   } else {
+    //     setState(() {
+    //       isverified = true;
+    //     });
+    // var res1 =
+    //     await db.collection("users").where("email", isEqualTo: email).get();
+    // if (res1.docs.isNotEmpty) {
+    //   Navigator.pop(context);
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(
+    //       content: Text("This email is already registered"),
+    //     ),
+    //   );
+    // } else {
+    //   setState(() {
+    //     isverified = true;
+    //   });
+    // }
+    // }
+    // } on FirebaseAuthException catch (e) {
+    //   Navigator.pop(context);
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: Text(e.code),
+    //     ),
+    //   );
+    // }
   }
 
   @override
@@ -315,29 +317,6 @@ class _RegisterState extends State<Register> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     Container(
-                  //       margin: const EdgeInsets.symmetric(horizontal: 23),
-                  //       child: Text(
-                  //         "Profile Photo",
-                  //         style:
-                  //             TextStyle(color: Colors.grey[700], fontSize: 18),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // const SizedBox(height: 20),
-                  // ProfileImage(
-                  //   img: _image1,
-                  //   onChanged: (File fileImage) {
-                  //     setState(() {
-                  //       _image1 = fileImage;
-                  //     });
-                  //   },
-                  // ),
-                  // const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -373,7 +352,7 @@ class _RegisterState extends State<Register> {
                   ),
                   const SizedBox(height: 10),
                   MyTextField(
-                    controller: usernameController,
+                    controller: emailController,
                     hintText: 'Your Email',
                     obscureText: false,
                   ),
