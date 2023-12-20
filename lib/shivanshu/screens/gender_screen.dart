@@ -6,7 +6,7 @@ import 'package:spinner_try/shivanshu/utils.dart';
 class GenderScreen extends StatefulWidget {
   final String username;
   final String email;
-  const GenderScreen({super.key, required this.username, required this.email});
+  const GenderScreen({super.key, this.username = "", required this.email});
 
   @override
   State<GenderScreen> createState() => _GenderScreenState();
