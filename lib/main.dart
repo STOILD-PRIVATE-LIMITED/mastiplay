@@ -73,7 +73,9 @@ class MyApp extends StatelessWidget {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const HomeLive()));
+                          builder: (context) => HomeLive(
+                                email: auth.currentUser!.email!,
+                              )));
                 }
               });
               return Scaffold(
