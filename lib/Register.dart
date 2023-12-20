@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:email_otp/email_otp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
@@ -26,7 +29,6 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  // controller
   final usernameController = TextEditingController();
 
   final passwordController = TextEditingController();
@@ -38,7 +40,6 @@ class _RegisterState extends State<Register> {
   final otpController = TextEditingController();
 
   bool pass = true;
-  EmailOTP myauth = EmailOTP();
   bool isverified = false;
   void visible() {
     setState(() {
@@ -72,7 +73,6 @@ class _RegisterState extends State<Register> {
       final Map<String, String?> obj = {
         "name": nameController.text,
         "email": usernameController.text,
-        // ignore: use_build_context_synchronously
         "photo": await uploadImage(
           context,
           _image1,
@@ -119,7 +119,11 @@ class _RegisterState extends State<Register> {
       });
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
-      ErrorMessage(e.code);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.code),
+        ),
+      );
       return;
     }
     if (Navigator.of(context).canPop()) {
@@ -128,102 +132,81 @@ class _RegisterState extends State<Register> {
   }
 
   void verify() async {
-    myauth.setSMTP(
-      host: 'smtp.gmail.com',
-      auth: true,
-      username: 'ramantank04@gmail.com',
-      password: 'Parshi@2003',
-      secure: "TLS",
-      port: 465,
-    );
-    myauth.setConfig(
-        appEmail: "mastiplayofficial@gmail.com",
-        appName: "Masti Play",
-        userEmail: usernameController.text,
-        otpLength: 6,
-        otpType: OTPType.digitsOnly);
-    if (await myauth.verifyOTP(otp: otpController.text) == true) {
+    if (otpController.text == otp.toString()) {
       signIn();
       Navigator.push(
-          context, CupertinoPageRoute(builder: (context) => const MyAuth()));
+        context,
+        CupertinoPageRoute(
+          builder: (context) => const HomeLive(),
+        ),
+      );
+    }
+  }
+
+  int otp = 0;
+
+  getOtpFromUrl() async {
+    final response =
+        await http.post(Uri.parse("https://3.7.66.245:8080/api/otp"), headers: {
+      'Content-Type': 'application/json',
+      'email': usernameController.text,
+    });
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      otp = data['otp'];
+      setState(() {});
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Invalid OTP")));
+      throw Exception('Failed to send OTP to your mail: ${usernameController.text}');
     }
   }
 
   void signUp() async {
     final email = usernameController.text;
     final phone = phoneController.text;
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
 
     try {
       final db = FirebaseFirestore.instance;
+      await getOtpFromUrl();
       var res = await db
           .collection("users")
-          .where("number", isEqualTo: phone.toString())
+          .where(
+            "number",
+            isEqualTo: phone.toString(),
+          )
           .get();
       if (res.docs.isNotEmpty) {
         Navigator.pop(context);
-        ErrorMessage("This number is already registered");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("This number is already registered"),
+          ),
+        );
       } else {
         var res1 =
             await db.collection("users").where("email", isEqualTo: email).get();
         if (res1.docs.isNotEmpty) {
           Navigator.pop(context);
-          ErrorMessage("Email is already registered");
-        } else {
-          myauth.setSMTP(
-            host: 'smtp.gmail.com',
-            auth: true,
-            username: 'ramantank04@gmail.com',
-            password: 'Parshi@2003',
-            secure: "TLS",
-            port: 465,
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("This email is already registered"),
+            ),
           );
-          myauth.setConfig(
-              appEmail: "mastiplayofficial@gmail.com",
-              appName: "Masti Play",
-              userEmail: usernameController.text,
-              otpLength: 6,
-              otpType: OTPType.digitsOnly);
-          if (await myauth.sendOTP() == true) {
-            setState(() {
-              isverified = true;
-            });
-          } else {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(const SnackBar(content: Text("OTP send failed")));
-          }
+        } else {
+          // if (otpController.text == otp) {
+          setState(() {
+            isverified = true;
+          });
+          // }
         }
       }
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
-
-      ErrorMessage(e.code);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.code),
+        ),
+      );
     }
-  }
-
-  void ErrorMessage(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.red[800],
-          title: Text(
-            message,
-            style: const TextStyle(color: Colors.white),
-          ),
-        );
-      },
-    );
   }
 
   @override
@@ -279,17 +262,21 @@ class _RegisterState extends State<Register> {
                           FilteringTextInputFormatter.digitsOnly
                         ],
                         decoration: InputDecoration(
-                            enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white)),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    const BorderSide(color: Color(0xFFFF290C)),
-                                borderRadius: BorderRadius.circular(10)),
-                            fillColor: Colors.grey.shade200,
-                            filled: true,
-                            hintText: "Otp",
-                            hintStyle: TextStyle(
-                                color: Colors.grey[500], fontSize: 18)),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFFFF290C),
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          fillColor: Colors.grey.shade200,
+                          filled: true,
+                          hintText: "Otp",
+                          hintStyle:
+                              TextStyle(color: Colors.grey[500], fontSize: 18),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 35),
@@ -409,27 +396,30 @@ class _RegisterState extends State<Register> {
                       controller: passwordController,
                       obscureText: pass,
                       decoration: InputDecoration(
-                          suffixIcon: GestureDetector(
-                            onTap: visible,
-                            child: pass == true
-                                ? Icon(
-                                    Icons.visibility,
-                                    size: 25,
-                                    color: Colors.grey[500],
-                                  )
-                                : Icon(Icons.visibility_off,
-                                    color: Colors.grey[500], size: 25),
-                          ),
-                          enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(10)),
-                          fillColor: Colors.grey.shade200,
-                          filled: true,
-                          hintText: "Password",
-                          hintStyle:
-                              TextStyle(color: Colors.grey[500], fontSize: 18)),
+                        suffixIcon: GestureDetector(
+                          onTap: visible,
+                          child: pass == true
+                              ? Icon(
+                                  Icons.visibility,
+                                  size: 25,
+                                  color: Colors.grey[500],
+                                )
+                              : Icon(Icons.visibility_off,
+                                  color: Colors.grey[500], size: 25),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        hintText: "Password",
+                        hintStyle:
+                            TextStyle(color: Colors.grey[500], fontSize: 18),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
