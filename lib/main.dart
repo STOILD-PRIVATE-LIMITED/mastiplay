@@ -1,16 +1,18 @@
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:spinner_try/auth.dart';
-import 'package:spinner_try/loginorregister.dart';
 import 'package:spinner_try/screen/login.dart';
+import 'package:spinner_try/shivanshu/models/globals.dart';
+import 'package:spinner_try/shivanshu/screens/gender_screen.dart';
+import 'package:spinner_try/shivanshu/screens/home_live.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/widgets/highlight_wheel.dart';
+import 'package:spinner_try/user_model.dart';
 
 import 'firebase_options.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class DevHttpOverrides extends HttpOverrides {
   @override
@@ -55,7 +57,40 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           fontFamily: 'assets/fontsSofiaProRegular.ttf',
         ),
-        home: const Login()
+        home: StreamBuilder(
+          stream: auth.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              fetchUser(auth.currentUser!.email!).then((value) {
+                if (value.id == null || value.id!.isEmpty) {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => GenderScreen(
+                                email: auth.currentUser!.email!,
+                              )));
+                } else {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomeLive()));
+                }
+              });
+              return Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text("You're logged in"),
+                      circularProgressIndicator(),
+                    ],
+                  ),
+                ),
+              );
+            }
+            return const Login();
+          },
+        )
         // home: const ProfileEdit(),
         // home: HomeScreennn(),
         // home: const HomeLive()
