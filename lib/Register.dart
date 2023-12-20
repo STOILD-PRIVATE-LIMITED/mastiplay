@@ -17,7 +17,6 @@ import 'package:spinner_try/shivanshu/models/firestore/firestore_document.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils/image.dart';
 import 'package:spinner_try/shivanshu/utils/profile_image.dart';
-import 'auth.dart';
 import 'shivanshu/screens/home_live.dart';
 
 class Register extends StatefulWidget {
@@ -192,11 +191,9 @@ class _RegisterState extends State<Register> {
             ),
           );
         } else {
-          // if (otpController.text == otp) {
           setState(() {
             isverified = true;
           });
-          // }
         }
       }
     } on FirebaseAuthException catch (e) {
