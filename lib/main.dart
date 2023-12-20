@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
-        title: 'Spinner Demo',
+        title: 'Masti Play',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
             seedColor: const Color.fromARGB(255, 224, 93, 211),
