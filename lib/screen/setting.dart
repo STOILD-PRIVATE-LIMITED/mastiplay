@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/auth.dart';
+import 'package:spinner_try/screen/login.dart';
 import 'package:spinner_try/shivanshu/utils/loading_elevated_button.dart';
 
 class Setting extends StatefulWidget {
@@ -89,7 +90,7 @@ class SettingState extends State<Setting> {
                 }
                 await FirebaseAuth.instance.signOut();
                 Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const MyAuth()));
+                    MaterialPageRoute(builder: (context) => const Login()));
               },
             ),
           ],
