@@ -557,7 +557,10 @@ class VideoRoom extends StatelessWidget {
                           onPressed: () {
                             shareRoomLink(room.id);
                           },
-                          icon: Image.asset('assets/Send1.png'),
+                          icon: Image.asset(
+                            'assets/Send1.png',
+                            height: 20.sp,
+                          ),
                         ),
                         // IconButton(
                         //   style: IconButton.styleFrom(
