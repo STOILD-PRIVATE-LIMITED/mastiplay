@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'shivanshu/models/firestore/firestore_document.dart';
 
 class UserModel {
@@ -31,7 +32,7 @@ class UserModel {
       photo: data["photo"] ?? "",
       name: data["name"],
       email: data["email"],
-      dob: data['dob'],
+      dob: data['dob'] != null ? (data['dob'] as Timestamp).toDate() : null,
       gender: data['gender'] ?? 1,
       country: data['country'] ?? "",
     );
