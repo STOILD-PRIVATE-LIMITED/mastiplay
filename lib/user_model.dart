@@ -22,10 +22,10 @@ class UserModel {
     this.id,
     this.name = "",
     this.photo = "",
-    this.gender = 1,
+    this.gender = -1,
     this.email = "",
     this.country = "",
-    this.frame = "",
+    this.frame,
   });
 
   factory UserModel.fromSnapahot(
@@ -42,9 +42,9 @@ class UserModel {
       phoneNumber: data["phoneNumber"],
       email: data["email"],
       dob: DateTime.fromMillisecondsSinceEpoch(data['dob'] * 1000),
-      gender: data['gender'] ?? 1,
+      gender: data['gender'] ?? -1,
       country: data['country'] ?? "",
-      frame: data['frame'] ?? "",
+      frame: data['frame'],
     );
   }
 
