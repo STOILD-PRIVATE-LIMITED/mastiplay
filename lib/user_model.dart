@@ -40,9 +40,7 @@ class UserModel {
         name: data["name"],
         phoneNumber: data["phoneNumber"],
         email: data["email"],
-        dob: data['dob'] != null
-            ? DateTime.fromMillisecondsSinceEpoch(data['dob'] * 1000)
-            : null,
+        dob: data['dob'],
         gender: data['gender'] ?? 1,
         country: data['country'] ?? "",
         frame: data['frame'] ?? "");

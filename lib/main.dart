@@ -84,31 +84,35 @@ class NewAuth extends StatelessWidget {
           fetchUser(auth.currentUser!.email!).then((value) {
             if (value.id == null || value.id!.isEmpty) {
               Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => GenderScreen(
-                            email: auth.currentUser!.email!,
-                          )));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GenderScreen(
+                    email: auth.currentUser!.email!,
+                  ),
+                ),
+              );
             } else {
               Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => HomeLive(
-                            email: auth.currentUser!.email!,
-                          )));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeLive(
+                    email: auth.currentUser!.email!,
+                  ),
+                ),
+              );
             }
           });
-          return Scaffold(
-            body: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text("You're logged in"),
-                  circularProgressIndicator(),
-                ],
-              ),
-            ),
-          );
+          // return Scaffold(
+          //   body: Center(
+          //     child: Column(
+          //       mainAxisSize: MainAxisSize.min,
+          //       children: [
+          //         const Text("You're logged in"),
+          //         // circularProgressIndicator(),
+          //       ],
+          //     ),
+          //   ),
+          // );
         }
         return const Login();
       },
