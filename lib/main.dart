@@ -81,33 +81,27 @@ class NewAuth extends StatelessWidget {
       stream: auth.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          try {
-            fetchUser(auth.currentUser!.email!).then((value) {
-              currentUser = value;
-              if (value.id == null || value.id!.isEmpty) {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => GenderScreen(
-                              email: auth.currentUser!.email!,
-                            )));
-              } else {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomeLive(
-                              email: auth.currentUser!.email!,
-                            )));
-              }
-            });
-          } catch (e) {
-            Navigator.pushReplacement(
+          fetchUser(auth.currentUser!.email!).then((value) {
+            if (value.id == null || value.id!.isEmpty) {
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => GenderScreen(
-                          email: auth.currentUser!.email!,
-                        )));
-          }
+                  builder: (context) => GenderScreen(
+                    email: auth.currentUser!.email!,
+                  ),
+                ),
+              );
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeLive(
+                    email: auth.currentUser!.email!,
+                  ),
+                ),
+              );
+            }
+          });
           return Scaffold(
             body: Center(
               child: Column(

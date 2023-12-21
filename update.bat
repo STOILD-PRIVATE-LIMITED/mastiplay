@@ -3,7 +3,7 @@ set commit_message=%1
 if "%commit_message%"=="" set commit_message=New Update
 git checkout dev
 git add .
-git commit -m "%commit_message%"
+git commit -m "New Updatee"
 git checkout main
 git pull
 git merge dev

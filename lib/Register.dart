@@ -164,7 +164,19 @@ class _RegisterState extends State<Register> {
   }
 
   void signUp() async {
-    await getOtpFromUrl();
+    if (nameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Name shouldn't be empty"),
+        ),
+      );
+      return;
+    }
+    if (isEmailExits(emailController.text)) {
+      _showAlertDialog(context);
+      return;
+    }
+    getOtpFromUrl();
     setState(() {
       isverified = true;
     });
@@ -213,6 +225,51 @@ class _RegisterState extends State<Register> {
     //     ),
     //   );
     // }
+  }
+
+  final CollectionReference _usersCollection =
+      FirebaseFirestore.instance.collection('users');
+
+  List<String> _documentIds = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchDocumentIds();
+  }
+
+  Future<void> _fetchDocumentIds() async {
+    QuerySnapshot querySnapshot = await _usersCollection.get();
+    setState(() {
+      _documentIds =
+          querySnapshot.docs.map((doc) => doc.id.toString()).toList();
+    });
+  }
+
+  bool isEmailExits(String email) {
+    return _documentIds.contains(email);
+  }
+
+  _showAlertDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      title: const Text("Email already exists"),
+      content: const Text(
+          "Please try with another email or login with existing email"),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text("OK"),
+        ),
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   @override
