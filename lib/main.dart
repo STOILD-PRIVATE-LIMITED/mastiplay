@@ -86,7 +86,10 @@ class NewAuth extends StatelessWidget {
           try {
             fetchUser(auth.currentUser!.email!).then((value) {
               currentUser = value;
-              if (value.id == null || value.id!.isEmpty) {
+              if (value.gender == -1 ||
+                  value.dob == null ||
+                  value.country.isEmpty ||
+                  value.frame == null) {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

@@ -1,19 +1,14 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
-import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/screens/family_room_page.dart';
+import 'package:spinner_try/shivanshu/screens/frame_choose_screen.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/image.dart';
-import 'package:spinner_try/user_model.dart';
-
-import '../models/firestore/firestore_document.dart';
-import 'home_live.dart';
 
 class BirthdayScreen extends StatefulWidget {
   final String name;
@@ -71,62 +66,16 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
             );
     }
 
-    // widget.name;
-    // widget.gender;
-    // _selectedDate;
-    // country;
-    // imgUrl;
-    // widget.email;
-    final db = FirebaseFirestore.instance;
-
-    currentUser = UserModel(
-      email: widget.email,
-      name: widget.name,
-      photo: imgUrl ?? '',
-      gender: (widget.gender == 'Male') ? 0 : 1,
-      dob: _selectedDate,
-      country: country!.name.toString(),
-    );
-    final id = await randomSet(
-      FirestoreDocument(
-        id: widget.email,
-        path: 'users',
-        data: currentUser.toJson(),
-      ),
-      digitCount: 8,
-      uniqueCondition: (transaction, id) async {
-        log("uniqueCondition called for id: $id");
-        final doc = await FirebaseFirestore.instance
-            .collection('users')
-            .where('id', isEqualTo: id)
-            .get();
-        log("uniqueCondition is ${doc.docs.isEmpty}");
-        return doc.docs.isEmpty;
-      },
-      docSet: (transaction, id, data) async {
-        log("docSet called for id: $id");
-        data['id'] = id.toString();
-        data['updatedAt'] = DateTime.now().toIso8601String();
-        log("Adding things was succesful");
-        transaction.set(db.collection('users').doc(widget.email), data);
-      },
-    ).whenComplete(() {
-      while (Navigator.of(context).canPop()) {
-        Navigator.of(context).pop();
-      }
-      Navigator.pushReplacement(
+    navigatorPush(
         context,
-        MaterialPageRoute(
-          builder: (context) {
-            return HomeLive(
-              email: widget.email,
-            );
-          },
-        ),
-      );
-      // setState(() {});
-    });
-    currentUser.id = id.toString();
+        FrameChooseScreen(
+          name: name,
+          gender: widget.gender,
+          email: widget.email,
+          country: country!.displayName,
+          dob: _selectedDate!,
+          imgUrl: imgUrl,
+        ));
   }
 
   @override
