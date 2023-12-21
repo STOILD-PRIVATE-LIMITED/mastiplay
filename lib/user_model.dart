@@ -22,10 +22,10 @@ class UserModel {
       this.id,
       this.name = "",
       this.photo = "",
-      this.gender = 1,
+      this.gender = -1,
       this.email = "",
       this.country = "",
-      this.frame = ""});
+      this.frame});
 
   factory UserModel.fromSnapahot(
       DocumentSnapshot<Map<String, dynamic>> document) {
@@ -40,10 +40,10 @@ class UserModel {
         name: data["name"],
         phoneNumber: data["phoneNumber"],
         email: data["email"],
-        dob: data['dob'],
-        gender: data['gender'] ?? 1,
+        dob: DateTime.fromMillisecondsSinceEpoch(data['dob'] * 1000),
+        gender: data['gender'] ?? -1,
         country: data['country'] ?? "",
-        frame: data['frame'] ?? "");
+        frame: data['frame']);
   }
 
   Map<String, dynamic> toJson() {

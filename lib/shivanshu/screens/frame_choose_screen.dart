@@ -1,50 +1,100 @@
-import 'package:flutter/material.dart';
-import 'package:spinner_try/shivanshu/screens/birthday_screen.dart';
-import 'package:spinner_try/shivanshu/screens/family_room_page.dart';
-import 'package:spinner_try/shivanshu/utils.dart';
+import 'dart:developer';
 
-class GenderScreen extends StatefulWidget {
-  final String username;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:spinner_try/shivanshu/models/firestore/firestore_document.dart';
+import 'package:spinner_try/shivanshu/models/globals.dart';
+import 'package:spinner_try/shivanshu/screens/family_room_page.dart';
+import 'package:spinner_try/shivanshu/screens/home_live.dart';
+import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/user_model.dart';
+
+class FrameChooseScreen extends StatefulWidget {
+  final String name;
+  final String gender;
   final String email;
-  const GenderScreen({super.key, this.username = "", required this.email});
+  final String country;
+  final String? imgUrl;
+  final DateTime dob;
+
+  const FrameChooseScreen({
+    super.key,
+    required this.name,
+    required this.gender,
+    required this.email,
+    required this.country,
+    this.imgUrl,
+    required this.dob,
+  });
 
   @override
-  State<GenderScreen> createState() => _GenderScreenState();
+  State<FrameChooseScreen> createState() => _FrameChooseScreenState();
 }
 
-class _GenderScreenState extends State<GenderScreen> {
-  String name = "";
+class _FrameChooseScreenState extends State<FrameChooseScreen> {
   int? selectedIndex;
   TextEditingController nameController = TextEditingController();
 
-  void _submitForm() {
-    final isValid = _formKey.currentState!.validate();
+  void _submitForm() async {
+    // final isValid = _formKey.currentState!.validate();
     if (selectedIndex == null) {
-      showMsg(context, "Choose a gender please.");
+      showMsg(context, "Choose a frame please.");
       return;
     }
-    if (!isValid) {
-      return;
-    }
-    _formKey.currentState!.save();
-    navigatorPush(
+    final db = FirebaseFirestore.instance;
+
+    currentUser = UserModel(
+      email: widget.email,
+      name: widget.name,
+      photo: widget.imgUrl ?? '',
+      gender: (widget.gender == 'Male') ? 0 : 1,
+      dob: widget.dob,
+      country: widget.country,
+      frame: (selectedIndex! + 1).toString(),
+    );
+    final id = await randomSet(
+      FirestoreDocument(
+        id: widget.email,
+        path: 'users',
+        data: currentUser.toJson(),
+      ),
+      digitCount: 8,
+      uniqueCondition: (transaction, id) async {
+        log("uniqueCondition called for id: $id");
+        final doc = await FirebaseFirestore.instance
+            .collection('users')
+            .where('id', isEqualTo: id)
+            .get();
+        log("uniqueCondition is ${doc.docs.isEmpty}");
+        return doc.docs.isEmpty;
+      },
+      docSet: (transaction, id, data) async {
+        log("docSet called for id: $id");
+        data['id'] = id.toString();
+        data['updatedAt'] = DateTime.now().toIso8601String();
+        log("Adding things was succesful");
+        transaction.set(db.collection('users').doc(widget.email), data);
+      },
+    ).whenComplete(() {
+      while (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
+      Navigator.pushReplacement(
         context,
-        BirthdayScreen(
-          name: name,
-          gender: selectedIndex == 0 ? 'Male' : 'Female',
-          email: widget.email,
-        ));
+        MaterialPageRoute(
+          builder: (context) {
+            return HomeLive(
+              email: widget.email,
+            );
+          },
+        ),
+      );
+      // setState(() {});
+    });
+    currentUser.id = id.toString();
   }
 
   final _formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    super.initState();
-    name = widget.username;
-    print(widget.email);
-    print(widget.username);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +107,7 @@ class _GenderScreenState extends State<GenderScreen> {
                 },
               )
             : null,
-        title: const Text('Complete Information'),
+        title: const Text('Choose a Frame'),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -69,21 +119,32 @@ class _GenderScreenState extends State<GenderScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  TextField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      hintText: 'NickName',
-                      hintStyle: const TextStyle(color: Colors.black26),
-                      fillColor: Colors.black12.withOpacity(0.05),
-                      filled: true,
-                      prefixIcon: const Icon(Icons.person_rounded),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(40),
-                      ),
+                  Container(
+                    width: 150,
+                    height: 150,
+                    clipBehavior: Clip.hardEdge,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    keyboardType: TextInputType.name,
-                    textInputAction: TextInputAction.next,
+                    child: Hero(
+                      tag: widget.gender,
+                      child: widget.imgUrl != null
+                          ? Image.network(widget.imgUrl!, fit: BoxFit.cover)
+                          : Image.asset(
+                              widget.gender == 'Male'
+                                  ? 'assets/male.jpg'
+                                  : 'assets/female.jpg',
+                              fit: BoxFit.contain,
+                              width: 150,
+                            ),
+                    ),
+                  ),
+                  Text(
+                    'Choose a frame for your profile picture',
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   SizedBox(height: 30.sp),
                   Row(
@@ -106,9 +167,9 @@ class _GenderScreenState extends State<GenderScreen> {
                                     child: Hero(
                                       tag: 'Male',
                                       child: Image.asset(
-                                        'assets/male.jpg',
+                                        'assets/Frame 1.png',
                                         fit: BoxFit.contain,
-                                        width: 100,
+                                        height: 100,
                                       ),
                                     ),
                                     onTap: () {
@@ -126,7 +187,7 @@ class _GenderScreenState extends State<GenderScreen> {
                             ),
                             SizedBox(height: 10.sp),
                             Text(
-                              'Male',
+                              'Frame 1',
                               style: TextStyle(
                                 color: selectedIndex == 0
                                     ? const Color.fromARGB(255, 59, 214, 168)
@@ -155,9 +216,9 @@ class _GenderScreenState extends State<GenderScreen> {
                                     child: Hero(
                                       tag: 'Female',
                                       child: Image.asset(
-                                        'assets/female.jpg',
+                                        'assets/Frame 2.png',
                                         fit: BoxFit.contain,
-                                        width: 100,
+                                        height: 100,
                                       ),
                                     ),
                                     onTap: () {
@@ -177,7 +238,7 @@ class _GenderScreenState extends State<GenderScreen> {
                             ),
                             SizedBox(height: 10.sp),
                             Text(
-                              'Female',
+                              'Frame 2',
                               style: TextStyle(
                                 color: selectedIndex == 1
                                     ? const Color.fromARGB(255, 59, 214, 168)
