@@ -12,7 +12,7 @@ class UserModel {
   String photo;
   String? phoneNumber;
   int gender;
-  TimeStamp dob;
+  DateTime? dob;
   String country;
   String? frame;
 
