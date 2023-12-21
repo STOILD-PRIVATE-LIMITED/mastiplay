@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:spinner_try/auth.dart';
 import 'package:spinner_try/screen/login.dart';
 import 'package:spinner_try/shivanshu/utils/loading_elevated_button.dart';
 
