@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
 import 'package:spinner_try/screen/login.dart';
+import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/user_model.dart';
 
 class ProfileEdit extends StatefulWidget {
@@ -76,7 +77,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     final userDoc = await userRef.where('email', isEqualTo: email).get();
     final userDocId = userDoc.docs.first.id;
     await userRef.doc(userDocId).update({
-      'dob': _selectedDate,
+      'dob': _selectedDate.toJson(),
     });
   }
 
