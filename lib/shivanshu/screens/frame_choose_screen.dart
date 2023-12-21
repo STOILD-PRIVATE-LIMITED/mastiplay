@@ -7,6 +7,7 @@ import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/screens/family_room_page.dart';
 import 'package:spinner_try/shivanshu/screens/home_live.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/shivanshu/utils/loading_elevated_button.dart';
 import 'package:spinner_try/user_model.dart';
 
 class FrameChooseScreen extends StatefulWidget {
@@ -35,7 +36,7 @@ class _FrameChooseScreenState extends State<FrameChooseScreen> {
   int? selectedIndex;
   TextEditingController nameController = TextEditingController();
 
-  void _submitForm() async {
+  Future<void> _submitForm() async {
     // final isValid = _formKey.currentState!.validate();
     if (selectedIndex == null) {
       showMsg(context, "Choose a frame please.");
@@ -116,27 +117,52 @@ class _FrameChooseScreenState extends State<FrameChooseScreen> {
             child: Form(
               key: _formKey,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    width: 150,
-                    height: 150,
-                    clipBehavior: Clip.hardEdge,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Hero(
-                      tag: widget.gender,
-                      child: widget.imgUrl != null
-                          ? Image.network(widget.imgUrl!, fit: BoxFit.cover)
-                          : Image.asset(
-                              widget.gender == 'Male'
-                                  ? 'assets/male.jpg'
-                                  : 'assets/female.jpg',
-                              fit: BoxFit.contain,
-                              width: 150,
+                    width: width,
+                    height: 130,
+                    // clipBehavior: Clip.hardEdge,
+                    decoration: const BoxDecoration(
+                        // shape: BoxShape.circle,
+                        ),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          top: 30,
+                          bottom: 10,
+                          child: Container(
+                            clipBehavior: Clip.hardEdge,
+                            decoration:
+                                const BoxDecoration(shape: BoxShape.circle),
+                            child: Hero(
+                              tag: widget.gender,
+                              child: widget.imgUrl != null
+                                  ? Image.network(widget.imgUrl!,
+                                      fit: BoxFit.cover)
+                                  : Image.asset(
+                                      widget.gender == 'Male'
+                                          ? 'assets/male.jpg'
+                                          : 'assets/female.jpg',
+                                      fit: BoxFit.contain,
+                                      width: 150,
+                                    ),
                             ),
+                          ),
+                        ),
+                        if (selectedIndex != null)
+                          Image.asset(
+                            "assets/Frame ${selectedIndex! + 1}.png",
+                            // width: 150,
+                            height: 220,
+                            fit: BoxFit.fitHeight,
+                          ),
+                      ],
                     ),
                   ),
                   Text(
@@ -164,13 +190,10 @@ class _FrameChooseScreenState extends State<FrameChooseScreen> {
                                     // color: Colors.black12.withOpacity(0.05),
                                   ),
                                   child: InkWell(
-                                    child: Hero(
-                                      tag: 'Male',
-                                      child: Image.asset(
-                                        'assets/Frame 1.png',
-                                        fit: BoxFit.contain,
-                                        height: 100,
-                                      ),
+                                    child: Image.asset(
+                                      'assets/Frame 1.png',
+                                      fit: BoxFit.contain,
+                                      height: 100,
                                     ),
                                     onTap: () {
                                       setState(() {
@@ -213,13 +236,10 @@ class _FrameChooseScreenState extends State<FrameChooseScreen> {
                                     // color: Colors.black12.withOpacity(0.05),
                                   ),
                                   child: InkWell(
-                                    child: Hero(
-                                      tag: 'Female',
-                                      child: Image.asset(
-                                        'assets/Frame 2.png',
-                                        fit: BoxFit.contain,
-                                        height: 100,
-                                      ),
+                                    child: Image.asset(
+                                      'assets/Frame 2.png',
+                                      fit: BoxFit.contain,
+                                      height: 100,
                                     ),
                                     onTap: () {
                                       setState(() {
@@ -266,7 +286,8 @@ class _FrameChooseScreenState extends State<FrameChooseScreen> {
                               Colors.yellow.withOpacity(0.7),
                               Colors.blueAccent.withOpacity(0.7),
                             ],
-                            child: ElevatedButton(
+                            child: LoadingElevatedButton(
+                              icon: const Icon(Icons.donut_large_rounded),
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(40),
@@ -278,7 +299,7 @@ class _FrameChooseScreenState extends State<FrameChooseScreen> {
                                 foregroundColor: Colors.black,
                               ),
                               onPressed: _submitForm,
-                              child: const Text(
+                              label: const Text(
                                 '                  ',
                                 style: TextStyle(
                                   color: Colors.black,

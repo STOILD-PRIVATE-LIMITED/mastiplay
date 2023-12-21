@@ -65,17 +65,18 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
               widget.email,
             );
     }
-
-    navigatorPush(
-        context,
-        FrameChooseScreen(
-          name: name,
-          gender: widget.gender,
-          email: widget.email,
-          country: country!.displayName,
-          dob: _selectedDate!,
-          imgUrl: imgUrl,
-        ));
+    if (context.mounted) {
+      navigatorPush(
+          context,
+          FrameChooseScreen(
+            name: name,
+            gender: widget.gender,
+            email: widget.email,
+            country: country!.displayName,
+            dob: _selectedDate!,
+            imgUrl: imgUrl,
+          ));
+    }
   }
 
   @override
