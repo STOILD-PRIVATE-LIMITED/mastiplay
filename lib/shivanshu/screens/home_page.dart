@@ -450,3 +450,80 @@ class GameLive extends StatelessWidget {
     );
   }
 }
+// import 'package:flutter/material.dart';
+
+// void main() {
+//   runApp(MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: MyHomePage(),
+//     );
+//   }
+// }
+
+// class MyHomePage extends StatefulWidget {
+//   @override
+//   _MyHomePageState createState() => _MyHomePageState();
+// }
+
+// class _MyHomePageState extends State<MyHomePage> {
+//   bool showAlert = false;
+
+//   @override
+//   void initState() {
+//     super.initState();
+
+//     Future.delayed(Duration(seconds: 2), () {
+//       setState(() {
+//         showAlert = true;
+//       });
+//       _showAlertDialog();
+//     });
+//   }
+
+//   void _showAlertDialog() {
+//     showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return AlertDialog(
+//           title: Text('Alert Dialog'),
+//           content: Text('This is an alert dialog that appears after 2 seconds.'),
+//           actions: <Widget>[
+//             ElevatedButton (
+//               child: Text('OK'),
+//               onPressed: () {
+//                 // Close the dialog
+//                 Navigator.of(context).pop();
+//               },
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Show AlertDialog'),
+//       ),
+//       body: Center(
+//         child: ElevatedButton(
+//           onPressed: () {
+//             // Show the AlertDialog immediately when the button is pressed
+//             setState(() {
+//               showAlert = true;
+//             });
+//             _showAlertDialog();
+//           },
+//           child: Text('Show AlertDialog'),
+//         ),
+//       ),
+//     );
+//   }
+// }
