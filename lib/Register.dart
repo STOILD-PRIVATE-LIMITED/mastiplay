@@ -1,22 +1,21 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
-import 'package:http/http.dart' as http;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:spinner_try/components/button.dart';
 import 'package:spinner_try/components/textfield.dart';
-import 'package:spinner_try/shivanshu/models/firestore/firestore_document.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/screens/gender_screen.dart';
+import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/image.dart';
-import 'shivanshu/screens/home_live.dart';
 
 class Register extends StatefulWidget {
   final Function()? onTap;
@@ -62,86 +61,88 @@ class _RegisterState extends State<Register> {
   }
 
   void signIn() async {
-    try {
-      final db = FirebaseFirestore.instance;
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.toLowerCase(),
-        password: passwordController.text,
-      );
-      final Map<String, String?> obj = {
-        "name": nameController.text,
-        "email": emailController.text.toLowerCase(),
-        "photo": await uploadImage(
-          context,
-          _image1,
-          'images',
-          auth.currentUser!.email!,
-        ),
-      };
-      assert(obj['email'] != null || obj['email']!.isEmpty,
-          "Email shouldn't be empty.");
+    // try {
+    final db = FirebaseFirestore.instance;
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: emailController.text.toLowerCase(),
+      password: passwordController.text,
+    );
+    final Map<String, String?> obj = {
+      "name": nameController.text,
+      "email": emailController.text.toLowerCase(),
+      "photo": await uploadImage(
+        context,
+        _image1,
+        'images',
+        auth.currentUser!.email!,
+      ),
+    };
+    assert(obj['email'] != null || obj['email']!.isEmpty,
+        "Email shouldn't be empty.");
 
-      await randomSet(
-        FirestoreDocument(
-          id: obj['email']!,
-          path: 'users',
-          data: obj,
-        ),
-        digitCount: 8,
-        uniqueCondition: (transaction, id) async {
-          log("uniqueCondition called for id: $id");
-          final doc = await FirebaseFirestore.instance
-              .collection('users')
-              .where('id', isEqualTo: id)
-              .get();
-          log("uniqueCondition is ${doc.docs.isEmpty}");
-          return doc.docs.isEmpty;
-        },
-        docSet: (transaction, id, data) async {
-          log("docSet called for id: $id");
-          data['id'] = id.toString();
-          data['updatedAt'] = DateTime.now().toIso8601String();
-          log("Adding things was succesful");
-          transaction.set(db.collection('users').doc(obj['email']), data);
-        },
-      ).whenComplete(() {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return HomeLive(
-                email: emailController.text.toLowerCase(),
-              );
-            },
-          ),
-        );
-        setState(() {});
-      });
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.code),
-        ),
-      );
-      return;
-    }
-    if (Navigator.of(context).canPop()) {
-      Navigator.pop(context);
-    }
+    navigatorPush(context, GenderScreen(email: obj['email']!));
+    // await randomSet(
+    //   FirestoreDocument(
+    //     id: obj['email']!,
+    //     path: 'users',
+    //     data: obj,
+    //   ),
+    //   digitCount: 8,
+    //   uniqueCondition: (transaction, id) async {
+    //     log("uniqueCondition called for id: $id");
+    //     final doc = await FirebaseFirestore.instance
+    //         .collection('users')
+    //         .where('id', isEqualTo: id)
+    //         .get();
+    //     log("uniqueCondition is ${doc.docs.isEmpty}");
+    //     return doc.docs.isEmpty;
+    //   },
+    //   docSet: (transaction, id, data) async {
+    //     log("docSet called for id: $id");
+    //     data['id'] = id.toString();
+    //     data['updatedAt'] = DateTime.now().toIso8601String();
+    //     log("Adding things was succesful");
+    //     transaction.set(db.collection('users').doc(obj['email']), data);
+    // },
+    //   ).whenComplete(() {
+    //     Navigator.pushReplacement(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (context) {
+    //           return HomeLive(
+    //             email: emailController.text.toLowerCase(),
+    //           );
+    //         },
+    //       ),
+    //     );
+    //     setState(() {});
+    //   });
+    // } on FirebaseAuthException catch (e) {
+    //   Navigator.pop(context);
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: Text(e.code),
+    //     ),
+    //   );
+    //   return;
+    // }
+    // if (Navigator.of(context).canPop()) {
+    //   Navigator.pop(context);
+    // }
   }
 
   void verify() async {
     if (otpController.text == otp.toString()) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => GenderScreen(
-            username: nameController.text,
-            email: emailController.text.toLowerCase(),
-          ),
-        ),
-      );
+      signIn();
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => GenderScreen(
+      //       username: nameController.text,
+      //       email: emailController.text.toLowerCase(),
+      //     ),
+      //   ),
+      // );
     }
   }
 

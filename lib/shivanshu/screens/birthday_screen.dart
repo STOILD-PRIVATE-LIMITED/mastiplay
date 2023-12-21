@@ -27,8 +27,6 @@ class BirthdayScreen extends StatefulWidget {
 }
 
 class _BirthdayScreenState extends State<BirthdayScreen> {
-  String name = "";
-
   DateTime? _selectedDate;
   Country? country;
 
@@ -69,7 +67,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
       navigatorPush(
           context,
           FrameChooseScreen(
-            name: name,
+            name: widget.name,
             gender: widget.gender,
             email: widget.email,
             country: country!.displayName,
