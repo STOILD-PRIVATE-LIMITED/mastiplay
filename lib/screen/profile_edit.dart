@@ -41,9 +41,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     userGender = users[0].gender;
     photoUrl = users[0].photo;
     userAge = users[0].dob;
-    print(users[0].dob);
     age = calculateAge(userAge.toString());
-    // print(userAge.toString());
     setState(() {});
   }
 
@@ -57,6 +55,7 @@ class _ProfileEditState extends State<ProfileEdit> {
             currentDate.day < birthDate.day)) {
       age--;
     }
+    print(age);
 
     return age;
   }
