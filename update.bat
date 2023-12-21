@@ -1,9 +1,10 @@
-REM Set the commit message or use "New Update" by default
-set commit_message=%1
-if "%commit_message%"=="" set commit_message=New Update
 git checkout dev
 git add .
+<<<<<<< HEAD
 git commit -m "New Updatee"
+=======
+git commit -m "New Update"
+>>>>>>> 56d2eb8f3fdf26dc0d175011245bd628fba3e6e3
 git checkout main
 git pull
 git merge dev
