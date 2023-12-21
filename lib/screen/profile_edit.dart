@@ -1,9 +1,10 @@
 import 'dart:io';
-import 'package:intl/intl.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
 import 'package:spinner_try/screen/login.dart';
 import 'package:spinner_try/user_model.dart';
@@ -277,8 +278,10 @@ class _ProfileEditState extends State<ProfileEdit> {
                                       onPressed: () {
                                         updateDob();
                                         setState(() {
-                                          age = calculateAge(
-                                              _selectedDate.toString());
+                                          age = DateTime.now()
+                                                  .difference(_selectedDate)
+                                                  .inDays ~/
+                                              365;
                                         });
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
