@@ -8,7 +8,6 @@ import 'package:scroll_date_picker/scroll_date_picker.dart';
 import 'package:spinner_try/screen/login.dart';
 import 'package:spinner_try/user_model.dart';
 
-
 class ProfileEdit extends StatefulWidget {
   const ProfileEdit({super.key});
 
@@ -25,7 +24,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   String photoUrl = '';
   String userEmail = '';
   int userGender = 0;
-  DateTime? userAge;
+  var userAge;
   int age = 0;
 
   List<UserModel> users = [];
@@ -41,7 +40,9 @@ class _ProfileEditState extends State<ProfileEdit> {
     userGender = users[0].gender;
     photoUrl = users[0].photo;
     userAge = users[0].dob;
+    print(users[0].dob);
     age = calculateAge(userAge.toString());
+    // print(userAge.toString());
     setState(() {});
   }
 

@@ -30,7 +30,7 @@ void main() async {
   // ByteData data =
   //     await PlatformAssetBundle().load('assets/ssl/server-cert.pem');
   // SecurityContext.defaultContext
-  //     .setTrustedCertificatesBytes(data.buffer.asUint8List());
+  //     .setTrustedCertificatesBytes(data.buffer.asUint8List(),);
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
@@ -38,7 +38,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  runApp(const MyApp());
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -65,7 +67,7 @@ class MyApp extends StatelessWidget {
         // home: const NobelCenter(),
         // home: const AnotherNodelCenter(),
         // home: JackpotScreen(
-        //   items: animals.map((e) => Text(e)).toList(),
+        //   items: animals.map((e) => Text(e),).toList(),
         //   itemHeight: 30,
         // ),
         );
@@ -86,27 +88,33 @@ class NewAuth extends StatelessWidget {
               currentUser = value;
               if (value.id == null || value.id!.isEmpty) {
                 Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => GenderScreen(
-                              email: auth.currentUser!.email!,
-                            )));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GenderScreen(
+                      email: auth.currentUser!.email!,
+                    ),
+                  ),
+                );
               } else {
                 Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomeLive(
-                              email: auth.currentUser!.email!,
-                            )));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomeLive(
+                      email: auth.currentUser!.email!,
+                    ),
+                  ),
+                );
               }
             });
           } catch (e) {
             Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => GenderScreen(
-                          email: auth.currentUser!.email!,
-                        )));
+              context,
+              MaterialPageRoute(
+                builder: (context) => GenderScreen(
+                  email: auth.currentUser!.email!,
+                ),
+              ),
+            );
           }
           return Scaffold(
             body: Center(
@@ -148,17 +156,21 @@ class SpinnerPage extends StatelessWidget {
             duration: 4,
             highlightedItemBuilder: (index) {
               return CircleAvatar(
-                  backgroundColor: Colors.red,
-                  child: Text(
-                    animals[index],
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ));
+                backgroundColor: Colors.red,
+                child: Text(
+                  animals[index],
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              );
             },
             onComplete: (index) {
               ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('You got ${animals[index]}')));
+                SnackBar(
+                  content: Text('You got ${animals[index]}'),
+                ),
+              );
             },
             items: animals
                 .map(
