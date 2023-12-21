@@ -1,6 +1,6 @@
 git checkout dev
 git add .
-git commit -m "New Updatee"
+git commit -m "New Update"
 git checkout main
 git pull
 git merge dev
