@@ -15,7 +15,6 @@ class GenderScreen extends StatefulWidget {
 class _GenderScreenState extends State<GenderScreen> {
   String name = "";
   int? selectedIndex;
-  TextEditingController nameController = TextEditingController();
 
   void _submitForm() {
     final isValid = _formKey.currentState!.validate();
@@ -70,7 +69,9 @@ class _GenderScreenState extends State<GenderScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   TextField(
-                    controller: nameController,
+                    onChanged: (value) {
+                      name = value;
+                    },
                     decoration: InputDecoration(
                       hintText: 'NickName',
                       hintStyle: const TextStyle(color: Colors.black26),

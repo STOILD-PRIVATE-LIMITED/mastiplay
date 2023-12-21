@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -86,6 +87,7 @@ class NewAuth extends StatelessWidget {
           try {
             fetchUser(auth.currentUser!.email!).then((value) {
               currentUser = value;
+              log("Current User: ${value.toJson()}");
               if (value.gender == -1 ||
                   value.dob == null ||
                   value.country.isEmpty ||
