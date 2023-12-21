@@ -72,6 +72,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
   updateDob() async {
+    print(_selectedDate.toJson());
     final email = user!.email;
     final userRef = FirebaseFirestore.instance.collection('users');
     final userDoc = await userRef.where('email', isEqualTo: email).get();

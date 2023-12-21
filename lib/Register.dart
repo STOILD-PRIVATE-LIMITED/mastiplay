@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:js_interop';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -65,12 +66,12 @@ class _RegisterState extends State<Register> {
     try {
       final db = FirebaseFirestore.instance;
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
+        email: emailController.text.toLowerCase(),
         password: passwordController.text,
       );
       final Map<String, String?> obj = {
         "name": nameController.text,
-        "email": emailController.text,
+        "email": emailController.text.toLowerCase(),
         "photo": await uploadImage(
           context,
           _image1,
@@ -110,7 +111,7 @@ class _RegisterState extends State<Register> {
           MaterialPageRoute(
             builder: (context) {
               return HomeLive(
-                email: emailController.text,
+                email: emailController.text.toLowerCase(),
               );
             },
           ),
@@ -138,7 +139,7 @@ class _RegisterState extends State<Register> {
         MaterialPageRoute(
           builder: (context) => GenderScreen(
             username: nameController.text,
-            email: emailController.text,
+            email: emailController.text.toLowerCase(),
           ),
         ),
       );
@@ -151,7 +152,7 @@ class _RegisterState extends State<Register> {
     final response =
         await http.post(Uri.parse("https://3.7.66.245:8080/api/otp"), headers: {
       'Content-Type': 'application/json',
-      'email': emailController.text,
+      'email': emailController.text.toLowerCase(),
     });
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -159,7 +160,7 @@ class _RegisterState extends State<Register> {
       setState(() {});
     } else {
       throw Exception(
-          'Failed to send OTP to your mail: ${emailController.text}');
+          'Failed to send OTP to your mail: ${emailController.text.toLowerCase()}');
     }
   }
 
@@ -172,7 +173,7 @@ class _RegisterState extends State<Register> {
       );
       return;
     }
-    if (isEmailExits(emailController.text)) {
+    if (isEmailExits(emailController.text.toLowerCase())) {
       _showAlertDialog(context);
       return;
     }

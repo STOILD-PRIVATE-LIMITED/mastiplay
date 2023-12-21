@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/components/button.dart';
@@ -15,20 +17,15 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  // controller
-  final usernameController = TextEditingController();
-
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
   bool pass = true;
-
   void visible() {
     setState(() {
       pass = !pass;
     });
   }
 
-  // signIn method
   void signIn() async {
     showDialog(
       context: context,
@@ -38,11 +35,10 @@ class _LoginState extends State<Login> {
         );
       },
     );
-
-    // Sign in process
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: usernameController.text, password: passwordController.text);
+          email: emailController.text.toLowerCase(),
+          password: passwordController.text);
 
       Navigator.pop(context);
       while (Navigator.of(context).canPop()) {
@@ -61,19 +57,19 @@ class _LoginState extends State<Login> {
 
       // Wrong Username
       if (e.code == 'user-not-found') {
-        ErrorMessage("User Not Registered");
+        errorMessage("User Not Registered");
       }
 
       // Wrong Password
       else if (e.code == 'wrong-password') {
-        ErrorMessage("Incorrect Password");
+        errorMessage("Incorrect Password");
       }
     }
     // Lodding Circle
   }
 
   // Error Message
-  void ErrorMessage(String message) {
+  void errorMessage(String message) {
     showDialog(
       context: context,
       builder: (context) {
@@ -140,7 +136,7 @@ class _LoginState extends State<Login> {
                 const SizedBox(height: 10),
 
                 MyTextField(
-                  controller: usernameController,
+                  controller: emailController,
                   hintText: 'Your email',
                   obscureText: false,
                 ),
@@ -238,20 +234,23 @@ class _LoginState extends State<Login> {
                     elevation: 0,
                   ),
                   onPressed: () async {
-                    usernameController.text = usernameController.text.trim();
-                    String? err =
-                        Validate.email(usernameController.text, required: true);
+                    emailController.text =
+                        emailController.text.trim().toLowerCase();
+                    String? err = Validate.email(
+                        emailController.text.toLowerCase(),
+                        required: true);
                     if (err != null) {
                       showMsg(context, err);
                       return;
                     }
                     if (await askUser(context, 'Send a password reset link for',
-                            description: "${usernameController.text} ?",
+                            description:
+                                "${emailController.text.toLowerCase()} ?",
                             yes: true,
                             no: true) ==
                         'yes') {
                       await FirebaseAuth.instance.sendPasswordResetEmail(
-                          email: usernameController.text);
+                          email: emailController.text.toLowerCase());
                     }
                   },
                   icon: const Icon(Icons.lock_reset_rounded),
