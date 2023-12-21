@@ -102,17 +102,17 @@ class NewAuth extends StatelessWidget {
               );
             }
           });
-          // return Scaffold(
-          //   body: Center(
-          //     child: Column(
-          //       mainAxisSize: MainAxisSize.min,
-          //       children: [
-          //         const Text("You're logged in"),
-          //         // circularProgressIndicator(),
-          //       ],
-          //     ),
-          //   ),
-          // );
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("You're logged in"),
+                  circularProgressIndicator(),
+                ],
+              ),
+            ),
+          );
         }
         return const Login();
       },
