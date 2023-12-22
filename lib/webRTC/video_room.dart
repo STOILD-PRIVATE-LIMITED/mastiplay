@@ -557,7 +557,7 @@ class VideoRoom extends StatelessWidget {
                     children: [
                       for (int i = 0; i < usersData.length; ++i)
                         AudioUserTile(
-                          // frame: usersData[i]['frame'],
+                          frame: usersData[i]['frame'],
                           imgUrl: usersData[i]['photo'],
                           name: usersData[i].isEmpty
                               ? "Error"

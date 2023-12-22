@@ -1,8 +1,6 @@
 // import 'dart:developer';
 
 import 'package:animated_icon/animated_icon.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:emoji_keyboard_flutter/emoji_keyboard_flutter.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 // import 'package:flutter/foundation.dart' as foundation;
@@ -13,8 +11,6 @@ import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/webRTC/audio_room.dart';
 import 'package:spinner_try/webRTC/web_rtc.dart';
-
-import '../../user_model.dart';
 
 class AudioPage extends StatefulWidget {
   final Room room;
@@ -32,27 +28,6 @@ class _AudioPageState extends State<AudioPage> {
   void dispose() {
     _controller.dispose();
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getFrame();
-  }
-
-  final db = FirebaseFirestore.instance;
-  List<UserModel> users = [];
-  String frame = '';
-  final user = FirebaseAuth.instance.currentUser;
-  getFrame() async {
-    final email = user!.email;
-    final snapshot =
-        await db.collection("users").where("email", isEqualTo: email).get();
-    users =
-        snapshot.docs.map<UserModel>((e) => UserModel.fromSnapahot(e)).toList();
-    frame = '${users[0].frame}';
-    print(frame);
-    setState(() {});
   }
 
   @override
@@ -86,22 +61,14 @@ class _AudioPageState extends State<AudioPage> {
                   children: [
                     CircleAvatar(
                       radius: 20,
-                      backgroundColor: Colors.black,
-                      backgroundImage: (frame == "1" || frame == "2")
-                          ? ((frame == "1")
-                              ? const AssetImage('assets/Frame 1.png')
-                              : const AssetImage('assets/Frame 2.png'))
-                          : NetworkImage(widget.room.imgUrl!) as ImageProvider,
-                      child: CircleAvatar(
-                        radius: 15,
-                        foregroundImage: widget.room.imgUrl != null &&
-                                widget.room.imgUrl!.isNotEmpty
-                            ? NetworkImage(widget.room.imgUrl!)
-                            : (currentUser.photo.isNotEmpty
-                                ? NetworkImage(currentUser.photo)
-                                : const AssetImage('assets/dummy_person.png')
-                                    as ImageProvider),
-                      ),
+                      backgroundImage: widget.room.imgUrl != null &&
+                              widget.room.imgUrl!.isNotEmpty
+                          ? NetworkImage(widget.room.imgUrl!)
+                          : (currentUser.photo.isNotEmpty
+                              ? NetworkImage(currentUser.photo)
+                              : const AssetImage('assets/dummy_person.png')
+                                  as ImageProvider),
+                      backgroundColor: Colors.transparent,
                     ),
                     const SizedBox(width: 10),
                     Expanded(
@@ -716,9 +683,11 @@ class _AudioPageState extends State<AudioPage> {
 
 class AudioUserTile extends StatefulWidget {
   final String name;
+  final String? frame;
   final void Function()? onTap;
   final String? imgUrl;
-  const AudioUserTile({super.key, required this.name, this.onTap, this.imgUrl});
+  const AudioUserTile(
+      {super.key, required this.name, this.onTap, this.imgUrl, this.frame});
 
   @override
   State<AudioUserTile> createState() => _AudioUserTileState();
@@ -730,6 +699,11 @@ class _AudioUserTileState extends State<AudioUserTile> {
     "assets/Frame 2.png",
   ];
   bool isMuted = false;
+  @override
+  void initState() {
+    super.initState();
+    print('This is widget frame number ${widget.frame}');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -757,8 +731,19 @@ class _AudioUserTileState extends State<AudioUserTile> {
                 )
               : CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  foregroundImage: NetworkImage(widget.imgUrl!),
-                  radius: 14,
+                  foregroundColor: Colors.transparent,
+                  foregroundImage: (widget.frame == "1" || widget.frame == "2")
+                      ? ((widget.frame == "1")
+                          ? const AssetImage('assets/Frame 1.png')
+                          : const AssetImage('assets/Frame 2.png'))
+                      : NetworkImage(widget.imgUrl!) as ImageProvider,
+                  radius: 20,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.transparent,
+                    backgroundImage: NetworkImage(widget.imgUrl!),
+                    radius: 14,
+                  ),
                 ),
         ),
         AnimateIcon(
