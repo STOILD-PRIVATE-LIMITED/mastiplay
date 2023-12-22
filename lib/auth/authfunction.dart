@@ -123,8 +123,9 @@ Future<UserCredential?> signInWithGoogle(context) async {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => HomeLive(
-            email: '${user!.email}',
+          builder: (context) => GenderScreen(
+            username: '${user!.displayName}',
+            email: '${user.email}',
           ),
         ),
       );

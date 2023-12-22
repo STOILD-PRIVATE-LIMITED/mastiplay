@@ -1,6 +1,8 @@
 // import 'dart:developer';
 
 import 'package:animated_icon/animated_icon.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:emoji_keyboard_flutter/emoji_keyboard_flutter.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 // import 'package:flutter/foundation.dart' as foundation;
@@ -11,6 +13,8 @@ import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/webRTC/audio_room.dart';
 import 'package:spinner_try/webRTC/web_rtc.dart';
+
+import '../../user_model.dart';
 
 class AudioPage extends StatefulWidget {
   final Room room;
@@ -28,6 +32,27 @@ class _AudioPageState extends State<AudioPage> {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getFrame();
+  }
+
+  final db = FirebaseFirestore.instance;
+  List<UserModel> users = [];
+  String frame = '';
+  final user = FirebaseAuth.instance.currentUser;
+  getFrame() async {
+    final email = user!.email;
+    final snapshot =
+        await db.collection("users").where("email", isEqualTo: email).get();
+    users =
+        snapshot.docs.map<UserModel>((e) => UserModel.fromSnapahot(e)).toList();
+    frame = '${users[0].frame}';
+    print(frame);
+    setState(() {});
   }
 
   @override
@@ -61,14 +86,22 @@ class _AudioPageState extends State<AudioPage> {
                   children: [
                     CircleAvatar(
                       radius: 20,
-                      backgroundImage: widget.room.imgUrl != null &&
-                              widget.room.imgUrl!.isNotEmpty
-                          ? NetworkImage(widget.room.imgUrl!)
-                          : (currentUser.photo.isNotEmpty
-                              ? NetworkImage(currentUser.photo)
-                              : const AssetImage('assets/dummy_person.png')
-                                  as ImageProvider),
-                      backgroundColor: Colors.transparent,
+                      backgroundColor: Colors.black,
+                      backgroundImage: (frame == "1" || frame == "2")
+                          ? ((frame == "1")
+                              ? const AssetImage('assets/Frame 1.png')
+                              : const AssetImage('assets/Frame 2.png'))
+                          : NetworkImage(widget.room.imgUrl!) as ImageProvider,
+                      child: CircleAvatar(
+                        radius: 15,
+                        foregroundImage: widget.room.imgUrl != null &&
+                                widget.room.imgUrl!.isNotEmpty
+                            ? NetworkImage(widget.room.imgUrl!)
+                            : (currentUser.photo.isNotEmpty
+                                ? NetworkImage(currentUser.photo)
+                                : const AssetImage('assets/dummy_person.png')
+                                    as ImageProvider),
+                      ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
@@ -692,7 +725,12 @@ class AudioUserTile extends StatefulWidget {
 }
 
 class _AudioUserTileState extends State<AudioUserTile> {
+  List<String> frames = [
+    "assets/Frame 1.png",
+    "assets/Frame 2.png",
+  ];
   bool isMuted = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -718,7 +756,8 @@ class _AudioUserTileState extends State<AudioUserTile> {
                   color: colorScheme(context).primary,
                 )
               : CircleAvatar(
-                  backgroundImage: NetworkImage(widget.imgUrl!),
+                  backgroundColor: Colors.transparent,
+                  foregroundImage: NetworkImage(widget.imgUrl!),
                   radius: 14,
                 ),
         ),

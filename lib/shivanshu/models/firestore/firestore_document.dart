@@ -45,6 +45,7 @@ class FirestoreDocument {
     }
     final doc = await firestore.doc(path! + id).get();
     if (!doc.exists) {
+    print("Document not found at: ${path! + id}"); 
       throw Exception("Document doesn't exist");
     }
     data = doc.data() ?? {};

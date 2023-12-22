@@ -56,15 +56,13 @@ class VideoRoom extends StatelessWidget {
                   child: iAmAdmin
                       ? myVideoView
                       : (adminIndex == -1
-                          ? Center(
-                              child: Container(
-                                child: const GlassWidget(
-                                  blur: 0,
-                                  child: Text(
-                                    'Admin has left the meeting',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
+                          ? const Center(
+                              child: GlassWidget(
+                                blur: 0,
+                                child: Text(
+                                  'Admin has left the meeting',
+                                  style: TextStyle(
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -559,6 +557,7 @@ class VideoRoom extends StatelessWidget {
                     children: [
                       for (int i = 0; i < usersData.length; ++i)
                         AudioUserTile(
+                          // frame: usersData[i]['frame'],
                           imgUrl: usersData[i]['photo'],
                           name: usersData[i].isEmpty
                               ? "Error"

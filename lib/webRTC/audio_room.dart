@@ -57,6 +57,7 @@ class _AudioRoomState extends State<AudioRoom> {
           children: [
             AudioUserTile(
               imgUrl: myUserData['photo'],
+              // frame: myUserData['frame'],
               name: myUserData == null
                   ? "You"
                   : myUserData['name'] ?? myUserData['email'] ?? "Anonymous",
@@ -70,6 +71,10 @@ class _AudioRoomState extends State<AudioRoom> {
             ),
             for (int i = 0; i < usersData.length; ++i)
               AudioUserTile(
+                // frame: usersData[i]['frame']
+                // ? usersData[i]['frame']
+                // : null,
+                // ,
                 imgUrl: usersData[i]['photo'],
                 name: usersData[i] == null
                     ? "You"
