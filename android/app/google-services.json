@@ -1,91 +1,130 @@
 {
-  "project_info": {
-    "project_number": "482042580776",
-    "firebase_url": "https://mastiplay-31ca8-default-rtdb.firebaseio.com",
-    "project_id": "mastiplay-31ca8",
-    "storage_bucket": "mastiplay-31ca8.appspot.com"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:482042580776:android:9a55a8afbe22d028c60a1d",
-        "android_client_info": {
-          "package_name": "com.example.app"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "482042580776-24g7n0ann9n5kjl1r5jcddtqs6hfjcd1.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.app",
-            "certificate_hash": "13a8d408638219bb4e3cdd31e47db14fe22d3f46"
-          }
+    "project_info": {
+        "project_number": "482042580776",
+        "firebase_url": "https://mastiplay-31ca8-default-rtdb.firebaseio.com",
+        "project_id": "mastiplay-31ca8",
+        "storage_bucket": "mastiplay-31ca8.appspot.com"
+    },
+    "client": [{
+            "client_info": {
+                "mobilesdk_app_id": "1:482042580776:android:9a55a8afbe22d028c60a1d",
+                "android_client_info": {
+                    "package_name": "com.example.app"
+                }
+            },
+            "oauth_client": [{
+                    "client_id": "482042580776-24g7n0ann9n5kjl1r5jcddtqs6hfjcd1.apps.googleusercontent.com",
+                    "client_type": 1,
+                    "android_info": {
+                        "package_name": "com.example.app",
+                        "certificate_hash": "13a8d408638219bb4e3cdd31e47db14fe22d3f46"
+                    }
+                },
+                {
+                    "client_id": "482042580776-dvibd6vaal0u1q2v21o3tivu9fsvioha.apps.googleusercontent.com",
+                    "client_type": 1,
+                    "android_info": {
+                        "package_name": "com.example.app",
+                        "certificate_hash": "1fbdf63f4f514537f12e1140bec13c081c28322f"
+                    }
+                },
+                {
+                    "client_id": "482042580776-k1q12v4fsug2pk97fueqiflmcdp40h46.apps.googleusercontent.com",
+                    "client_type": 1,
+                    "android_info": {
+                        "package_name": "com.example.app",
+                        "certificate_hash": "48cbce16824f21225093e5aedbd28dea30e4bc1d"
+                    }
+                },
+                {
+                    "client_id": "482042580776-63h1tuchukcqlcfet2skb4b4fs1peqtu.apps.googleusercontent.com",
+                    "client_type": 3
+                }
+            ],
+            "api_key": [{
+                "current_key": "AIzaSyD3tPY6LVeKIHTUZvIyBoijMbRcUITQBQY"
+            }],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": [{
+                            "client_id": "482042580776-63h1tuchukcqlcfet2skb4b4fs1peqtu.apps.googleusercontent.com",
+                            "client_type": 3
+                        },
+                        {
+                            "client_id": "482042580776-7lv25oo9itbf992b1t1t0tbcus8ms7ma.apps.googleusercontent.com",
+                            "client_type": 2,
+                            "ios_info": {
+                                "bundle_id": "com.example.mastiplay"
+                            }
+                        }
+                    ]
+                }
+            }
         },
         {
-          "client_id": "482042580776-63h1tuchukcqlcfet2skb4b4fs1peqtu.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyD3tPY6LVeKIHTUZvIyBoijMbRcUITQBQY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "482042580776-63h1tuchukcqlcfet2skb4b4fs1peqtu.apps.googleusercontent.com",
-              "client_type": 3
+            "client_info": {
+                "mobilesdk_app_id": "1:482042580776:android:53a225cb68729f40c60a1d",
+                "android_client_info": {
+                    "package_name": "com.example.spinner_try"
+                }
             },
-            {
-              "client_id": "482042580776-7lv25oo9itbf992b1t1t0tbcus8ms7ma.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.mastiplay"
-              }
+            "oauth_client": [{
+                    "client_id": "482042580776-6e19b2o3c3irm32b2dv6bmdge1k6o4bn.apps.googleusercontent.com",
+                    "client_type": 1,
+                    "android_info": {
+                        "package_name": "com.example.spinner_try",
+                        "certificate_hash": "1fbdf63f4f514537f12e1140bec13c081c28322f"
+                    }
+                },
+                {
+                    "client_id": "482042580776-e333mk38u949invnjrshrhmc7o0jaol6.apps.googleusercontent.com",
+                    "client_type": 1,
+                    "android_info": {
+                        "package_name": "com.example.spinner_try",
+                        "certificate_hash": "474501e5e99416b88491518eab5df5e0becc629c"
+                    }
+                },
+                {
+                    "client_id": "482042580776-l0vro1j9kqvqm6dvpomefd1seuqh8aib.apps.googleusercontent.com",
+                    "client_type": 1,
+                    "android_info": {
+                        "package_name": "com.example.spinner_try",
+                        "certificate_hash": "48cbce16824f21225093e5aedbd28dea30e4bc1d"
+                    }
+                },
+                {
+                    "client_id": "482042580776-mt3j6rbi3195q0m48uniut9a3mds1i1m.apps.googleusercontent.com",
+                    "client_type": 1,
+                    "android_info": {
+                        "package_name": "com.example.spinner_try",
+                        "certificate_hash": "13a8d408638219bb4e3cdd31e47db14fe22d3f46"
+                    }
+                },
+                {
+                    "client_id": "482042580776-63h1tuchukcqlcfet2skb4b4fs1peqtu.apps.googleusercontent.com",
+                    "client_type": 3
+                }
+            ],
+            "api_key": [{
+                "current_key": "AIzaSyD3tPY6LVeKIHTUZvIyBoijMbRcUITQBQY"
+            }],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": [{
+                            "client_id": "482042580776-63h1tuchukcqlcfet2skb4b4fs1peqtu.apps.googleusercontent.com",
+                            "client_type": 3
+                        },
+                        {
+                            "client_id": "482042580776-7lv25oo9itbf992b1t1t0tbcus8ms7ma.apps.googleusercontent.com",
+                            "client_type": 2,
+                            "ios_info": {
+                                "bundle_id": "com.example.mastiplay"
+                            }
+                        }
+                    ]
+                }
             }
-          ]
         }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:482042580776:android:53a225cb68729f40c60a1d",
-        "android_client_info": {
-          "package_name": "com.example.spinner_try"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "482042580776-63h1tuchukcqlcfet2skb4b4fs1peqtu.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyD3tPY6LVeKIHTUZvIyBoijMbRcUITQBQY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "482042580776-63h1tuchukcqlcfet2skb4b4fs1peqtu.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "482042580776-7lv25oo9itbf992b1t1t0tbcus8ms7ma.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.mastiplay"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
-  "configuration_version": "1"
+    ],
+    "configuration_version": "1"
 }
