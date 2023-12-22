@@ -696,10 +696,6 @@ class AudioUserTile extends StatefulWidget {
 
 class _AudioUserTileState extends State<AudioUserTile> {
   bool isMuted = false;
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -710,7 +706,6 @@ class _AudioUserTileState extends State<AudioUserTile> {
           style: IconButton.styleFrom(
             padding: EdgeInsets.zero,
             tapTargetSize: MaterialTapTargetSize.padded,
-            backgroundColor: const Color.fromARGB(255, 206, 195, 195),
           ),
           onPressed: () {
             if (widget.onTap != null) {
@@ -721,38 +716,130 @@ class _AudioUserTileState extends State<AudioUserTile> {
             }
           },
           icon: widget.imgUrl == null || widget.imgUrl!.isEmpty
-              ? Icon(
-                  (isMuted ? Icons.mic_off_outlined : Icons.mic_none_outlined),
-                  color: colorScheme(context).primary,
+              ? Container(
+                  color: Colors.transparent,
+                  child: Icon(
+                    (isMuted
+                        ? Icons.mic_off_outlined
+                        : Icons.mic_none_outlined),
+                    color: colorScheme(context).primary,
+                  ),
                 )
-              : CircleAvatar(
-                  foregroundImage: (widget.frame == "1" || widget.frame == "2")
-                      ? ((widget.frame == "1")
-                          ? const AssetImage('assets/Frame 1.png')
-                          : const AssetImage('assets/Frame 2.png'))
-                      : NetworkImage(widget.imgUrl!) as ImageProvider,
-                  radius: 20,
+              // height: 50,
+              // width: 50,
+              // padding: const EdgeInsets.only(top: 9, left: 5, right: 9),
+              // image: (widget.frame == "1" || widget.frame == "2")
+              //     ? ((widget.frame == "1")
+              //         ? const AssetImage('assets/Frame 1.png')
+              //         : const AssetImage('assets/Frame 2.png'))
+              //     : NetworkImage(widget.imgUrl!) as ImageProvider,
+              // alignment: Alignment.center,
+              // : Container(
+              //     height: 50,
+              //     width: 50,
+              //     decoration: ShapeDecoration(
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(30),
+              //       ),
+              //       image: DecorationImage(
+              //         image: NetworkImage(
+              //           widget.imgUrl!,
+              //         ),
+              //       ),
+              //     ),
+              //     child: CircleAvatar(
+              //       backgroundColor: Colors.transparent,
+              //       foregroundImage:
+              //           (widget.frame == "1" || widget.frame == "2")
+              //               ? ((widget.frame == "1")
+              //                   ? const AssetImage('assets/Frame 1.png')
+              //                   : const AssetImage('assets/Frame 2.png'))
+              //               : NetworkImage(widget.imgUrl!) as ImageProvider,
+              //     ),
+              // ),
+              : Container(
+                  decoration: ShapeDecoration(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage(widget.imgUrl!),
-                    radius: 14,
+                    backgroundColor: Colors.transparent,
+                    foregroundImage:
+                        (widget.frame == "1" || widget.frame == "2")
+                            ? ((widget.frame == "1")
+                                ? const AssetImage('assets/Frame 1.png')
+                                : const AssetImage('assets/Frame 2.png'))
+                            : null,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 9, left: 5, right: 9),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Image(
+                          image: NetworkImage(widget.imgUrl!),
+                          fit: BoxFit.cover,
+                          width: 40,
+                          height: 40,
+                          // alignment: Alignment.center,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
+          // radius: 20,
+          // NetworkImage(
+          //   widget.imgUrl!,
+          // ),
+          // radius: 15,
+          // foregroundImage:
+          //     (widget.frame == "1" || widget.frame == "2")
+          //         ? ((widget.frame == "1")
+          //             ? const AssetImage('assets/Frame 1.png')
+          //             : const AssetImage('assets/Frame 2.png'))
+          //         : NetworkImage(widget.imgUrl!) as ImageProvider,
+          // radius: 20,
+          // child: CircleAvatar(
+          //   backgroundColor: Colors.transparent,
+          //   foregroundColor: Colors.transparent,
+          //   backgroundImage: NetworkImage(widget.imgUrl!),
+          //   radius: 25,
+          // ),
+
+          // child: CircleAvatar(
+          //     backgroundColor: Colors.transparent,
+          //     foregroundColor: Colors.transparent,
+          //     foregroundImage: (widget.frame == "1" || widget.frame == "2")
+          //         ? ((widget.frame == "1")
+          //             ? const AssetImage('assets/Frame 1.png')
+          //             : const AssetImage('assets/Frame 2.png'))
+          //         : NetworkImage(widget.imgUrl!) as ImageProvider,
+          //     radius: 25,
+          //     backgroundImage: NetworkImage(
+          //       widget.imgUrl!,
+          //     ),
+          //     // child: CircleAvatar(
+          //     //   backgroundColor: Colors.transparent,
+          //     //   foregroundColor: Colors.transparent,
+          //     //   backgroundImage: NetworkImage(widget.imgUrl!),
+          //     //   radius: 25,
+          //     // ),
+          //   ),
         ),
-        AnimateIcon(
-          onTap: () {
-            if (widget.onTap != null) {
-              widget.onTap!();
-              setState(() {
-                isMuted = !isMuted;
-              });
-            }
-          },
-          width: 40,
-          height: 20,
-          color: Colors.white,
-          iconType: IconType.continueAnimation,
-          animateIcon: AnimateIcons.loading3,
-        ),
+        // AnimateIcon(
+        //   onTap: () {
+        //     if (widget.onTap != null) {
+        //       widget.onTap!();
+        //       setState(() {
+        //         isMuted = !isMuted;
+        //       });
+        //     }
+        //   },
+        //   width: 40,
+        //   height: 20,
+        //   color: Colors.white,
+        //   iconType: IconType.continueAnimation,
+        //   animateIcon: AnimateIcons.loading3,
+        // ),
         FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
@@ -778,14 +865,14 @@ void showAlertDialog(BuildContext context) {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog
-              Navigator.of(context).pop(); // Close the parent screen/page
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
             },
             child: const Text('Yes'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog
+              Navigator.of(context).pop();
             },
             child: const Text('No'),
           ),
