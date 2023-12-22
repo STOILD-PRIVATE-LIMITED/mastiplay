@@ -20,11 +20,16 @@ class AudioRoom extends StatefulWidget {
   State<AudioRoom> createState() => _AudioRoomState();
 }
 
+final WebRtcController controller = WebRtcController(
+  audio: true,
+  video: false,
+);
+
 class _AudioRoomState extends State<AudioRoom> {
-  final WebRtcController controller = WebRtcController(
-    audio: true,
-    video: false,
-  );
+  // final WebRtcController controller = WebRtcController(
+  //   audio: true,
+  //   video: false,
+  // );
   @override
   Widget build(BuildContext context) {
     return WebRTCWidget(
@@ -71,9 +76,7 @@ class _AudioRoomState extends State<AudioRoom> {
             ),
             for (int i = 0; i < usersData.length; ++i)
               AudioUserTile(
-                frame: usersData[i]['frame']
-                    ? usersData[i]['frame']
-                    : null,
+                frame: usersData[i]['frame'],
                 imgUrl: usersData[i]['photo'],
                 name: usersData[i] == null
                     ? "You"

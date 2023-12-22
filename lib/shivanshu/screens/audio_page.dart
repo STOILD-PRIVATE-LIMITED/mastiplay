@@ -22,7 +22,6 @@ class AudioPage extends StatefulWidget {
 
 class _AudioPageState extends State<AudioPage> {
   final TextEditingController _controller = TextEditingController();
-  bool emojiShowing = false;
 
   @override
   void dispose() {
@@ -30,6 +29,10 @@ class _AudioPageState extends State<AudioPage> {
     super.dispose();
   }
 
+  // final WebRtcController controller = WebRtcController(
+  //   audio: true,
+  //   video: false,
+  // );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -562,15 +565,21 @@ class _AudioPageState extends State<AudioPage> {
                 // showMsg(context, "In Developement");
                 children: [
                   IconButton(
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.black12,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          emojiShowing = !emojiShowing;
-                        });
-                      },
-                      icon: Image.asset('assets/smile.png')),
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.black12,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        controller.audio = !controller.audio;
+                      });
+                      showMsg(
+                          context,
+                          controller.audio
+                              ? "You're unmuted"
+                              : 'You\'re now muted');
+                    },
+                    icon: Image.asset('assets/Voice.png'),
+                  ),
                   Expanded(
                     child: Container(
                       width: width,
@@ -604,7 +613,7 @@ class _AudioPageState extends State<AudioPage> {
                             fontSize: height / 50,
                             color: Colors.black45,
                           ),
-                          suffixIcon: Image.asset('assets/Voice.png'),
+                          suffixIcon: Image.asset('assets/smile.png'),
                           contentPadding: EdgeInsets.symmetric(
                             horizontal: width / 30,
                             vertical: height / 100,
@@ -618,14 +627,6 @@ class _AudioPageState extends State<AudioPage> {
                       backgroundColor: Colors.black12,
                     ),
                     onPressed: () {
-                      // showModalBottomSheet(
-                      //     backgroundColor: const Color(0xFF21242D),
-                      //     context: context,
-                      //     builder: (context) {
-                      //       return AudioGo(
-                      //         roomID: room.id,
-                      //       );
-                      //     });
                       shareRoomLink(widget.room.id);
                     },
                     icon: Image.asset(
@@ -694,15 +695,10 @@ class AudioUserTile extends StatefulWidget {
 }
 
 class _AudioUserTileState extends State<AudioUserTile> {
-  List<String> frames = [
-    "assets/Frame 1.png",
-    "assets/Frame 2.png",
-  ];
   bool isMuted = false;
   @override
   void initState() {
     super.initState();
-    print('This is widget frame number ${widget.frame}');
   }
 
   @override
@@ -730,8 +726,6 @@ class _AudioUserTileState extends State<AudioUserTile> {
                   color: colorScheme(context).primary,
                 )
               : CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: Colors.transparent,
                   foregroundImage: (widget.frame == "1" || widget.frame == "2")
                       ? ((widget.frame == "1")
                           ? const AssetImage('assets/Frame 1.png')
@@ -739,8 +733,6 @@ class _AudioUserTileState extends State<AudioUserTile> {
                       : NetworkImage(widget.imgUrl!) as ImageProvider,
                   radius: 20,
                   child: CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    foregroundColor: Colors.transparent,
                     backgroundImage: NetworkImage(widget.imgUrl!),
                     radius: 14,
                   ),
