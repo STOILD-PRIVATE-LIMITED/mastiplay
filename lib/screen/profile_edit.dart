@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
 import 'package:spinner_try/screen/login.dart';
+import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/user_model.dart';
 
@@ -174,7 +175,7 @@ class _ProfileEditState extends State<ProfileEdit> {
               Align(
                 alignment: Alignment.center,
                 child: Text(
-                  "Basic information",
+                  "Basic Information",
                   style: TextStyle(
                       fontSize: height / 50, fontWeight: FontWeight.bold),
                 ),
@@ -330,15 +331,49 @@ class _ProfileEditState extends State<ProfileEdit> {
                 ),
               ),
               ListTile(
-                title: Text(
+                leading: Text(
                   "Email",
                   style: TextStyle(
-                      fontSize: height / 50, fontWeight: FontWeight.bold),
+                    fontSize: height / 50,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
                 trailing: Text(userEmail,
                     style:
                         TextStyle(fontSize: height / 60, color: Colors.grey)),
               ),
+              ListTile(
+                title: Text(
+                  "ID",
+                  style: TextStyle(
+                      fontSize: height / 50, fontWeight: FontWeight.bold),
+                ),
+                trailing: Text(currentUser.id ?? "No id",
+                    style:
+                        TextStyle(fontSize: height / 60, color: Colors.grey)),
+              ),
+              // ListTile(
+              //   title: Text(
+              //     "Country",
+              //     style: TextStyle(
+              //         fontSize: height / 50, fontWeight: FontWeight.bold),
+              //   ),
+              //   trailing: Text(currentUser.country,
+              //       style:
+              //           TextStyle(fontSize: height / 60, color: Colors.grey)),
+              // ),
+              if (currentUser.phoneNumber != null)
+                ListTile(
+                  title: Text(
+                    "Phone Number",
+                    style: TextStyle(
+                        fontSize: height / 50, fontWeight: FontWeight.bold),
+                  ),
+                  trailing: Text(currentUser.phoneNumber!,
+                      style:
+                          TextStyle(fontSize: height / 60, color: Colors.grey)),
+                ),
               SizedBox(
                 height: height / 30,
               ),
