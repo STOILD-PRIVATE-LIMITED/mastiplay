@@ -512,8 +512,7 @@ class _AudioPageState extends State<AudioPage> {
                                 itemBuilder: (ctx, index) {
                                   final String message =
                                       messages[index]['message'] ?? "Error";
-                                  final userData =
-                                      messages[index]['userData'];
+                                  final userData = messages[index]['userData'];
                                   final photo = userData['photo'];
                                   return ListTile(
                                     dense: true,
@@ -753,8 +752,8 @@ class _AudioUserTileState extends State<AudioUserTile> {
                   ),
                 )
               : Container(
-                  height: 50,
-                  width: 50,
+                  height: 70.sp,
+                  width: 70.sp,
                   decoration: ShapeDecoration(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
@@ -775,8 +774,6 @@ class _AudioUserTileState extends State<AudioUserTile> {
                         child: Image(
                           image: NetworkImage(widget.imgUrl!),
                           fit: BoxFit.cover,
-                          width: 40,
-                          height: 40,
                           // alignment: Alignment.center,
                         ),
                       ),
