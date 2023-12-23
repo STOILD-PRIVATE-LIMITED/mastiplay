@@ -512,7 +512,8 @@ class _AudioPageState extends State<AudioPage> {
                                 itemBuilder: (ctx, index) {
                                   final String message =
                                       messages[index]['message'] ?? "Error";
-                                  final userData = messages[index]['userData'];
+                                  final userData =
+                                      messages[index]['userData'];
                                   final photo = userData['photo'];
                                   return ListTile(
                                     dense: true,

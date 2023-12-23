@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/screens/audio_page.dart';
+import 'package:spinner_try/shivanshu/screens/bottom_model.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/webRTC/web_rtc.dart';
 
@@ -72,6 +73,21 @@ class _AudioRoomState extends State<AudioRoom> {
                 });
                 showMsg(context,
                     controller.audio ? "You're unmuted" : 'You\'re now muted');
+                showModalBottomSheet(
+                  context: context,
+                  builder: ((context) {
+                    return BottomModel(
+                      frame: myUserData['frame'],
+                      imageUrl: myUserData['photo'],
+                      name: myUserData == null
+                          ? "You"
+                          : myUserData['name'] ??
+                              myUserData['email'] ??
+                              "Anonymous",
+                      roomId: roomId,
+                    );
+                  }),
+                );
               },
             ),
             for (int i = 0; i < usersData.length; ++i)
