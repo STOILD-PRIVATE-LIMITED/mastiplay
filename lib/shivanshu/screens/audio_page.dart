@@ -747,7 +747,7 @@ class _AudioUserTileState extends State<AudioUserTile> {
                     (isMuted
                         ? Icons.mic_off_outlined
                         : Icons.mic_none_outlined),
-                    size: 60,
+                    size: 40,
                     color: colorScheme(context).primary,
                   ),
                 )
@@ -776,44 +776,6 @@ class _AudioUserTileState extends State<AudioUserTile> {
                       ),
                   ],
                 ),
-          // radius: 20,
-          // NetworkImage(
-          //   widget.imgUrl!,
-          // ),
-          // radius: 15,
-          // foregroundImage:
-          //     (widget.frame == "1" || widget.frame == "2")
-          //         ? ((widget.frame == "1")
-          //             ? const AssetImage('assets/Frame 1.png')
-          //             : const AssetImage('assets/Frame 2.png'))
-          //         : NetworkImage(widget.imgUrl!) as ImageProvider,
-          // radius: 20,
-          // child: CircleAvatar(
-          //   backgroundColor: Colors.transparent,
-          //   foregroundColor: Colors.transparent,
-          //   backgroundImage: NetworkImage(widget.imgUrl!),
-          //   radius: 25,
-          // ),
-
-          // child: CircleAvatar(
-          //     backgroundColor: Colors.transparent,
-          //     foregroundColor: Colors.transparent,
-          //     foregroundImage: (widget.frame == "1" || widget.frame == "2")
-          //         ? ((widget.frame == "1")
-          //             ? const AssetImage('assets/Frame 1.png')
-          //             : const AssetImage('assets/Frame 2.png'))
-          //         : NetworkImage(widget.imgUrl!) as ImageProvider,
-          //     radius: 25,
-          //     backgroundImage: NetworkImage(
-          //       widget.imgUrl!,
-          //     ),
-          //     // child: CircleAvatar(
-          //     //   backgroundColor: Colors.transparent,
-          //     //   foregroundColor: Colors.transparent,
-          //     //   backgroundImage: NetworkImage(widget.imgUrl!),
-          //     //   radius: 25,
-          //     // ),
-          //   ),
         ),
         // AnimateIcon(
         //   onTap: () {
