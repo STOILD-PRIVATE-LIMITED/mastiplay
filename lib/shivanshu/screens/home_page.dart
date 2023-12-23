@@ -28,43 +28,9 @@ class _HomePageState extends State<HomePage> {
     'Audio',
   ];
   bool showAlert = false;
-  @override
-  void initState() {
-    super.initState();
+  
 
-    // Future.delayed(const Duration(seconds: 2), () {
-    //   setState(() {
-    //     showAlert = true;
-    //   });
-    //   _showAlertDialog();
-    // });
-  }
-
-  void _showAlertDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Select Frame'),
-          content: const Row(
-            children: [
-              Icon(Icons.abc),
-              Icon(Icons.abc),
-            ],
-          ),
-          actions: [
-            ElevatedButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);

@@ -1,6 +1,6 @@
 // import 'dart:developer';
 
-import 'package:animated_icon/animated_icon.dart';
+// import 'package:animated_icon/animated_icon.dart';
 // import 'package:emoji_keyboard_flutter/emoji_keyboard_flutter.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 // import 'package:flutter/foundation.dart' as foundation;
@@ -563,6 +563,11 @@ class _AudioPageState extends State<AudioPage> {
                 //   });
                 // },
                 // showMsg(context, "In Developement");
+                // showMsg(
+                //     context,
+                //     controller.audio
+                //         ? "You're unmuted"
+                //         : 'You\'re now muted');
                 children: [
                   IconButton(
                     style: IconButton.styleFrom(
@@ -572,52 +577,47 @@ class _AudioPageState extends State<AudioPage> {
                       setState(() {
                         controller.audio = !controller.audio;
                       });
-                      showMsg(
-                          context,
-                          controller.audio
-                              ? "You're unmuted"
-                              : 'You\'re now muted');
                     },
-                    icon: Image.asset('assets/Voice.png'),
+                    icon: controller.audio
+                        ? Image.asset(
+                            'assets/Voice.png',
+                            height: 18.sp,
+                          )
+                        : Image.asset(
+                            "assets/Frame 29.png",
+                            height: 18.sp,
+                          ),
                   ),
                   Expanded(
-                    child: Container(
-                      width: width,
-                      height: height / 15,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: TextFormField(
-                        controller: _controller,
-                        onFieldSubmitted: (value) {
-                          if (value.isNotEmpty) {
-                            sendMessage(
-                              value,
-                              widget.room.id,
-                            );
-                            _controller.clear();
-                          }
-                        },
-                        decoration: InputDecoration(
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide: const BorderSide(
-                              width: 1,
-                              color: Colors.transparent,
-                            ),
+                    child: TextFormField(
+                      controller: _controller,
+                      onFieldSubmitted: (value) {
+                        if (value.isNotEmpty) {
+                          sendMessage(
+                            value,
+                            widget.room.id,
+                          );
+                          _controller.clear();
+                        }
+                      },
+                      decoration: InputDecoration(
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            width: 1,
+                            color: Colors.transparent,
                           ),
-                          hintText: "Hii...",
-                          hintStyle: TextStyle(
-                            fontSize: height / 50,
-                            color: Colors.black45,
-                          ),
-                          suffixIcon: Image.asset('assets/smile.png'),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: width / 30,
-                            vertical: height / 100,
-                          ),
+                        ),
+                        hintText: "Hii...",
+                        hintStyle: TextStyle(
+                          fontSize: height / 50,
+                          color: Colors.black45,
+                        ),
+                        suffixIcon: Image.asset('assets/smile.png'),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: width / 30,
+                          vertical: height / 100,
                         ),
                       ),
                     ),
@@ -725,39 +725,9 @@ class _AudioUserTileState extends State<AudioUserTile> {
                     color: colorScheme(context).primary,
                   ),
                 )
-              // height: 50,
-              // width: 50,
-              // padding: const EdgeInsets.only(top: 9, left: 5, right: 9),
-              // image: (widget.frame == "1" || widget.frame == "2")
-              //     ? ((widget.frame == "1")
-              //         ? const AssetImage('assets/Frame 1.png')
-              //         : const AssetImage('assets/Frame 2.png'))
-              //     : NetworkImage(widget.imgUrl!) as ImageProvider,
-              // alignment: Alignment.center,
-              // : Container(
-              //     height: 50,
-              //     width: 50,
-              //     decoration: ShapeDecoration(
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(30),
-              //       ),
-              //       image: DecorationImage(
-              //         image: NetworkImage(
-              //           widget.imgUrl!,
-              //         ),
-              //       ),
-              //     ),
-              //     child: CircleAvatar(
-              //       backgroundColor: Colors.transparent,
-              //       foregroundImage:
-              //           (widget.frame == "1" || widget.frame == "2")
-              //               ? ((widget.frame == "1")
-              //                   ? const AssetImage('assets/Frame 1.png')
-              //                   : const AssetImage('assets/Frame 2.png'))
-              //               : NetworkImage(widget.imgUrl!) as ImageProvider,
-              //     ),
-              // ),
               : Container(
+                  height: 50,
+                  width: 50,
                   decoration: ShapeDecoration(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),

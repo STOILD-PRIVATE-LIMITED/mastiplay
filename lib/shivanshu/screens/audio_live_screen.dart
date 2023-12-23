@@ -344,14 +344,12 @@ class _AudioLiveState extends State<AudioLive> {
                             Positioned(
                               right: 10.sp,
                               top: widget.height / 80,
-                              child: Container(
-                                child: Timer(
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  startTime: rooms[index].updatedAt,
+                              child: Timer(
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
+                                startTime: rooms[index].updatedAt,
                               ),
                             ),
                             Positioned(
@@ -399,6 +397,10 @@ class _AudioLiveState extends State<AudioLive> {
                               bottom: widget.height / 50,
                               left: widget.width / 30,
                               child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 5,
+                                ),
                                 decoration: BoxDecoration(
                                   color: Colors.black38,
                                   borderRadius: BorderRadius.circular(20),
@@ -407,13 +409,13 @@ class _AudioLiveState extends State<AudioLive> {
                                   children: [
                                     Image.asset(
                                       'assets/Home_white.png',
-                                      height: widget.height / 80,
+                                      height: widget.height / 70,
                                     ),
                                     SizedBox(
                                       width: widget.width / 40,
                                     ),
                                     Text(
-                                      rooms[index].name,
+                                      rooms[index].name.toPascalCase(),
                                       overflow: TextOverflow.fade,
                                       style: TextStyle(
                                           fontSize: widget.height / 80,

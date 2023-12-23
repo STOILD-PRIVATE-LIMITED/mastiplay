@@ -7,18 +7,27 @@ import 'package:spinner_try/shivanshu/screens/audio_page.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/webRTC/web_rtc.dart';
 
-class VideoRoom extends StatelessWidget {
+import 'audio_room.dart';
+
+class VideoRoom extends StatefulWidget {
   final Room room;
 
-  final _controller = TextEditingController();
+
   VideoRoom({super.key, required this.room});
 
   @override
+  State<VideoRoom> createState() => _VideoRoomState();
+}
+
+class _VideoRoomState extends State<VideoRoom> {
+  final _controller = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
-    final iAmAdmin = room.admin == auth.currentUser!.email!;
+    final iAmAdmin = widget.room.admin == auth.currentUser!.email!;
     return WebRTCWidget(
       onExit: () async {
-        if (room.admin == auth.currentUser!.email) {
+        if (widget.room.admin == auth.currentUser!.email) {
           // if (await askUser(context, 'Do you want to delete the room as well?',
           //         no: true,
           //         custom: {
@@ -37,12 +46,12 @@ class VideoRoom extends StatelessWidget {
         audio: true,
       ),
       userData: currentUser.toJson(),
-      roomId: room.id,
+      roomId: widget.room.id,
       builder: (context, roomId, usersData, videoViews, myUserData, myVideoView,
           controls) {
         int? adminIndex = iAmAdmin
             ? null
-            : usersData.indexWhere((element) => element['email'] == room.admin);
+            : usersData.indexWhere((element) => element['email'] == widget.room.admin);
         log("adminIndex=$adminIndex");
         return Scaffold(
           backgroundColor: Colors.transparent,
@@ -105,7 +114,7 @@ class VideoRoom extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  room.name,
+                                  widget.room.name,
                                   style: const TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
@@ -114,7 +123,7 @@ class VideoRoom extends StatelessWidget {
                                   overflow: TextOverflow.fade,
                                 ),
                                 Text(
-                                  "id: ${room.id}",
+                                  "id: ${widget.room.id}",
                                   style: const TextStyle(
                                     fontSize: 10,
                                     color: Colors.grey,
@@ -566,6 +575,7 @@ class VideoRoom extends StatelessWidget {
                                   "Anonymous"),
                         ),
                     ],
+                            // showMsg(context, "In Developement");
                   ),
                   bottomNavigationBar: Card(
                     elevation: 0,
@@ -575,52 +585,55 @@ class VideoRoom extends StatelessWidget {
                     child: Row(
                       children: [
                         IconButton(
-                            style: IconButton.styleFrom(
-                              backgroundColor: Colors.black12,
-                            ),
-                            onPressed: () {
-                              showMsg(context, "In Developement");
-                            },
-                            icon: Image.asset('assets/smile.png')),
+                          style: IconButton.styleFrom(
+                            backgroundColor: Colors.black12,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              controller.audio = !controller.audio;
+                            });
+                          },
+                          icon: controller.audio
+                        ? Image.asset(
+                            'assets/Voice.png',
+                            height: 18.sp,
+                          )
+                        : Image.asset(
+                            "assets/Frame 29.png",
+                            height: 18.sp,
+                          ),
+                        ),
                         Expanded(
-                          child: Container(
-                            width: width,
-                            height: height / 15,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: TextFormField(
-                              controller: _controller,
-                              onFieldSubmitted: (value) {
-                                if (value.isNotEmpty) {
-                                  sendMessage(
-                                    value,
-                                    room.id,
-                                  );
-                                  _controller.clear();
-                                }
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                  borderSide: const BorderSide(
-                                    width: 1,
-                                    color: Colors.transparent,
-                                  ),
-                                ),
-                                hintText: "Hii...",
-                                hintStyle: TextStyle(
-                                  fontSize: height / 50,
-                                  color: Colors.black45,
-                                ),
-                                suffixIcon: Image.asset('assets/Voice.png'),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: width / 30,
-                                  vertical: height / 100,
+                          child: TextFormField(
+                            controller: _controller,
+                            onFieldSubmitted: (value) {
+                              if (value.isNotEmpty) {
+                                sendMessage(
+                                  value,
+                                  widget.room.id,
+                                );
+                                _controller.clear();
+                              }
+                            },
+                            decoration: InputDecoration(
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: const BorderSide(
+                                  width: 1,
+                                  color: Colors.transparent,
                                 ),
                               ),
+                              hintText: "Hii...",
+                              hintStyle: TextStyle(
+                                fontSize: height / 50,
+                                color: Colors.black45,
+                              ),
+                              suffixIcon: Image.asset('assets/smile.png'),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: width / 30,
+                          vertical: height / 100,
+                        ),
                             ),
                           ),
                         ),
@@ -630,7 +643,7 @@ class VideoRoom extends StatelessWidget {
                             backgroundColor: Colors.black12,
                           ),
                           onPressed: () {
-                            shareRoomLink(room.id);
+                            shareRoomLink(widget.room.id);
                           },
                           icon: Image.asset(
                             'assets/Send1.png',
