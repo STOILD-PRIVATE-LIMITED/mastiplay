@@ -26,7 +26,8 @@ class _BottomModelState extends State<BottomModel> {
       // color: Colors.black26,
       color: const Color(0xFF011a51),
       child: Stack(
-        fit: StackFit.passthrough,
+        clipBehavior: Clip.none,
+        fit: StackFit.loose,
         alignment: Alignment.center,
         children: [
           Positioned(
@@ -61,11 +62,13 @@ class _BottomModelState extends State<BottomModel> {
                       widget.roomId,
                       style: TextStyle(
                         fontSize: 10.sp,
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     ),
-                    const Icon(
+                    Icon(
                       Icons.copy,
+                      color: Colors.white,
+                      size: 10.sp,
                     )
                   ],
                 ),

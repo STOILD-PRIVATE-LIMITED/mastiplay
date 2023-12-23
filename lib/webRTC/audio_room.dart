@@ -108,6 +108,21 @@ class _AudioRoomState extends State<AudioRoom> {
                       controller.audio
                           ? "You're unmuted"
                           : 'You\'re now muted');
+                  showModalBottomSheet(
+                    context: context,
+                    builder: ((context) {
+                      return BottomModel(
+                        frame: usersData[i]['frame'],
+                        imageUrl: usersData[i]['photo'],
+                        name: usersData[i] == null
+                            ? "You"
+                            : usersData[i]['name'] ??
+                                usersData[i]['email'] ??
+                                "Anonymous",
+                        roomId: roomId,
+                      );
+                    }),
+                  );
                 },
               ),
             for (int i = usersData.length + 1; i < widget.maxParticipants; ++i)
