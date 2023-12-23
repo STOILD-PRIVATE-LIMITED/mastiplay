@@ -12,8 +12,7 @@ import 'audio_room.dart';
 class VideoRoom extends StatefulWidget {
   final Room room;
 
-
-  VideoRoom({super.key, required this.room});
+  const VideoRoom({super.key, required this.room});
 
   @override
   State<VideoRoom> createState() => _VideoRoomState();
@@ -51,7 +50,8 @@ class _VideoRoomState extends State<VideoRoom> {
           controls) {
         int? adminIndex = iAmAdmin
             ? null
-            : usersData.indexWhere((element) => element['email'] == widget.room.admin);
+            : usersData
+                .indexWhere((element) => element['email'] == widget.room.admin);
         log("adminIndex=$adminIndex");
         return Scaffold(
           backgroundColor: Colors.transparent,
@@ -565,17 +565,21 @@ class _VideoRoomState extends State<VideoRoom> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       for (int i = 0; i < usersData.length; ++i)
-                        AudioUserTile(
-                          frame: usersData[i]['frame'],
-                          imgUrl: usersData[i]['photo'],
-                          name: usersData[i].isEmpty
-                              ? "Error"
-                              : (usersData[i]['name'] ??
-                                  usersData[i]['email'] ??
-                                  "Anonymous"),
+                        SizedBox(
+                          height: 90,
+                          width: 90,
+                          child: AudioUserTile(
+                            frame: usersData[i]['frame'],
+                            imgUrl: usersData[i]['photo'],
+                            name: usersData[i].isEmpty
+                                ? "Error"
+                                : (usersData[i]['name'] ??
+                                    usersData[i]['email'] ??
+                                    "Anonymous"),
+                          ),
                         ),
                     ],
-                            // showMsg(context, "In Developement");
+                    // showMsg(context, "In Developement");
                   ),
                   bottomNavigationBar: Card(
                     elevation: 0,
@@ -594,14 +598,14 @@ class _VideoRoomState extends State<VideoRoom> {
                             });
                           },
                           icon: controller.audio
-                        ? Image.asset(
-                            'assets/Voice.png',
-                            height: 18.sp,
-                          )
-                        : Image.asset(
-                            "assets/Frame 29.png",
-                            height: 18.sp,
-                          ),
+                              ? Image.asset(
+                                  'assets/Voice.png',
+                                  height: 18.sp,
+                                )
+                              : Image.asset(
+                                  "assets/Frame 29.png",
+                                  height: 18.sp,
+                                ),
                         ),
                         Expanded(
                           child: TextFormField(
@@ -630,10 +634,10 @@ class _VideoRoomState extends State<VideoRoom> {
                                 color: Colors.black45,
                               ),
                               suffixIcon: Image.asset('assets/smile.png'),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: width / 30,
-                          vertical: height / 100,
-                        ),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: width / 30,
+                                vertical: height / 100,
+                              ),
                             ),
                           ),
                         ),
