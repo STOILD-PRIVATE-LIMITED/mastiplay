@@ -50,9 +50,12 @@ class _HomeLiveState extends State<HomeLive> {
             loader: (context, start, interval) async {
               Query<Map<String, dynamic>> query =
                   firestore.collection("rooms/");
+
               query = query.orderBy('updatedAt', descending: true);
               query = query.where('roomType', isEqualTo: RoomType.video.index);
-              query = query.startAfter([lastDoc]);
+              if (lastDoc != null) {
+                query = query.startAfter([lastDoc]);
+              }
               query = query.limit(4);
 
               final value = await query.get();
@@ -64,6 +67,7 @@ class _HomeLiveState extends State<HomeLive> {
                         updatedAt: DateTime.tryParse(e.data()['updatedAt']),
                       ))
                   .toList();
+              log("lastDoc=$lastDoc");
               // final docs = await FirestoreCollection(id: 'rooms').get(
               //   start: lastDoc,
               //   limit: 4,

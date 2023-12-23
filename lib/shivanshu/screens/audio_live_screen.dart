@@ -252,7 +252,6 @@ class _AudioLiveState extends State<AudioLive> {
                 query = query.startAfter([lastUpdatedAt]);
               }
               query = query.limit(4);
-
               final value = await query.get();
               final docs = value.docs
                   .map((e) => FirestoreDocument(
@@ -263,7 +262,7 @@ class _AudioLiveState extends State<AudioLive> {
                         e.data()['updatedAt'],
                       )))
                   .toList();
-              log("lastDoc=$lastUpdatedAt");
+              log("lastUpdatedAt=$lastUpdatedAt");
               final List<Room> rooms = docs
                   .map((e) => Room(roomType: RoomType.audio)
                     ..loadFromJson(e.data..addAll({'id': e.id.toString()})))
