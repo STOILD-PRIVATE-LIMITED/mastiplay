@@ -9,7 +9,6 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 import 'package:spinner_try/components/button.dart';
 import 'package:spinner_try/components/textfield.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
@@ -32,7 +31,7 @@ class _RegisterState extends State<Register> {
 
   final nameController = TextEditingController();
   File? _image1;
-  final picker = ImagePicker();
+  // final picker = ImagePicker();
   final phoneController = TextEditingController();
   final otpController = TextEditingController();
 
@@ -47,18 +46,18 @@ class _RegisterState extends State<Register> {
   final imageController = TextEditingController();
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
-  Future getImage() async {
-    final pickedFile =
-        await picker.pickImage(source: ImageSource.gallery, imageQuality: 100);
-    setState(() {
-      if (pickedFile != null) {
-        _image1 = File(pickedFile.path);
-        imageController.text = pickedFile.name;
-      } else {
-        imageController.text = "no image picked";
-      }
-    });
-  }
+  // Future getImage() async {
+  // final pickedFile =
+  //     await picker.pickImage(source: ImageSource.gallery, imageQuality: 100);
+  // setState(() {
+  //   if (pickedFile != null) {
+  //     _image1 = File(pickedFile.path);
+  //     imageController.text = pickedFile.name;
+  //   } else {
+  //     imageController.text = "no image picked";
+  //   }
+  // });
+  // }
 
   void signIn() async {
     // try {

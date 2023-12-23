@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spinner_try/chat/models/message.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
+import 'package:spinner_try/shivanshu/utils.dart';
 
 /// Ask the user for an image
 /// uploads it on cloud and
@@ -28,7 +29,7 @@ Future<String?> getLocalImageOnCloud(context,
             iconSize: 30,
             onPressed: () async {
               final imagePicker = ImagePicker();
-              final pickedImage = await imagePicker.pickImage(
+              XFile? pickedImage = await imagePicker.pickImage(
                 imageQuality: imageQuality,
                 maxWidth: maxWidth,
                 maxHeight: maxHeight,
@@ -37,8 +38,12 @@ Future<String?> getLocalImageOnCloud(context,
               if (pickedImage == null) {
                 return;
               }
+              final file = await cropImage(context, File(pickedImage.path));
+              pickedImage = file == null ? null : XFile(file.path);
               // ignore: use_build_context_synchronously
-              Navigator.of(context).pop(File(pickedImage.path));
+              if (pickedImage != null) {
+                Navigator.of(context).pop(File(pickedImage.path));
+              }
             },
             icon: const Icon(Icons.image_rounded),
           ),

@@ -123,9 +123,11 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                           : ImageSource.gallery,
                       preferredCameraDevice: CameraDevice.front,
                     )
-                        .then((value) {
+                        .then((value) async {
                       if (value == null) return;
-                      setState(() => img = File(value.path));
+                      final file = await cropImage(context, File(value.path));
+                      setState(
+                          () => img = file == null ? null : File(file.path));
                     });
                   },
                   child: Hero(

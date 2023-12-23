@@ -150,9 +150,12 @@ class _ProfileEditState extends State<ProfileEdit> {
                             imageQuality: 50,
                             maxWidth: 200,
                           )
-                              .then((value) {
+                              .then((value) async {
                             if (value == null) return;
-                            setState(() => img = File(value.path));
+                            final file =
+                                await cropImage(context, File(value.path));
+                            setState(() =>
+                                img = file == null ? null : File(file.path));
                           });
                         },
                         icon: Icon(
