@@ -728,12 +728,8 @@ class _AudioUserTileState extends State<AudioUserTile> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        IconButton(
-          style: IconButton.styleFrom(
-            padding: EdgeInsets.zero,
-            tapTargetSize: MaterialTapTargetSize.padded,
-          ),
-          onPressed: () {
+        GestureDetector(
+          onTap: () {
             if (widget.onTap != null) {
               widget.onTap!();
               setState(() {
@@ -741,44 +737,44 @@ class _AudioUserTileState extends State<AudioUserTile> {
               });
             }
           },
-          icon: widget.imgUrl == null || widget.imgUrl!.isEmpty
+          child: widget.imgUrl == null || widget.imgUrl!.isEmpty
               ? Container(
-                  color: Colors.transparent,
+                  decoration: const BoxDecoration(
+                    color: Colors.black45,
+                    shape: BoxShape.circle,
+                  ),
                   child: Icon(
                     (isMuted
                         ? Icons.mic_off_outlined
                         : Icons.mic_none_outlined),
+                    size: 60,
                     color: colorScheme(context).primary,
                   ),
                 )
-              : Container(
-                  height: 70.sp,
-                  width: 70.sp,
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    foregroundImage:
-                        (widget.frame == "1" || widget.frame == "2")
-                            ? ((widget.frame == "1")
-                                ? const AssetImage('assets/Frame 1.png')
-                                : const AssetImage('assets/Frame 2.png'))
-                            : null,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 9, left: 5, right: 9),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: Image(
-                          image: NetworkImage(widget.imgUrl!),
+              : Stack(
+                  children: [
+                    Positioned(
+                      left: 5,
+                      top: 10,
+                      child: Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: const BoxDecoration(shape: BoxShape.circle),
+                        child: Image.network(
+                          widget.imgUrl!,
                           fit: BoxFit.cover,
-                          // alignment: Alignment.center,
+                          width: 50,
+                          height: 50,
                         ),
                       ),
                     ),
-                  ),
+                    if (widget.frame != null)
+                      Image.asset(
+                        'assets/Frame ${widget.frame}.png',
+                        fit: BoxFit.cover,
+                        width: 60,
+                        height: 60,
+                      ),
+                  ],
                 ),
           // radius: 20,
           // NetworkImage(
@@ -834,10 +830,11 @@ class _AudioUserTileState extends State<AudioUserTile> {
         //   iconType: IconType.continueAnimation,
         //   animateIcon: AnimateIcons.loading3,
         // ),
-        FittedBox(
-          fit: BoxFit.scaleDown,
+        const SizedBox(height: 5),
+        Expanded(
           child: Text(
             widget.name.isEmpty ? "Name is empty" : widget.name,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
