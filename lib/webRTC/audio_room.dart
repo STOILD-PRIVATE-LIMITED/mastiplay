@@ -91,7 +91,7 @@ class _AudioRoomState extends State<AudioRoom> {
                           : myUserData['name'] ??
                               myUserData['email'] ??
                               "Anonymous",
-                      roomId: roomId,
+                      roomId: myUserData["id"],
                     );
                   }),
                 );
@@ -133,7 +133,7 @@ class _AudioRoomState extends State<AudioRoom> {
                             : usersData[i]['name'] ??
                                 usersData[i]['email'] ??
                                 "Anonymous",
-                        roomId: roomId,
+                        roomId: usersData[i]["id"],
                       );
                     }),
                   );
