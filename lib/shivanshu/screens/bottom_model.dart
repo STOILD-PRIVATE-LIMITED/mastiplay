@@ -28,18 +28,57 @@ class _BottomModelState extends State<BottomModel> {
       alignment: Alignment.center,
       children: [
         Positioned(
-          top: -30,
-          child: AudioUserTile(
-              imgUrl: widget.imageUrl, frame: widget.frame, name: widget.name),
-        ),
+            top: -30,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 5,
+                        top: 10,
+                        child: Container(
+                          clipBehavior: Clip.hardEdge,
+                          decoration:
+                              const BoxDecoration(shape: BoxShape.circle),
+                          child: Image.network(
+                            widget.imageUrl,
+                            fit: BoxFit.cover,
+                            width: 65,
+                            height: 65,
+                          ),
+                        ),
+                      ),
+                      Image.asset(
+                        'assets/Frame ${widget.frame}.png',
+                        fit: BoxFit.cover,
+                        width: 80,
+                        height: 80,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  widget.name.isEmpty ? "Name is empty" : widget.name,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.sp),
+                ),
+              ],
+            )),
         Padding(
           padding: EdgeInsets.only(
-            top: 70.0.sp,
+            top: 90.0.sp,
           ),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                     padding: EdgeInsets.symmetric(
