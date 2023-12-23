@@ -84,54 +84,74 @@ class NewAuth extends StatelessWidget {
       stream: auth.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          try {
-            fetchUser(auth.currentUser!.email!).then((value) {
-              currentUser = value;
-              log("Current User: ${value.toJson()}");
-              if (value.gender == -1 ||
-                  value.dob == null ||
-                  value.country.isEmpty ||
-                  value.frame == null) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => GenderScreen(
-                      email: auth.currentUser!.email!,
-                    ),
-                  ),
-                );
-              } else {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomeLive(
-                      email: auth.currentUser!.email!,
-                    ),
-                  ),
-                );
-              }
-            });
-          } catch (e) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => GenderScreen(
+          return FutureBuilder(
+            future: fetchUser(auth.currentUser!.email!),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return GenderScreen(
                   email: auth.currentUser!.email!,
-                ),
+                );
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return Scaffold(
+                  body: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          'assets/logo.png',
+                          width: width / 2,
+                          height: width / 2,
+                          fit: BoxFit.contain,
+                        ),
+                        circularProgressIndicator(),
+                        const Text('Loading...'),
+                      ],
+                    ),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                currentUser = snapshot.data!;
+                log("Current User: ${currentUser.toJson()}");
+                if (currentUser.gender == -1 ||
+                    currentUser.dob == null ||
+                    currentUser.country.isEmpty ||
+                    currentUser.frame == null) {
+                  return GenderScreen(
+                    email: auth.currentUser!.email!,
+                  );
+                } else {
+                  return HomeLive(
+                    email: auth.currentUser!.email!,
+                  );
+                }
+              }
+              return const Login();
+            },
+          );
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/logo.png',
+                    width: width / 2,
+                    height: width / 2,
+                    fit: BoxFit.contain,
+                  ),
+                  const Text("You're logged in"),
+                  circularProgressIndicator(),
+                ],
               ),
-            );
-          }
-          // return Scaffold(
-          //   body: Center(
-          //     child: Column(
-          //       mainAxisSize: MainAxisSize.min,
-          //       children: [
-          //         const Text("You're logged in"),
-          //         circularProgressIndicator(),
-          //       ],
-          //     ),
-          //   ),
-          // );
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(
+              child: Text('Error: ${snapshot.error}'),
+            ),
+          );
         }
         return const Login();
       },

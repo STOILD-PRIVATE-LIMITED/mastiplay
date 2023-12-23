@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:spinner_try/screen/room.dart';
-import 'package:spinner_try/screen/trending_list.dart';
 import 'package:spinner_try/shivanshu/screens/audio_live_screen.dart';
 import 'package:spinner_try/shivanshu/screens/home_live_screen.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
@@ -28,9 +26,7 @@ class _HomePageState extends State<HomePage> {
     'Audio',
   ];
   bool showAlert = false;
-  
 
-  
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -59,26 +55,26 @@ class _HomePageState extends State<HomePage> {
             );
           },
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              navigatorPush(context, const MyRoom());
-            },
-            icon: Image.asset('assets/profile.png'),
-          ),
-          IconButton(
-            onPressed: () {
-              navigatorPush(context, TrendingList());
-              showMsg(context, 'In Development');
-            },
-            icon: Image.asset('assets/trophy.png'),
-          ),
-          IconButton(
-            onPressed: () {
-              showMsg(context, "Search");
-            },
-            icon: Image.asset('assets/search.png'),
-          ),
+        actions: const [
+          // IconButton(
+          //   onPressed: () {
+          //     // navigatorPush(context, const MyRoom());
+          //   },
+          //   icon: Image.asset('assets/profile.png'),
+          // ),
+          // IconButton(
+          //   onPressed: () {
+          //     // navigatorPush(context, TrendingList());
+          //     showMsg(context, 'In Development');
+          //   },
+          //   icon: Image.asset('assets/trophy.png'),
+          // ),
+          // IconButton(
+          //   onPressed: () {
+          //     showMsg(context, "Search");
+          //   },
+          //   icon: Image.asset('assets/search.png'),
+          // ),
         ],
       ),
       body: Stack(

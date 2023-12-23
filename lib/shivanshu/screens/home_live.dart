@@ -20,6 +20,7 @@ class _HomeLiveState extends State<HomeLive> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: PageView(
         controller: _pageViewController,
         onPageChanged: (i) {

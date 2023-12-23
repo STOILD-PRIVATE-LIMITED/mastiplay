@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/screens/audio_page.dart';
@@ -279,7 +280,39 @@ class _AddButtonPageState extends State<AddButtonPage> {
   }
 
   File? image;
-  void changeImage(File? newImg) {
+  Future<File?> changeImage(File? newImg) async {
     image = newImg;
+    if (image != null) {
+      CroppedFile? croppedFile = await ImageCropper().cropImage(
+        sourcePath: image!.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ],
+        uiSettings: [
+          AndroidUiSettings(
+              toolbarTitle: 'Cropper',
+              toolbarColor: Colors.deepOrange,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false),
+          IOSUiSettings(
+            title: 'Cropper',
+          ),
+          WebUiSettings(
+            context: context,
+          ),
+        ],
+      );
+      if (croppedFile == null) {
+        image == null;
+      } else {
+        image = File(croppedFile.path);
+      }
+    }
+    return image;
   }
 }

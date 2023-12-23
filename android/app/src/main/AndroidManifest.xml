@@ -15,10 +15,13 @@
         android:icon="@mipmap/ic_launcher">
         
         <activity
-          android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
-android:screenOrientation="portrait"
-android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
-
+            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -9,7 +9,7 @@ class LiveVideoRoomPage extends StatefulWidget {
   final bool showVideoButton;
   final TextEditingController controller;
   final TextEditingController nameController;
-  final void Function(File? newImgUrl) onChanged;
+  final Future<File?> Function(File? newImgUrl) onChanged;
   const LiveVideoRoomPage({
     super.key,
     this.showVideoButton = true,
@@ -23,10 +23,6 @@ class LiveVideoRoomPage extends StatefulWidget {
 }
 
 class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
-  void onChanged() {
-    setState(() {});
-  }
-
   XFile? image;
   TextEditingController roomIDController = TextEditingController();
   @override
@@ -90,10 +86,12 @@ class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
                       : ImageSource.gallery,
                   preferredCameraDevice: CameraDevice.front,
                 )
-                    .then((value) {
+                    .then((value) async {
                   if (value == null) return;
-                  setState(() => image = value);
-                  widget.onChanged(image == null ? null : File(image!.path));
+                  final File? croppedImg =
+                      await widget.onChanged(File(value.path));
+                  image = croppedImg == null ? null : XFile(croppedImg.path);
+                  setState(() {});
                 });
               },
               child: Container(

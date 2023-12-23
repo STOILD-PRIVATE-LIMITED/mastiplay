@@ -5,10 +5,9 @@
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 // import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
-// import 'package:spinner_try/screen/audio_go.dart';
-import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/audio_room.dart';
 import 'package:spinner_try/webRTC/web_rtc.dart';
 
@@ -62,17 +61,44 @@ class _AudioPageState extends State<AudioPage> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundImage: widget.room.imgUrl != null &&
-                              widget.room.imgUrl!.isNotEmpty
-                          ? NetworkImage(widget.room.imgUrl!)
-                          : (currentUser.photo.isNotEmpty
-                              ? NetworkImage(currentUser.photo)
-                              : const AssetImage('assets/dummy_person.png')
-                                  as ImageProvider),
-                      backgroundColor: Colors.transparent,
-                    ),
+                    if (widget.room.imgUrl != null)
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(widget.room.imgUrl!),
+                        backgroundColor: Colors.transparent,
+                      )
+                    else
+                      Container(
+                        clipBehavior: Clip.hardEdge,
+                        width: 40,
+                        height: 40,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: FutureBuilder(
+                          future: fetchUser(widget.room.admin!),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final user = snapshot.data!;
+                              return (user.photo.isNotEmpty
+                                  ? Image.network(
+                                      user.photo,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.asset(
+                                      'assets/dummy_person.png',
+                                      fit: BoxFit.cover,
+                                    ));
+                            } else if (snapshot.hasError) {
+                              return const Icon(Icons.info, color: Colors.red);
+                            }
+                            return Image.asset(
+                              'assets/dummy_person.png',
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        ),
+                      ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Column(
