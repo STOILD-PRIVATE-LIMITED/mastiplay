@@ -74,6 +74,13 @@ class _AudioRoomState extends State<AudioRoom> {
                 showMsg(context,
                     controller.audio ? "You're unmuted" : 'You\'re now muted');
                 showModalBottomSheet(
+                  backgroundColor: const Color(0xFF011a51),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
                   context: context,
                   builder: ((context) {
                     return BottomModel(
@@ -109,6 +116,13 @@ class _AudioRoomState extends State<AudioRoom> {
                           ? "You're unmuted"
                           : 'You\'re now muted');
                   showModalBottomSheet(
+                    backgroundColor: const Color(0xFF011a51),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
                     context: context,
                     builder: ((context) {
                       return BottomModel(
