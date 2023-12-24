@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +12,8 @@ import 'package:spinner_try/screen/login.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/user_model.dart';
+
+import '../shivanshu/utils/image.dart';
 
 class ProfileEdit extends StatefulWidget {
   const ProfileEdit({super.key});
@@ -40,6 +44,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     users =
         snapshot.docs.map<UserModel>((e) => UserModel.fromSnapahot(e)).toList();
     name = users[0].name;
+    nameController.text = name;
     userGender = users[0].gender;
     photoUrl = users[0].photo;
     userAge = users[0].dob;
@@ -73,7 +78,6 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
   updateDob() async {
-    print(_selectedDate.toJson());
     final email = user!.email;
     final userRef = FirebaseFirestore.instance.collection('users');
     final userDoc = await userRef.where('email', isEqualTo: email).get();
@@ -81,6 +85,16 @@ class _ProfileEditState extends State<ProfileEdit> {
     await userRef.doc(userDocId).update({
       'dob': _selectedDate.toJson(),
     });
+  }
+
+  updateImage(File? img) async {
+    final email = user!.email;
+    await uploadImage(
+      context,
+      img,
+      'images',
+      email!,
+    );
   }
 
   TextEditingController nameController = TextEditingController();
@@ -155,8 +169,10 @@ class _ProfileEditState extends State<ProfileEdit> {
                             if (value == null) return;
                             final file =
                                 await cropImage(context, File(value.path));
-                            setState(() =>
-                                img = file == null ? null : File(file.path));
+                            setState(
+                              () => img = file == null ? null : File(file.path),
+                              // updateImage(File(file),context)
+                            );
                           });
                         },
                         icon: Icon(
@@ -192,59 +208,58 @@ class _ProfileEditState extends State<ProfileEdit> {
                 trailing: SizedBox(
                   width: width / 2.2,
                   height: height / 20,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(name.isEmpty ? "UserName" : name,
-                          style: TextStyle(
-                              fontSize: height / 50, color: Colors.grey)),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: const Text("Change Name"),
-                                  content: TextField(
-                                    controller: nameController,
-                                    decoration: const InputDecoration(
-                                      hintText: "Enter new name",
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        updateName();
-                                        setState(() {
-                                          name = nameController.text;
-                                        });
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                                'Name updated successfully'),
-                                          ),
-                                        );
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text("Save"),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text("Cancel"),
-                                    ),
-                                  ],
-                                );
-                              });
-                        },
-                        child: Icon(
+                  child: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("Change Name"),
+                              content: TextField(
+                                controller: nameController,
+                                decoration: const InputDecoration(
+                                  hintText: "Enter new name",
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    updateName();
+                                    setState(() {
+                                      name = nameController.text;
+                                    });
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content:
+                                            Text('Name updated successfully'),
+                                      ),
+                                    );
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("Save"),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("Cancel"),
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(name.isEmpty ? "UserName" : name,
+                            style: TextStyle(
+                                fontSize: height / 50, color: Colors.grey)),
+                        Icon(
                           Icons.arrow_forward_ios,
                           size: height / 50,
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -257,76 +272,74 @@ class _ProfileEditState extends State<ProfileEdit> {
                 trailing: SizedBox(
                   width: width / 2.2,
                   height: height / 20,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('$age',
-                          style: TextStyle(
-                              fontSize: height / 50, color: Colors.grey)),
-                      GestureDetector(
-                        onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            )),
-                            clipBehavior: Clip.hardEdge,
-                            builder: (context) {
-                              return Scaffold(
-                                appBar: AppBar(
-                                  backgroundColor: Colors.transparent,
-                                  surfaceTintColor: Colors.transparent,
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        updateDob();
-                                        setState(() {
-                                          age = DateTime.now()
-                                                  .difference(_selectedDate)
-                                                  .inDays ~/
-                                              365;
-                                        });
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                                'Date of birth updated successfully'),
-                                          ),
-                                        );
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Confirm'),
-                                    ),
-                                  ],
+                  child: GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        )),
+                        clipBehavior: Clip.hardEdge,
+                        builder: (context) {
+                          return Scaffold(
+                            appBar: AppBar(
+                              backgroundColor: Colors.transparent,
+                              surfaceTintColor: Colors.transparent,
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    updateDob();
+                                    setState(() {
+                                      age = DateTime.now()
+                                              .difference(_selectedDate)
+                                              .inDays ~/
+                                          365;
+                                    });
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            'Date of birth updated successfully'),
+                                      ),
+                                    );
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Confirm'),
                                 ),
-                                body: SizedBox(
-                                  height: height / 2,
-                                  child: ScrollDatePicker(
-                                    selectedDate:
-                                        _selectedDate ?? DateTime.now(),
-                                    locale: const Locale('en'),
-                                    options: const DatePickerOptions(
-                                      isLoop: false,
-                                    ),
-                                    onDateTimeChanged: (DateTime value) {
-                                      setState(() {
-                                        _selectedDate = value;
-                                      });
-                                    },
-                                  ),
+                              ],
+                            ),
+                            body: SizedBox(
+                              height: height / 2,
+                              child: ScrollDatePicker(
+                                selectedDate: _selectedDate ?? DateTime.now(),
+                                locale: const Locale('en'),
+                                options: const DatePickerOptions(
+                                  isLoop: false,
                                 ),
-                              );
-                            },
+                                onDateTimeChanged: (DateTime value) {
+                                  setState(() {
+                                    _selectedDate = value;
+                                  });
+                                },
+                              ),
+                            ),
                           );
                         },
-                        child: Icon(
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('$age',
+                            style: TextStyle(
+                                fontSize: height / 50, color: Colors.grey)),
+                        Icon(
                           Icons.arrow_forward_ios,
                           size: height / 50,
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -461,59 +474,3 @@ class _ProfileEditState extends State<ProfileEdit> {
     );
   }
 }
-
-            // SizedBox(
-            //   height: height / 30,
-            // ),
-            // Text(
-            //   "Album 1/1",
-            //   style:
-            //       TextStyle(fontSize: height / 50, fontWeight: FontWeight.bold),
-            // ),
-            // SizedBox(
-            //   height: height / 50,
-            // ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //   children: [
-            //     Container(
-            //       decoration: BoxDecoration(
-            //         borderRadius: BorderRadius.circular(10),
-            //         border: Border.all(color: Colors.grey),
-            //       ),
-            //       alignment: Alignment.center,
-            //       height: height / 8,
-            //       width: width / 4,
-            //       child: const Icon(
-            //         Icons.add,
-            //         color: Colors.black,
-            //       ),
-            //     ),
-            //     Container(
-            //       decoration: BoxDecoration(
-            //         borderRadius: BorderRadius.circular(10),
-            //         border: Border.all(color: Colors.grey),
-            //       ),
-            //       alignment: Alignment.center,
-            //       height: height / 8,
-            //       width: width / 4,
-            //       child: const Icon(
-            //         Icons.add,
-            //         color: Colors.black,
-            //       ),
-            //     ),
-            //     Container(
-            //       decoration: BoxDecoration(
-            //         borderRadius: BorderRadius.circular(10),
-            //         border: Border.all(color: Colors.grey),
-            //       ),
-            //       alignment: Alignment.center,
-            //       height: height / 8,
-            //       width: width / 4,
-            //       child: const Icon(
-            //         Icons.add,
-            //         color: Colors.black,
-            //       ),
-            //     ),
-            //   ],
-            // ),
