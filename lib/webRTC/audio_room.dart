@@ -5,7 +5,6 @@ import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/screens/audio_page.dart';
 import 'package:spinner_try/shivanshu/screens/bottom_model.dart';
-import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/web_rtc.dart';
 
@@ -62,55 +61,14 @@ class _AudioRoomState extends State<AudioRoom> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: widget.maxParticipants ~/ 2,
-            childAspectRatio: 1 / 1.2,
+            childAspectRatio: 1 / 2,
             children: [
-              AudioUserTile(
-                user: UserModel.fromJson(myUserData),
-                onTap: () {
-                  setState(() {
-                    controller.audio = !controller.audio;
-                  });
-                  showMsg(
-                      context,
-                      controller.audio
-                          ? "You're unmuted"
-                          : 'You\'re now muted');
-                  showModalBottomSheet(
-                    backgroundColor: const Color(0xFF011a51),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
-                    ),
-                    context: context,
-                    builder: ((context) {
-                      return BottomModel(
-                        frame: myUserData['frame'],
-                        imageUrl: myUserData['photo'],
-                        name: myUserData == null
-                            ? "You"
-                            : myUserData['name'] ??
-                                myUserData['email'] ??
-                                "Anonymous",
-                        roomId: myUserData["id"],
-                      );
-                    }),
-                  );
-                },
-              ),
-              for (int i = 0; i < usersData.length; ++i)
-                AudioUserTile(
-                  user: UserModel.fromJson(usersData[i]),
+              SizedBox(
+                // height: 100,
+                // width: 100,
+                child: AudioUserTile(
+                  user: UserModel.fromJson(myUserData),
                   onTap: () {
-                    setState(() {
-                      controller.audio = !controller.audio;
-                    });
-                    showMsg(
-                        context,
-                        controller.audio
-                            ? "You're unmuted"
-                            : 'You\'re now muted');
                     showModalBottomSheet(
                       backgroundColor: const Color(0xFF011a51),
                       shape: const RoundedRectangleBorder(
@@ -122,23 +80,60 @@ class _AudioRoomState extends State<AudioRoom> {
                       context: context,
                       builder: ((context) {
                         return BottomModel(
-                          frame: usersData[i]['frame'],
-                          imageUrl: usersData[i]['photo'],
-                          name: usersData[i] == null
+                          frame: myUserData['frame'],
+                          imageUrl: myUserData['photo'],
+                          name: myUserData == null
                               ? "You"
-                              : usersData[i]['name'] ??
-                                  usersData[i]['email'] ??
+                              : myUserData['name'] ??
+                                  myUserData['email'] ??
                                   "Anonymous",
-                          roomId: usersData[i]["id"],
+                          roomId: myUserData["id"],
                         );
                       }),
                     );
                   },
                 ),
+              ),
+              for (int i = 0; i < usersData.length; ++i)
+                SizedBox(
+                  // height: 100,
+                  // width: 100,
+                  child: AudioUserTile(
+                    user: UserModel.fromJson(usersData[i]),
+                    onTap: () {
+                      showModalBottomSheet(
+                        backgroundColor: const Color(0xFF011a51),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                        ),
+                        context: context,
+                        builder: ((context) {
+                          return BottomModel(
+                            frame: usersData[i]['frame'],
+                            imageUrl: usersData[i]['photo'],
+                            name: usersData[i] == null
+                                ? "You"
+                                : usersData[i]['name'] ??
+                                    usersData[i]['email'] ??
+                                    "Anonymous",
+                            roomId: usersData[i]["id"],
+                          );
+                        }),
+                      );
+                    },
+                  ),
+                ),
               for (int i = usersData.length + 1;
                   i < widget.maxParticipants;
                   ++i)
-                AudioUserTile(user: UserModel()),
+                SizedBox(
+                  // height: 100,
+                  // width: 100,
+                  child: AudioUserTile(user: UserModel()),
+                ),
             ],
           ),
         );

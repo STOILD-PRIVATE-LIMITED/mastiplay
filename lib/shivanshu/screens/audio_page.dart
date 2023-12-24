@@ -3,6 +3,8 @@
 // import 'package:emoji_keyboard_flutter/emoji_keyboard_flutter.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 // import 'package:flutter/foundation.dart' as foundation;
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
@@ -34,13 +36,22 @@ class _AudioPageState extends State<AudioPage> {
   // );
   @override
   Widget build(BuildContext context) {
+    log("height = $height");
+    log("MediaQuery.of(context).viewInsets.bottom = ${MediaQuery.of(context).viewInsets.bottom}");
+    log("MediaQuery.of(context).viewPadding.bottom = ${MediaQuery.of(context).viewPadding.bottom}");
+    log("MediaQuery.of(context).padding.bottom = ${MediaQuery.of(context).padding.bottom}");
     return Scaffold(
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(
-              'assets/1.png',
-              fit: BoxFit.cover,
+            bottom: -MediaQuery.of(context).viewInsets.bottom,
+            child: SizedBox(
+              height: height,
+              width: width,
+              child: Image.asset(
+                'assets/1.png',
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Scaffold(
@@ -405,30 +416,32 @@ class _AudioUserTileState extends State<AudioUserTile> {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        GestureDetector(
-            onTap: () {
-              if (widget.onTap != null) {
-                widget.onTap!();
-                setState(() {
-                  isMuted = !isMuted;
-                });
-              }
-            },
-            child: widget.user.photo.isEmpty
-                ? Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.black45,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      (isMuted
-                          ? Icons.mic_off_outlined
-                          : Icons.mic_none_outlined),
-                      size: 40,
-                      color: colorScheme(context).primary,
-                    ),
-                  )
-                : ProfileImage(user: widget.user)),
+        Expanded(
+          child: GestureDetector(
+              onTap: () {
+                if (widget.onTap != null) {
+                  widget.onTap!();
+                  setState(() {
+                    isMuted = !isMuted;
+                  });
+                }
+              },
+              child: widget.user.photo.isEmpty
+                  ? Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.black45,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        (isMuted
+                            ? Icons.mic_off_outlined
+                            : Icons.mic_none_outlined),
+                        size: 40,
+                        color: colorScheme(context).primary,
+                      ),
+                    )
+                  : ProfileImage(user: widget.user)),
+        ),
         const SizedBox(height: 5),
         Expanded(
           child: Text(

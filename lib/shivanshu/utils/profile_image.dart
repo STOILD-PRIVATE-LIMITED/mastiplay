@@ -16,6 +16,7 @@ class _ProfileImageState extends State<ProfileImage> {
     return LayoutBuilder(builder: (context, constraints) {
       return Stack(
         fit: StackFit.passthrough,
+        alignment: Alignment.center,
         children: [
           Positioned(
             top: 240 / 1080 * constraints.maxHeight,
@@ -36,6 +37,7 @@ class _ProfileImageState extends State<ProfileImage> {
             ),
           ),
           Image.asset(
+            // 'assets/Frame 2.png',
             'assets/Frame ${widget.user.frame}.png',
             fit: BoxFit.cover,
             height: constraints.maxHeight,
