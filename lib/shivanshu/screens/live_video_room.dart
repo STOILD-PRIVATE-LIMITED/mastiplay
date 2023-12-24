@@ -1,10 +1,14 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/settings.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+
+import '../utils/image.dart';
 
 class LiveVideoRoomPage extends StatefulWidget {
   final bool showVideoButton;
@@ -24,6 +28,20 @@ class LiveVideoRoomPage extends StatefulWidget {
 class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
   XFile? image;
   TextEditingController roomIDController = TextEditingController();
+  File? img;
+  final user = FirebaseAuth.instance.currentUser;
+
+  uploadImageToFirebase() async {
+    final email = user!.email;
+    var data = await uploadImage(context, img, 'images', email!);
+    final userRef = FirebaseFirestore.instance.collection('users');
+    final userDoc = await userRef.where('email', isEqualTo: email).get();
+    final userDocId = userDoc.docs.first.id;
+    await userRef.doc(userDocId).update({
+      'photo': data,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget imageWidget = image == null
@@ -95,7 +113,10 @@ class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
                   final File? croppedImg =
                       await widget.onChanged(File(value.path));
                   image = croppedImg == null ? null : XFile(croppedImg.path);
-                  setState(() {});
+                  setState(() {
+                    img = File(value.path);
+                  });
+                  await uploadImageToFirebase();
                 });
               },
               child: Container(

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
-import 'package:wakelock/wakelock.dart';
+// import 'package:wakelock/wakelock.dart';
 
 // TODO: set this to some global server
 // The below represents the server address of the server running the socket.io server
@@ -102,7 +102,7 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
     socket!.onConnect((data) {
       log("Socket connected !!");
       _localRTCVideoRenderer.initialize().then((value) => initLocalStream());
-      Wakelock.enable();
+      // Wakelock.enable();
     });
 
     socket!.on('disconnect', (data) => disconnect());
@@ -192,7 +192,7 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
             'yes') {
           return false;
         }
-        Wakelock.disable();
+        // Wakelock.disable();
         await widget.onExit?.call();
         if (socket != null) {
           socket!.disconnect();
@@ -527,7 +527,7 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
   }
 
   void disconnect() async {
-    Wakelock.disable();
+    // Wakelock.disable();
     log("Disconnected from signaling server");
     for (final peerId in peers.entries) {
       peers[peerId.key]!.close();
