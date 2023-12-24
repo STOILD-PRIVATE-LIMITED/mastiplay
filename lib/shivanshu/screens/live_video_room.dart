@@ -3,17 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
+import 'package:spinner_try/shivanshu/models/settings.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 
 class LiveVideoRoomPage extends StatefulWidget {
   final bool showVideoButton;
-  final TextEditingController controller;
   final TextEditingController nameController;
   final Future<File?> Function(File? newImgUrl) onChanged;
   const LiveVideoRoomPage({
     super.key,
     this.showVideoButton = true,
-    required this.controller,
     required this.onChanged,
     required this.nameController,
   });
@@ -28,16 +27,21 @@ class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
   @override
   Widget build(BuildContext context) {
     Widget imageWidget = image == null
-        ? (currentUser.photo.isEmpty
-            ? Image.asset(
-                'assets/dummy_person.png',
-                width: 100,
+        ? PrefStorage.myRoomUrl != null
+            ? Image.network(
+                PrefStorage.myRoomUrl!,
                 fit: BoxFit.cover,
               )
-            : Image.network(
-                currentUser.photo,
-                fit: BoxFit.cover,
-              ))
+            : (currentUser.photo.isEmpty
+                ? Image.asset(
+                    'assets/dummy_person.png',
+                    width: 100,
+                    fit: BoxFit.cover,
+                  )
+                : Image.network(
+                    currentUser.photo,
+                    fit: BoxFit.cover,
+                  ))
         : Image.file(
             File(image!.path),
             width: 100,
@@ -132,33 +136,6 @@ class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
                     controller: widget.nameController,
                     decoration: InputDecoration(
                       hintText: 'Enter Room Name',
-                      hintStyle: const TextStyle(color: Colors.black),
-                      isDense: true,
-                      filled: true,
-                      fillColor: Colors.black12,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(3),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                    style: const TextStyle(
-                      decorationColor: Colors.black12,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  width: 160,
-                  child: TextField(
-                    // enabled: widget.controller.text.isEmpty,
-                    controller: widget.controller,
-                    decoration: InputDecoration(
-                      hintText: 'Enter Room Id',
                       hintStyle: const TextStyle(color: Colors.black),
                       isDense: true,
                       filled: true,
