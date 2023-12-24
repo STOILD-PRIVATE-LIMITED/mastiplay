@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +10,8 @@ import 'package:scroll_date_picker/scroll_date_picker.dart';
 import 'package:spinner_try/screen/login.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/shivanshu/utils/image.dart';
 import 'package:spinner_try/user_model.dart';
-
-import '../shivanshu/utils/image.dart';
 
 class ProfileEdit extends StatefulWidget {
   const ProfileEdit({super.key});
@@ -32,7 +30,26 @@ class _ProfileEditState extends State<ProfileEdit> {
   String userEmail = '';
   int userGender = 0;
   var userAge;
+
   int age = 0;
+
+  // uploadImage(BuildContext context) async {
+  //   firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+  //       .ref('/images'+currentUser.id.toString())
+  //       .child('images/${}');
+  // }
+
+  // uploadImageToFirebase(BuildContext context, image) async {
+  //   String fileName = image.path;
+  //   firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+  //       .ref('/images' + currentUser.id.toString())
+  //       .child('images/$fileName');
+  //   firebase_storage.UploadTask uploadTask = ref.putFile(image);
+  //   firebase_storage.TaskSnapshot taskSnapshot = await uploadTask;
+  //   taskSnapshot.ref.getDownloadURL().then(
+  //         (value) => print("Done: $value"),
+  //       );
+  // }
 
   List<UserModel> users = [];
   final user = FirebaseAuth.instance.currentUser;
@@ -77,6 +94,18 @@ class _ProfileEditState extends State<ProfileEdit> {
     });
   }
 
+  uploadImageToFirebase() async {
+    var data= await uploadImage(context, img, 'images', userEmail);
+
+    final email = user!.email;
+    final userRef = FirebaseFirestore.instance.collection('users');
+    final userDoc = await userRef.where('email', isEqualTo: email).get();
+    final userDocId = userDoc.docs.first.id;
+    await userRef.doc(userDocId).update({
+      'photo': data,
+    });
+  }
+
   updateDob() async {
     final email = user!.email;
     final userRef = FirebaseFirestore.instance.collection('users');
@@ -85,16 +114,6 @@ class _ProfileEditState extends State<ProfileEdit> {
     await userRef.doc(userDocId).update({
       'dob': _selectedDate.toJson(),
     });
-  }
-
-  updateImage(File? img) async {
-    final email = user!.email;
-    await uploadImage(
-      context,
-      img,
-      'images',
-      email!,
-    );
   }
 
   TextEditingController nameController = TextEditingController();
@@ -158,22 +177,24 @@ class _ProfileEditState extends State<ProfileEdit> {
                                 .colorScheme
                                 .background
                                 .withOpacity(0.5)),
-                        onPressed: () {
+                        onPressed: () async {
                           ImagePicker()
                               .pickImage(
                             source: ImageSource.gallery,
                             imageQuality: 50,
                             maxWidth: 200,
                           )
-                              .then((value) async {
-                            if (value == null) return;
-                            final file =
-                                await cropImage(context, File(value.path));
-                            setState(
-                              () => img = file == null ? null : File(file.path),
-                              // updateImage(File(file),context)
-                            );
-                          });
+                              .then(
+                            (value) async {
+                              if (value == null) return;
+                              final file =
+                                  await cropImage(context, File(value.path));
+                              setState(() {
+                                img = file == null ? null : File(file.path);
+                              });
+                              await uploadImageToFirebase();
+                            },
+                          );
                         },
                         icon: Icon(
                           Icons.camera_alt,
