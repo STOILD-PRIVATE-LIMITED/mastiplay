@@ -36,7 +36,7 @@ class ChatScreen extends StatelessWidget {
         appBar: AppBar(
           titleSpacing: 0,
           actions: [
-            CallButton(emails: chat.receivers)
+            CallButton(emails: chat.participants)
                 .animate()
                 .fade(duration: const Duration(seconds: 1)),
           ],

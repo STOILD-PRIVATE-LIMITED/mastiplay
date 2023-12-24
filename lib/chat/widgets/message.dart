@@ -191,7 +191,7 @@ class Message extends StatelessWidget {
                               const SizedBox(width: 4),
                               if (msgAlignment)
                                 Icon(
-                                  msg.readBy.containsAll(chat.receivers) &&
+                                  msg.readBy.containsAll(chat.participants) &&
                                           msg.readBy.contains(
                                               auth.currentUser!.email!)
                                       ? Icons.done_all_rounded
