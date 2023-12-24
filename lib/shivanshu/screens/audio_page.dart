@@ -184,43 +184,47 @@ class _AudioPageState extends State<AudioPage> {
                                     messages[index]['message'] ?? "Error";
                                 final userData = messages[index]['userData'];
                                 final photo = userData['photo'];
-                                return ListTile(
-                                  dense: true,
-                                  shape: RoundedRectangleBorder(
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 5,
+                                  ),
+                                  decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(50),
+                                    color: Colors.black38,
                                   ),
-                                  minVerticalPadding: 0,
-                                  tileColor: Colors.black38,
-                                  leading: CircleAvatar(
-                                    backgroundImage: photo.isEmpty
-                                        ? null
-                                        : NetworkImage(photo),
-                                    radius: 14,
-                                    child: photo.isNotEmpty
-                                        ? null
-                                        : const Icon(
-                                            Icons.person_rounded,
-                                            size: 15,
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundImage: photo.isEmpty
+                                          ? null
+                                          : NetworkImage(photo),
+                                      radius: 14,
+                                      child: photo.isNotEmpty
+                                          ? null
+                                          : const Icon(
+                                              Icons.person_rounded,
+                                              size: 15,
+                                            ),
+                                    ),
+                                    title: RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: "${userData['name']}: ",
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                  ),
-                                  title: RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: "${userData['name']}: ",
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
+                                          TextSpan(
+                                            text: message,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              // fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                        TextSpan(
-                                          text: message,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            // fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );
