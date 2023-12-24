@@ -144,7 +144,353 @@ class _AudioPageState extends State<AudioPage> {
                 ),
               ),
               actions: [
-                // CircleAvatar(
+                IconButton(
+                  onPressed: () {
+                    showAlertDialog(context);
+                  },
+                  icon: Image.asset(
+                    'assets/close-square.png',
+                    color: Colors.white,
+                  ),
+                )
+              ],
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 20.0,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AudioRoom(
+                      room: widget.room,
+                    ),
+                    SizedBox(
+                      height: 410.sp,
+                      child: LiveChatBuilder(
+                        builder: (ctx, messages) {
+                          messages = messages.reversed.toList();
+                          return SizedBox(
+                            height: 410.sp,
+                            width: 300.sp,
+                            child: ListView.separated(
+                              separatorBuilder: (ctx, index) =>
+                                  const SizedBox(height: 5),
+                              reverse: true,
+                              itemCount: messages.length,
+                              itemBuilder: (ctx, index) {
+                                final String message =
+                                    messages[index]['message'] ?? "Error";
+                                final userData = messages[index]['userData'];
+                                final photo = userData['photo'];
+                                return ListTile(
+                                  dense: true,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  minVerticalPadding: 0,
+                                  tileColor: Colors.black38,
+                                  leading: CircleAvatar(
+                                    backgroundImage: photo.isEmpty
+                                        ? null
+                                        : NetworkImage(photo),
+                                    radius: 14,
+                                    child: photo.isNotEmpty
+                                        ? null
+                                        : const Icon(
+                                            Icons.person_rounded,
+                                            size: 15,
+                                          ),
+                                  ),
+                                  title: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: "${userData['name']}: ",
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: message,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            bottomNavigationBar: Card(
+              color: Colors.black26,
+              child: Row(
+                // setState(() {
+                //   showEmojiKeyboard = !showEmojiKeyboard;
+                //   if (showEmojiKeyboard) {
+                //     EmojiPicker(
+                //       textEditingController: controller,
+                //       config: Config(
+                //         columns: 7,
+                //         initCategory: Category.SMILEYS,
+                //         bgColor: const Color(0xFF21242D),
+                //       ),
+                //     );
+                //   }
+                // });
+                // onTap: () {
+                //   setState(() {
+                //     if (showEmojiKeyboard) {
+                //     setState(() {
+                //       showEmojiKeyboard = false;
+                //     });
+                //     }
+                //   });
+                // },
+                // showMsg(context, "In Developement");
+                // showMsg(
+                //     context,
+                //     controller.audio
+                //         ? "You're unmuted"
+                //         : 'You\'re now muted');
+                children: [
+                  IconButton(
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.black12,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        controller.audio = !controller.audio;
+                      });
+                    },
+                    icon: controller.audio
+                        ? Image.asset(
+                            'assets/Voice.png',
+                            height: 18.sp,
+                          )
+                        : Image.asset(
+                            "assets/Frame 29.png",
+                            height: 18.sp,
+                          ),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _controller,
+                      onFieldSubmitted: (value) {
+                        if (value.isNotEmpty) {
+                          sendMessage(
+                            value,
+                            widget.room.id,
+                          );
+                          _controller.clear();
+                        }
+                      },
+                      decoration: InputDecoration(
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: const BorderSide(
+                            width: 1,
+                            color: Colors.transparent,
+                          ),
+                        ),
+                        hintText: "Hii...",
+                        hintStyle: TextStyle(
+                          fontSize: height / 50,
+                          color: Colors.black45,
+                        ),
+                        suffixIcon: Image.asset('assets/smile.png'),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: width / 30,
+                          vertical: height / 100,
+                        ),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.black12,
+                    ),
+                    onPressed: () {
+                      shareRoomLink(widget.room.id);
+                    },
+                    icon: Image.asset(
+                      'assets/Send1.png',
+                      height: 20.sp,
+                    ),
+                  ),
+                  IconButton(
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.black12,
+                    ),
+                    onPressed: () {
+                      showMsg(context, "In Developement");
+                    },
+                    icon: Image.asset('assets/PK.png'),
+                  ),
+                  IconButton(
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.black12,
+                    ),
+                    onPressed: () {
+                      showMsg(context, "In Developement");
+                    },
+                    icon: Image.asset('assets/game_logo.png'),
+                  ),
+                  IconButton(
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.black12,
+                    ),
+                    onPressed: () {
+                      showMsg(context, "In Developement");
+                    },
+                    icon: Image.asset('assets/gift.png'),
+                  ),
+                  // Offstage(
+                  //   offstage: !emojiShowing,
+                  //   child: SizedBox(
+                  //     height: 250,
+                  //     child: EmojiKeyboard(
+                  //       emotionController: _controller,
+                  //       showEmojiKeyboard: emojiShowing,
+                  //       darkMode: true,
+                  //     )
+                  //   ),
+                  // ),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class AudioUserTile extends StatefulWidget {
+  final String name;
+  final String? frame;
+  final void Function()? onTap;
+  final String? imgUrl;
+  const AudioUserTile(
+      {super.key, required this.name, this.onTap, this.imgUrl, this.frame});
+
+  @override
+  State<AudioUserTile> createState() => _AudioUserTileState();
+}
+
+class _AudioUserTileState extends State<AudioUserTile> {
+  bool isMuted = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        GestureDetector(
+          onTap: () {
+            if (widget.onTap != null) {
+              widget.onTap!();
+              setState(() {
+                isMuted = !isMuted;
+              });
+            }
+          },
+          child: widget.imgUrl == null || widget.imgUrl!.isEmpty
+              ? Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.black45,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    (isMuted
+                        ? Icons.mic_off_outlined
+                        : Icons.mic_none_outlined),
+                    size: 40,
+                    color: colorScheme(context).primary,
+                  ),
+                )
+              : Stack(
+                  children: [
+                    Positioned(
+                      left: 5,
+                      top: 10,
+                      child: Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: const BoxDecoration(shape: BoxShape.circle),
+                        child: Image.network(
+                          widget.imgUrl!,
+                          fit: BoxFit.cover,
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                    ),
+                    if (widget.frame != null)
+                      Image.asset(
+                        'assets/Frame ${widget.frame}.png',
+                        fit: BoxFit.cover,
+                        width: 60,
+                        height: 60,
+                      ),
+                  ],
+                ),
+        ),
+        const SizedBox(height: 5),
+        Expanded(
+          child: Text(
+            widget.name.isEmpty ? "Name is empty" : widget.name,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+void showAlertDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Confirmation'),
+        content: const Text('Do you want to close?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            child: const Text('Yes'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('No'),
+          ),
+        ],
+      );
+    },
+  );
+}
+  // CircleAvatar(
                 //   radius: 15,
                 //   backgroundImage: currentUser.photo.isNotEmpty
                 //       ? NetworkImage(currentUser.photo)
@@ -167,17 +513,8 @@ class _AudioPageState extends State<AudioPage> {
                 //     ),
                 //   ],
                 // ),
-                IconButton(
-                  onPressed: () {
-                    showAlertDialog(context);
-                  },
-                  icon: Image.asset(
-                    'assets/close-square.png',
-                    color: Colors.white,
-                  ),
-                )
-              ],
-              // bottom: PreferredSize(
+
+                 // bottom: PreferredSize(
               //   preferredSize: Size(width, 40),
               //   child: Row(
               //     children: [
@@ -483,301 +820,8 @@ class _AudioPageState extends State<AudioPage> {
               //     ],
               //   ),
               // ),
-            ),
-            body: Padding(
-              padding: const EdgeInsets.only(
-                top: 20.0,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AudioRoom(
-                    room: widget.room,
-                  ),
-                  Expanded(
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        return LiveChatBuilder(
-                          builder: (ctx, messages) {
-                            messages = messages.reversed.toList();
-                            return SizedBox(
-                              height: constraints.maxHeight,
-                              width: constraints.maxWidth * 4 / 5,
-                              child: ListView.separated(
-                                separatorBuilder: (ctx, index) =>
-                                    const SizedBox(height: 5),
-                                reverse: true,
-                                itemCount: messages.length,
-                                itemBuilder: (ctx, index) {
-                                  final String message =
-                                      messages[index]['message'] ?? "Error";
-                                  final userData = messages[index]['userData'];
-                                  final photo = userData['photo'];
-                                  return ListTile(
-                                    dense: true,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    minVerticalPadding: 0,
-                                    tileColor: Colors.black38,
-                                    leading: CircleAvatar(
-                                      backgroundImage: photo.isEmpty
-                                          ? null
-                                          : NetworkImage(photo),
-                                      radius: 14,
-                                      child: photo.isNotEmpty
-                                          ? null
-                                          : const Icon(
-                                              Icons.person_rounded,
-                                              size: 15,
-                                            ),
-                                    ),
-                                    title: RichText(
-                                      text: TextSpan(children: [
-                                        TextSpan(
-                                          text: "${userData['name']}: ",
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: message,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            // fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ]),
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            bottomNavigationBar: Card(
-              color: Colors.black26,
-              child: Row(
-                // setState(() {
-                //   showEmojiKeyboard = !showEmojiKeyboard;
-                //   if (showEmojiKeyboard) {
-                //     EmojiPicker(
-                //       textEditingController: controller,
-                //       config: Config(
-                //         columns: 7,
-                //         initCategory: Category.SMILEYS,
-                //         bgColor: const Color(0xFF21242D),
-                //       ),
-                //     );
-                //   }
-                // });
-                // onTap: () {
-                //   setState(() {
-                //     if (showEmojiKeyboard) {
-                //     setState(() {
-                //       showEmojiKeyboard = false;
-                //     });
-                //     }
-                //   });
-                // },
-                // showMsg(context, "In Developement");
-                // showMsg(
-                //     context,
-                //     controller.audio
-                //         ? "You're unmuted"
-                //         : 'You\'re now muted');
-                children: [
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.black12,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        controller.audio = !controller.audio;
-                      });
-                    },
-                    icon: controller.audio
-                        ? Image.asset(
-                            'assets/Voice.png',
-                            height: 18.sp,
-                          )
-                        : Image.asset(
-                            "assets/Frame 29.png",
-                            height: 18.sp,
-                          ),
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      controller: _controller,
-                      onFieldSubmitted: (value) {
-                        if (value.isNotEmpty) {
-                          sendMessage(
-                            value,
-                            widget.room.id,
-                          );
-                          _controller.clear();
-                        }
-                      },
-                      decoration: InputDecoration(
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: const BorderSide(
-                            width: 1,
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        hintText: "Hii...",
-                        hintStyle: TextStyle(
-                          fontSize: height / 50,
-                          color: Colors.black45,
-                        ),
-                        suffixIcon: Image.asset('assets/smile.png'),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: width / 30,
-                          vertical: height / 100,
-                        ),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.black12,
-                    ),
-                    onPressed: () {
-                      shareRoomLink(widget.room.id);
-                    },
-                    icon: Image.asset(
-                      'assets/Send1.png',
-                      height: 20.sp,
-                    ),
-                  ),
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.black12,
-                    ),
-                    onPressed: () {
-                      showMsg(context, "In Developement");
-                    },
-                    icon: Image.asset('assets/PK.png'),
-                  ),
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.black12,
-                    ),
-                    onPressed: () {
-                      showMsg(context, "In Developement");
-                    },
-                    icon: Image.asset('assets/game_logo.png'),
-                  ),
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.black12,
-                    ),
-                    onPressed: () {
-                      showMsg(context, "In Developement");
-                    },
-                    icon: Image.asset('assets/gift.png'),
-                  ),
-                  // Offstage(
-                  //   offstage: !emojiShowing,
-                  //   child: SizedBox(
-                  //     height: 250,
-                  //     child: EmojiKeyboard(
-                  //       emotionController: _controller,
-                  //       showEmojiKeyboard: emojiShowing,
-                  //       darkMode: true,
-                  //     )
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
 
-class AudioUserTile extends StatefulWidget {
-  final String name;
-  final String? frame;
-  final void Function()? onTap;
-  final String? imgUrl;
-  const AudioUserTile(
-      {super.key, required this.name, this.onTap, this.imgUrl, this.frame});
-
-  @override
-  State<AudioUserTile> createState() => _AudioUserTileState();
-}
-
-class _AudioUserTileState extends State<AudioUserTile> {
-  bool isMuted = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        GestureDetector(
-          onTap: () {
-            if (widget.onTap != null) {
-              widget.onTap!();
-              setState(() {
-                isMuted = !isMuted;
-              });
-            }
-          },
-          child: widget.imgUrl == null || widget.imgUrl!.isEmpty
-              ? Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.black45,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    (isMuted
-                        ? Icons.mic_off_outlined
-                        : Icons.mic_none_outlined),
-                    size: 40,
-                    color: colorScheme(context).primary,
-                  ),
-                )
-              : Stack(
-                  children: [
-                    Positioned(
-                      left: 5,
-                      top: 10,
-                      child: Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        child: Image.network(
-                          widget.imgUrl!,
-                          fit: BoxFit.cover,
-                          width: 50,
-                          height: 50,
-                        ),
-                      ),
-                    ),
-                    if (widget.frame != null)
-                      Image.asset(
-                        'assets/Frame ${widget.frame}.png',
-                        fit: BoxFit.cover,
-                        width: 60,
-                        height: 60,
-                      ),
-                  ],
-                ),
-        ),
-        // AnimateIcon(
+                // AnimateIcon(
         //   onTap: () {
         //     if (widget.onTap != null) {
         //       widget.onTap!();
@@ -792,45 +836,3 @@ class _AudioUserTileState extends State<AudioUserTile> {
         //   iconType: IconType.continueAnimation,
         //   animateIcon: AnimateIcons.loading3,
         // ),
-        const SizedBox(height: 5),
-        Expanded(
-          child: Text(
-            widget.name.isEmpty ? "Name is empty" : widget.name,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-void showAlertDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Confirmation'),
-        content: const Text('Do you want to close?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-            child: const Text('Yes'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('No'),
-          ),
-        ],
-      );
-    },
-  );
-}
