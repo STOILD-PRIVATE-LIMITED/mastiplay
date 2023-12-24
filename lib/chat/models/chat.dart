@@ -8,20 +8,20 @@ import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 
 String chatServer =
-    "http://192.168.9.64:3000"; // keep this without trailing slash
+    "http://3.7.66.245:3001"; // keep this without trailing slash
 
 class ChatData {
   String id;
   String title;
   String? description;
-  List<String> receivers;
+  List<String> participants;
   List<String> admins;
   List<MessageData> messages = [];
   bool locked = false;
 
   ChatData({
     required this.admins,
-    required this.receivers,
+    required this.participants,
     this.description,
     required this.title,
     required this.id,
@@ -33,7 +33,7 @@ class ChatData {
         "id": id,
         "title": title,
         "description": description,
-        "receivers": receivers,
+        "receivers": participants,
         "owner": admins,
         // "messages": messages.map((e) => e.toJson()).toList(),
         "locked": locked,
@@ -44,7 +44,7 @@ class ChatData {
       id: json['id'],
       title: json['title'],
       description: json['description'],
-      receivers: json['receivers'].cast<String>(),
+      participants: json['receivers'].cast<String>(),
       admins: json['owner'].cast<String>(),
       messages: json['messages'].map((e) => MessageData.fromJson(e)).toList(),
       locked: json['locked'],
@@ -64,9 +64,6 @@ Future<ChatData> fetchChatData(String id) async {
 Future<ChatData> createChat(ChatData chat) async {
   final response = await http.post(
     Uri.parse("$chatServer/chat"),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
     body: jsonEncode(chat.toJson()),
   );
   if (response.statusCode == 200) {
@@ -101,7 +98,7 @@ showChat(
     ChatScreen(
       chat: ChatData(
         admins: [auth.currentUser!.email!],
-        receivers: emails,
+        participants: emails,
         title: chatId,
         id: chatId,
       ),

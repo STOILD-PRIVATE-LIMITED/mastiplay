@@ -106,7 +106,7 @@ class MessageScreen extends StatelessWidget {
             }
             createChat(ChatData(
               admins: [],
-              receivers: [currentUser.email, email],
+              participants: [currentUser.email, email],
               title: "Chat1",
               id: "0",
             ));
