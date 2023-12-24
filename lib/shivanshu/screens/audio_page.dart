@@ -1,5 +1,4 @@
 // import 'dart:developer';
-
 // import 'package:animated_icon/animated_icon.dart';
 // import 'package:emoji_keyboard_flutter/emoji_keyboard_flutter.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
@@ -7,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/audio_room.dart';
 import 'package:spinner_try/webRTC/live_chat_widget.dart';
@@ -380,12 +380,13 @@ class _AudioPageState extends State<AudioPage> {
 }
 
 class AudioUserTile extends StatefulWidget {
-  final String name;
-  final String? frame;
+  final UserModel user;
   final void Function()? onTap;
-  final String? imgUrl;
-  const AudioUserTile(
-      {super.key, required this.name, this.onTap, this.imgUrl, this.frame});
+  const AudioUserTile({
+    super.key,
+    required this.user,
+    this.onTap,
+  });
 
   @override
   State<AudioUserTile> createState() => _AudioUserTileState();
@@ -398,60 +399,36 @@ class _AudioUserTileState extends State<AudioUserTile> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
-          onTap: () {
-            if (widget.onTap != null) {
-              widget.onTap!();
-              setState(() {
-                isMuted = !isMuted;
-              });
-            }
-          },
-          child: widget.imgUrl == null || widget.imgUrl!.isEmpty
-              ? Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.black45,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    (isMuted
-                        ? Icons.mic_off_outlined
-                        : Icons.mic_none_outlined),
-                    size: 40,
-                    color: colorScheme(context).primary,
-                  ),
-                )
-              : Stack(
-                  children: [
-                    Positioned(
-                      left: 5,
-                      top: 10,
-                      child: Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        child: Image.network(
-                          widget.imgUrl!,
-                          fit: BoxFit.cover,
-                          width: 50,
-                          height: 50,
-                        ),
-                      ),
+            onTap: () {
+              if (widget.onTap != null) {
+                widget.onTap!();
+                setState(() {
+                  isMuted = !isMuted;
+                });
+              }
+            },
+            child: widget.user.photo.isEmpty
+                ? Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.black45,
+                      shape: BoxShape.circle,
                     ),
-                    if (widget.frame != null)
-                      Image.asset(
-                        'assets/Frame ${widget.frame}.png',
-                        fit: BoxFit.cover,
-                        width: 60,
-                        height: 60,
-                      ),
-                  ],
-                ),
-        ),
+                    child: Icon(
+                      (isMuted
+                          ? Icons.mic_off_outlined
+                          : Icons.mic_none_outlined),
+                      size: 40,
+                      color: colorScheme(context).primary,
+                    ),
+                  )
+                : ProfileImage(user: widget.user)),
         const SizedBox(height: 5),
         Expanded(
           child: Text(
-            widget.name.isEmpty ? "Name is empty" : widget.name,
+            widget.user.name.isEmpty ? "Name is empty" : widget.user.name,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: Colors.white,

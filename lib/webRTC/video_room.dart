@@ -5,6 +5,7 @@ import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/screens/audio_page.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/live_chat_widget.dart';
 import 'package:spinner_try/webRTC/web_rtc.dart';
 
@@ -570,13 +571,7 @@ class _VideoRoomState extends State<VideoRoom> {
                           height: 90,
                           width: 90,
                           child: AudioUserTile(
-                            frame: usersData[i]['frame'],
-                            imgUrl: usersData[i]['photo'],
-                            name: usersData[i].isEmpty
-                                ? "Error"
-                                : (usersData[i]['name'] ??
-                                    usersData[i]['email'] ??
-                                    "Anonymous"),
+                            user: UserModel.fromJson(usersData[i]),
                           ),
                         ),
                     ],
