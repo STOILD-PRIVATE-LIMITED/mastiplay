@@ -1,10 +1,10 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
+import 'package:spinner_try/shivanshu/models/settings.dart';
 import 'package:spinner_try/shivanshu/screens/audio_page.dart';
 import 'package:spinner_try/shivanshu/screens/live_video_room.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
@@ -15,10 +15,7 @@ import 'package:spinner_try/webRTC/video_room.dart';
 
 class AddButtonPage extends StatefulWidget {
   final String email;
-  final int selectedIndex;
-  final String? roomID;
-  const AddButtonPage(
-      {super.key, this.selectedIndex = 0, this.roomID, required this.email});
+  const AddButtonPage({super.key, required this.email});
 
   @override
   State<AddButtonPage> createState() => _AddButtonPageState();
@@ -26,41 +23,34 @@ class AddButtonPage extends StatefulWidget {
 
 class _AddButtonPageState extends State<AddButtonPage> {
   int selectedIndex = 0;
+  final PageController _pageViewController = PageController();
+  TextEditingController roomNameController = TextEditingController();
+  File? image;
+  Room? room;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    if (widget.selectedIndex == 0) {
-      roomIdController.text = widget.roomID ?? "";
-    }
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        _pageViewController.animateToPage(widget.selectedIndex,
-            duration: const Duration(milliseconds: 300), curve: Curves.easeIn));
+    roomNameController.text = PrefStorage.myRoomName ?? "";
+    _fetchMyRoomDetails();
   }
 
-  final PageController _pageViewController = PageController();
-  TextEditingController roomIdController = TextEditingController();
-  TextEditingController roomNameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: LoadingIconButton(
+        key: ValueKey("AddPageFloatingActionButton:$_isLoading"),
+        loading: _isLoading ? true : null,
         onPressed: () async {
-          log("roomIdController.text = ${roomIdController.text}");
-          if (roomNameController.text.isEmpty &&
-              roomIdController.text.isEmpty) {
+          if (roomNameController.text.isEmpty) {
             showMsg(
                 context, 'Room name can\'t be empty when creating a new room');
             return;
-          } else if (roomNameController.text.isNotEmpty &&
-              roomIdController.text.isNotEmpty) {
-            showMsg(context,
-                'Room name and id can\'t be specified at the same time');
-            return;
           }
-          await joinRoom();
+          await joinMyRoom();
         },
         style: IconButton.styleFrom(
           backgroundColor: const Color.fromARGB(255, 224, 93, 211),
@@ -88,13 +78,11 @@ class _AddButtonPageState extends State<AddButtonPage> {
               },
               children: [
                 LiveVideoRoomPage(
-                  controller: roomIdController,
                   nameController: roomNameController,
                   onChanged: changeImage,
                 ),
                 LiveVideoRoomPage(
                   showVideoButton: false,
-                  controller: roomIdController,
                   nameController: roomNameController,
                   onChanged: changeImage,
                 ),
@@ -146,9 +134,6 @@ class _AddButtonPageState extends State<AddButtonPage> {
                 ),
               ],
               onTap: (index) {
-                setState(() {
-                  selectedIndex = index;
-                });
                 _pageViewController.animateToPage(
                   index,
                   duration: const Duration(milliseconds: 400),
@@ -162,101 +147,30 @@ class _AddButtonPageState extends State<AddButtonPage> {
     );
   }
 
-  Future<void> joinRoom([Room? room]) async {
-    String enteredRoomID = room?.id ?? "";
-    String? url;
-    if (room == null) {
-      roomIdController.text = roomIdController.text.trim();
-      enteredRoomID = roomIdController.text;
-      if (FirebaseAuth.instance.currentUser == null && widget.email.isEmpty) {
-        showMsg(context, 'You are\'nt logged in yet.');
-        return;
-      }
-      if (FirebaseAuth.instance.currentUser!.email == null) {
-        showMsg(context,
-            'You do not posses an email. An email is required to join/create a room');
-        return;
-      }
-      room = Room(
-        roomType: selectedIndex == 0 ? RoomType.video : RoomType.audio,
-        name: roomNameController.text,
-      );
-      if (image != null) {
-        url = await uploadImage(
-            context, image!, 'rooms', auth.currentUser!.email!);
-        room.imgUrl = url;
-      }
-    }
-    try {
-      if (enteredRoomID.isEmpty) {
-        try {
-          assert(roomNameController.text.isNotEmpty,
-              "Room name shouldn't be empty");
-          await room.create();
-        } catch (e) {
-          if (e.toString().contains("You already have a room!") &&
-              context.mounted) {
-            showMsg(context, 'You already have a room!');
-            askUser(context, 'Do you want to join your previous room?',
-                description:
-                    'Room name: \t${room.name}\nRoom id: \t${room.id}\nCreation Day: \t${ddmmyyyy(room.updatedAt)}\n',
-                yes: true,
-                cancel: true,
-                custom: {
-                  "delete previous":
-                      const Icon(Icons.delete, color: Colors.red),
-                }).then((response) {
-              if (response == 'yes') {
-                if (room!.roomType == RoomType.audio && selectedIndex == 0) {
-                  showMsg(context,
-                      'You cannot join an audio room as a video room.');
-                  return;
-                } else if (room.roomType == RoomType.video &&
-                    selectedIndex == 1) {
-                  showMsg(context,
-                      'You cannot join a video room as an audio room.');
-                  return;
-                }
-                if (url != null) {
-                  room.imgUrl = url;
-                  room.update();
-                }
-                joinRoom(room);
-              } else if (response == 'delete previous') {
-                room!.delete().then((value) {
-                  if (context.mounted) {
-                    showMsg(context, "Room deleted successfully!");
-                  }
-                });
-              }
-            });
-            return;
-          } else {
-            rethrow;
-          }
-        }
-      } else {
-        room.id = enteredRoomID;
-        await room.fetch();
-        if (context.mounted) {
-          if (room.roomType == RoomType.audio && selectedIndex == 0) {
-            showMsg(context, 'You cannot join an audio room as a video room.');
-            return;
-          } else if (room.roomType == RoomType.video && selectedIndex == 1) {
-            showMsg(context, 'You cannot join a video room as an audio room.');
-            return;
-          }
-        }
-      }
-    } catch (e) {
-      if (context.mounted) {
-        if (e.toString().contains("Document doesn't exist")) {
-          showMsg(context, 'Room $enteredRoomID doesn\'t exist');
-        } else {
-          showMsg(context, 'Error: $e');
-        }
-      }
+  Future<void> joinMyRoom() async {
+    if (roomNameController.text.isEmpty) {
+      showMsg(context, 'Room Name can\'t be empty');
       return;
+    }
+    if (room == null) {
+      room = Room(
+        name: roomNameController.text,
+        roomType: selectedIndex == 0 ? RoomType.video : RoomType.audio,
+        imgUrl: image == null
+            ? null
+            : await uploadImage(
+                context, image!, 'rooms', auth.currentUser!.email!),
+      );
+      await room!.create();
+      image = null;
+      PrefStorage.myRoomName = room!.name;
+      PrefStorage.myRoomUrl = room!.imgUrl;
+    } else {
+      room!.name = roomNameController.text;
+      room!.roomType = selectedIndex == 0 ? RoomType.video : RoomType.audio;
+      PrefStorage.myRoomName = room!.name;
+      PrefStorage.myRoomUrl = room!.imgUrl;
+      await room!.update();
     }
     // Navigating to the required page
     if (context.mounted) {
@@ -264,24 +178,56 @@ class _AddButtonPageState extends State<AddButtonPage> {
         navigatorPush(
           context,
           VideoRoom(
-            room: room,
+            room: room!,
           ),
         );
       } else {
         await navigatorPush(
           context,
           AudioPage(
-            room: room,
+            room: room!,
           ),
         );
       }
     }
   }
 
-  File? image;
   Future<File?> changeImage(File? newImg) async {
-    image = newImg;
-    image = await cropImage(context, image);
-    return image;
+    newImg = image = await cropImage(context, newImg);
+    if (image == null) return null;
+    if (room != null) {
+      if (context.mounted) {
+        room!.imgUrl = await uploadImage(
+            context, image!, 'rooms', auth.currentUser!.email!);
+      }
+      PrefStorage.myRoomUrl = room!.imgUrl;
+      await room!.update();
+      image = null;
+    }
+    return newImg;
+  }
+
+  Future<Room?> _fetchMyRoomDetails() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      room = await getMyRoom();
+      if (room != null) {
+        roomNameController.text = room!.name;
+        PrefStorage.myRoomName = room!.name;
+        PrefStorage.myRoomUrl = room!.imgUrl;
+        log("This user has a room: ${room!.toJson()}");
+      } else {
+        log("This user does not have a room");
+      }
+    } catch (e) {
+      log("error fetching room details: $e");
+      if (context.mounted) showMsg(context, e.toString());
+    }
+    setState(() {
+      _isLoading = false;
+    });
+    return room;
   }
 }

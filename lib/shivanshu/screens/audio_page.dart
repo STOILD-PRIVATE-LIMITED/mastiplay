@@ -492,8 +492,11 @@ class _AudioPageState extends State<AudioPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AudioRoom(
-                    room: widget.room,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: AudioRoom(
+                      room: widget.room,
+                    ),
                   ),
                   Expanded(
                     child: LayoutBuilder(
