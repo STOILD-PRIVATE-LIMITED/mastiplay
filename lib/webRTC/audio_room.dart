@@ -6,6 +6,7 @@ import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/screens/audio_page.dart';
 import 'package:spinner_try/shivanshu/screens/bottom_model.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/web_rtc.dart';
 
 class AudioRoom extends StatefulWidget {
@@ -55,57 +56,16 @@ class _AudioRoomState extends State<AudioRoom> {
       builder: (context, roomId, usersData, videoViews, myUserData, myVideoView,
           controls) {
         log("usersData: $usersData");
-        return GridView.count(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: widget.maxParticipants ~/ 2,
-          childAspectRatio: 1,
-          children: [
-            AudioUserTile(
-              imgUrl: myUserData['photo'],
-              frame: myUserData['frame'],
-              name: myUserData == null
-                  ? "You"
-                  : myUserData['name'] ?? myUserData['email'] ?? "Anonymous",
-              onTap: () {
-                setState(() {
-                  controller.audio = !controller.audio;
-                });
-                showMsg(context,
-                    controller.audio ? "You're unmuted" : 'You\'re now muted');
-                showModalBottomSheet(
-                  backgroundColor: const Color(0xFF011a51),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                  ),
-                  context: context,
-                  builder: ((context) {
-                    return BottomModel(
-                      frame: myUserData['frame'],
-                      imageUrl: myUserData['photo'],
-                      name: myUserData == null
-                          ? "You"
-                          : myUserData['name'] ??
-                              myUserData['email'] ??
-                              "Anonymous",
-                      roomId: myUserData["id"],
-                    );
-                  }),
-                );
-              },
-            ),
-            for (int i = 0; i < usersData.length; ++i)
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GridView.count(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: widget.maxParticipants ~/ 2,
+            childAspectRatio: 1 / 1.2,
+            children: [
               AudioUserTile(
-                frame: usersData[i]['frame'],
-                imgUrl: usersData[i]['photo'],
-                name: usersData[i] == null
-                    ? "You"
-                    : usersData[i]['name'] ??
-                        usersData[i]['email'] ??
-                        "Anonymous",
+                user: UserModel.fromJson(myUserData),
                 onTap: () {
                   setState(() {
                     controller.audio = !controller.audio;
@@ -126,22 +86,61 @@ class _AudioRoomState extends State<AudioRoom> {
                     context: context,
                     builder: ((context) {
                       return BottomModel(
-                        frame: usersData[i]['frame'],
-                        imageUrl: usersData[i]['photo'],
-                        name: usersData[i] == null
+                        frame: myUserData['frame'],
+                        imageUrl: myUserData['photo'],
+                        name: myUserData == null
                             ? "You"
-                            : usersData[i]['name'] ??
-                                usersData[i]['email'] ??
+                            : myUserData['name'] ??
+                                myUserData['email'] ??
                                 "Anonymous",
-                        roomId: usersData[i]["id"],
+                        roomId: myUserData["id"],
                       );
                     }),
                   );
                 },
               ),
-            for (int i = usersData.length + 1; i < widget.maxParticipants; ++i)
-              const AudioUserTile(name: 'Empty'),
-          ],
+              for (int i = 0; i < usersData.length; ++i)
+                AudioUserTile(
+                  user: UserModel.fromJson(usersData[i]),
+                  onTap: () {
+                    setState(() {
+                      controller.audio = !controller.audio;
+                    });
+                    showMsg(
+                        context,
+                        controller.audio
+                            ? "You're unmuted"
+                            : 'You\'re now muted');
+                    showModalBottomSheet(
+                      backgroundColor: const Color(0xFF011a51),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                      ),
+                      context: context,
+                      builder: ((context) {
+                        return BottomModel(
+                          frame: usersData[i]['frame'],
+                          imageUrl: usersData[i]['photo'],
+                          name: usersData[i] == null
+                              ? "You"
+                              : usersData[i]['name'] ??
+                                  usersData[i]['email'] ??
+                                  "Anonymous",
+                          roomId: usersData[i]["id"],
+                        );
+                      }),
+                    );
+                  },
+                ),
+              for (int i = usersData.length + 1;
+                  i < widget.maxParticipants;
+                  ++i)
+                AudioUserTile(user: UserModel()),
+            ],
+          ),
         );
       },
       // meBuilder: (context,
