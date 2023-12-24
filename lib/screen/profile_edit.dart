@@ -33,7 +33,6 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   int age = 0;
 
-
   List<UserModel> users = [];
   final user = FirebaseAuth.instance.currentUser;
   getProfile() async {
@@ -46,6 +45,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     name = users[0].name;
     nameController.text = name;
     userGender = users[0].gender;
+    selectedGender = (userGender == 1) ? 'Male' : 'Female';
     photoUrl = users[0].photo;
     userAge = users[0].dob;
     age = calculateAge(userAge.toString());
@@ -62,8 +62,6 @@ class _ProfileEditState extends State<ProfileEdit> {
             currentDate.day < birthDate.day)) {
       age--;
     }
-    print(age);
-
     return age;
   }
 
@@ -78,8 +76,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
   uploadImageToFirebase() async {
-    var data= await uploadImage(context, img, 'images', userEmail);
-
+    var data = await uploadImage(context, img, 'images', userEmail);
     final email = user!.email;
     final userRef = FirebaseFirestore.instance.collection('users');
     final userDoc = await userRef.where('email', isEqualTo: email).get();
@@ -96,6 +93,16 @@ class _ProfileEditState extends State<ProfileEdit> {
     final userDocId = userDoc.docs.first.id;
     await userRef.doc(userDocId).update({
       'dob': _selectedDate.toJson(),
+    });
+  }
+
+  updateGender(int number) async {
+    final email = user!.email;
+    final userRef = FirebaseFirestore.instance.collection('users');
+    final userDoc = await userRef.where('email', isEqualTo: email).get();
+    final userDocId = userDoc.docs.first.id;
+    await userRef.doc(userDocId).update({
+      'gender': number,
     });
   }
 
@@ -402,7 +409,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                       Radio(
                         value: 'Male',
                         groupValue: selectedGender,
-                        onChanged: (value) {
+                        onChanged: (value) async {
+                          await updateGender(1);
                           setState(() {
                             selectedGender = value!;
                           });
@@ -420,7 +428,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                       Radio(
                         value: 'Female',
                         groupValue: selectedGender,
-                        onChanged: (value) {
+                        onChanged: (value) async {
+                          await updateGender(2);
                           setState(() {
                             selectedGender = value!;
                           });
