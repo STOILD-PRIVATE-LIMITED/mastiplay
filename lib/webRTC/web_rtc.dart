@@ -11,56 +11,6 @@ const String websocketUrl = "https://3.7.66.245:8080";
 // const String websocketUrl = "https://192.168.9.64:8080";
 Socket? socket;
 
-void sendMessage(String msg, String roomId) {
-  log("Sending msg: $msg with roomID: $roomId");
-  assert(socket != null, "Socket is not yet initialized!");
-  socket!.emit('message', {
-    'channel': roomId,
-    'message': msg,
-  });
-}
-
-class LiveChatBuilder extends StatefulWidget {
-  final Widget Function(
-      BuildContext context, List<Map<String, dynamic>> messages) builder;
-  const LiveChatBuilder({super.key, required this.builder});
-
-  @override
-  State<LiveChatBuilder> createState() => _LiveChatBuilderState();
-}
-
-class _LiveChatBuilderState extends State<LiveChatBuilder> {
-  void broadCastMsg(data) {
-    log("Received a broadcast msg: $data");
-    if (context.mounted) {
-      setState(() {
-        messages.add(data);
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    log("Setting up socket listeners for chat");
-    socket!.on('broadcastMsg', broadCastMsg);
-  }
-
-  @override
-  void dispose() {
-    log("Removing socket listeners for chat");
-    socket?.off('broadcastMsg', broadCastMsg);
-    super.dispose();
-  }
-
-  List<Map<String, dynamic>> messages = [];
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.builder(context, messages);
-  }
-}
-
 class WebRtcController {
   WebRtcController({
     bool audio = true,
@@ -103,8 +53,6 @@ class WebRTCWidget extends StatefulWidget {
   final dynamic userData;
   final WebRtcController? controller;
   final String roomId;
-
-  // final bool showControls;
   final Widget Function(
     BuildContext context,
     String roomId,
@@ -115,6 +63,7 @@ class WebRTCWidget extends StatefulWidget {
     Widget controls,
   ) builder;
   final Future<void> Function()? onExit;
+
   const WebRTCWidget({
     super.key,
     required this.userData,
@@ -134,9 +83,9 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
   final _localRTCVideoRenderer = RTCVideoRenderer();
   MediaStream? _localStream;
   final Map<String, RTCPeerConnection> peers = {};
-  bool isAudioOn = true, isVideoOn = true, isFrontCameraSelected = true;
-
   final Map<String, RTCVideoRenderer> _remoteRTCVideoRenderers = {};
+
+  bool isAudioOn = true, isVideoOn = true, isFrontCameraSelected = true;
 
   Future<void> connectToServer() async {
     log("Connecting to socket on $websocketUrl");

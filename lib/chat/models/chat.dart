@@ -7,7 +7,8 @@ import 'package:spinner_try/chat/screens/chat_screen.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 
-String chatServer = "http://localhost:3000"; // keep this without trailing slash
+String chatServer =
+    "http://192.168.9.64:3000"; // keep this without trailing slash
 
 class ChatData {
   String id;
@@ -34,7 +35,7 @@ class ChatData {
         "description": description,
         "receivers": receivers,
         "owner": admins,
-        "messages": messages.map((e) => e.toJson()).toList(),
+        // "messages": messages.map((e) => e.toJson()).toList(),
         "locked": locked,
       };
 
@@ -62,7 +63,7 @@ Future<ChatData> fetchChatData(String id) async {
 
 Future<ChatData> createChat(ChatData chat) async {
   final response = await http.post(
-    Uri.parse("$chatServer/api/chats"),
+    Uri.parse("$chatServer/chat"),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

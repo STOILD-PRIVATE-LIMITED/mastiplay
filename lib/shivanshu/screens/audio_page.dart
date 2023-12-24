@@ -9,7 +9,7 @@ import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/audio_room.dart';
-import 'package:spinner_try/webRTC/web_rtc.dart';
+import 'package:spinner_try/webRTC/live_chat_widget.dart';
 
 class AudioPage extends StatefulWidget {
   final Room room;

@@ -177,6 +177,54 @@ class MyColumn extends StatelessWidget {
   }
 }
 
+Future<String?> promptUser(BuildContext context,
+    {String? question, String? description}) async {
+  String? ans;
+  List<Widget> buttons = [
+    TextButton.icon(
+      label: const Text("Submit"),
+      onPressed: () {
+        Navigator.of(context).pop(ans);
+      },
+      icon: const Icon(Icons.check_rounded),
+    ),
+  ];
+  return await Navigator.push(
+    context,
+    DialogRoute(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (question != null) Text(question),
+            if (description != null)
+              Text(
+                description,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+          ],
+        ),
+        content: TextFormField(
+          onChanged: (value) => ans = value,
+          decoration: InputDecoration(
+            hintText: 'Enter your input here',
+            border: OutlineInputBorder(
+              borderSide: const BorderSide(width: 1),
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+          maxLines: 1,
+          minLines: 1,
+          keyboardType: TextInputType.text,
+        ),
+        actions: buttons,
+        actionsAlignment: MainAxisAlignment.spaceAround,
+      ),
+    ),
+  );
+}
+
 Future<String?> askUser(
   context,
   String msg, {
