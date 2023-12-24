@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:spinner_try/shivanshu/widgets/imgae_preview.dart';
+import 'package:spinner_try/chat/models/chat.dart';
+import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/shivanshu/widgets/imgae_preview.dart';
 
 class MessageScreen extends StatelessWidget {
   const MessageScreen({super.key});
@@ -91,6 +93,26 @@ class MessageScreen extends StatelessWidget {
             ][index % 3],
           );
         },
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 200.0),
+        child: FloatingActionButton(
+          onPressed: () async {
+            String? email = await promptUser(context,
+                question: "Enter the email address of recepient");
+            email = email?.trim();
+            if (email == null || email.isEmpty) {
+              return;
+            }
+            createChat(ChatData(
+              admins: [],
+              receivers: [currentUser.email, email],
+              title: "Chat1",
+              id: "0",
+            ));
+          },
+          child: const Icon(Icons.add_rounded),
+        ),
       ),
     );
   }

@@ -53,8 +53,6 @@ class WebRTCWidget extends StatefulWidget {
   final dynamic userData;
   final WebRtcController? controller;
   final String roomId;
-
-  // final bool showControls;
   final Widget Function(
     BuildContext context,
     String roomId,
@@ -65,6 +63,7 @@ class WebRTCWidget extends StatefulWidget {
     Widget controls,
   ) builder;
   final Future<void> Function()? onExit;
+
   const WebRTCWidget({
     super.key,
     required this.userData,
@@ -84,9 +83,9 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
   final _localRTCVideoRenderer = RTCVideoRenderer();
   MediaStream? _localStream;
   final Map<String, RTCPeerConnection> peers = {};
-  bool isAudioOn = true, isVideoOn = true, isFrontCameraSelected = true;
-
   final Map<String, RTCVideoRenderer> _remoteRTCVideoRenderers = {};
+
+  bool isAudioOn = true, isVideoOn = true, isFrontCameraSelected = true;
 
   Future<void> connectToServer() async {
     log("Connecting to socket on $websocketUrl");
