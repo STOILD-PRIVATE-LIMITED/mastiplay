@@ -33,23 +33,6 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   int age = 0;
 
-  // uploadImage(BuildContext context) async {
-  //   firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-  //       .ref('/images'+currentUser.id.toString())
-  //       .child('images/${}');
-  // }
-
-  // uploadImageToFirebase(BuildContext context, image) async {
-  //   String fileName = image.path;
-  //   firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-  //       .ref('/images' + currentUser.id.toString())
-  //       .child('images/$fileName');
-  //   firebase_storage.UploadTask uploadTask = ref.putFile(image);
-  //   firebase_storage.TaskSnapshot taskSnapshot = await uploadTask;
-  //   taskSnapshot.ref.getDownloadURL().then(
-  //         (value) => print("Done: $value"),
-  //       );
-  // }
 
   List<UserModel> users = [];
   final user = FirebaseAuth.instance.currentUser;
