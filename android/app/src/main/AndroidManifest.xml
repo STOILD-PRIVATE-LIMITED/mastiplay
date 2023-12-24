@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:label="Masti Play"
         android:name="${applicationName}"
@@ -42,6 +44,10 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <intent-filter>
+        <action android:name="io.flutter.embedding.android.FlutterActivity" />
+        <category android:name="android.intent.category.DEFAULT" />
+    </intent-filter>
         </activity>
         
 
