@@ -62,7 +62,7 @@ class _RegisterState extends State<Register> {
   void signIn() async {
     // try {
     final db = FirebaseFirestore.instance;
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    await Firebas bbeAuth.instance.createUserWithEmailAndPassword(
       email: emailController.text.toLowerCase(),
       password: passwordController.text,
     );
