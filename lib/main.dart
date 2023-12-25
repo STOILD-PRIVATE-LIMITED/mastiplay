@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spinner_try/screen/login.dart';
+import 'package:spinner_try/shivanshu/models/firestore/fcm.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/screens/gender_screen.dart';
 import 'package:spinner_try/shivanshu/screens/home_live.dart';
@@ -46,6 +48,43 @@ void main() async {
   );
 }
 
+class WrapperApp extends StatefulWidget {
+  const WrapperApp({super.key});
+
+  @override
+  State<WrapperApp> createState() => _WrapperAppState();
+}
+
+class _WrapperAppState extends State<WrapperApp> {
+  @override
+  void initState() {
+    super.initState();
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      log("FCM message received: ${message.data}");
+      showMsg(context, message.data);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      log("FCM message opened: ${message.data}");
+      showMsg(context, message.data);
+    });
+
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Masti Play',
+      home: Scaffold(
+        body: MyApp(),
+      ),
+    );
+  }
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -83,10 +122,12 @@ class NewAuth extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
+      key: const ValueKey('newAuthStreamBuilder'),
       stream: auth.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return FutureBuilder(
+            key: const ValueKey('newAuthFutureBuilder'),
             future: fetchUser(auth.currentUser!.email!),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
@@ -113,6 +154,7 @@ class NewAuth extends StatelessWidget {
                 );
               } else if (snapshot.hasData) {
                 currentUser = snapshot.data!;
+                setupFCMTokenMangement();
                 log("Current User: ${currentUser.toJson()}");
                 if (currentUser.gender == -1 ||
                     currentUser.dob == null ||

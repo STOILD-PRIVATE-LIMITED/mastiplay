@@ -27,4 +27,20 @@ class PrefStorage {
       prefs.setString('myRoomName', url);
     }
   }
+
+  static String? get fcmToken {
+    return prefs.getString('fcmToken');
+  }
+
+  static set fcmToken(String? url) {
+    if (url == null) {
+      prefs.remove('fcmToken');
+    } else {
+      prefs.setString('fcmToken', url);
+    }
+  }
+
+  static void clear() {
+    prefs.clear();
+  }
 }
