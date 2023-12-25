@@ -35,7 +35,9 @@ class _LiveChatBuilderState extends State<LiveChatBuilder> {
   void initState() {
     super.initState();
     log("Setting up socket listeners for chat");
-    socket!.on('broadcastMsg', broadCastMsg);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      socket!.on('broadcastMsg', broadCastMsg);
+    });
   }
 
   @override

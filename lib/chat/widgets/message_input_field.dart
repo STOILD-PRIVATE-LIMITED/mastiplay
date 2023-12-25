@@ -37,6 +37,8 @@ class _MessageInputFieldState extends State<MessageInputField> {
     try {
       await widget.onSubmit(
         MessageData(
+          chatId:
+              "message_input_field.dart file mein chatID change nhi hui hai",
           id: DateTime.now().millisecondsSinceEpoch.toString(),
           txt: txt,
           from: auth.currentUser!.email!,

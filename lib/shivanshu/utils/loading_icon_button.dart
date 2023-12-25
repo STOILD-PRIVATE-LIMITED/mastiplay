@@ -48,7 +48,7 @@ class _LoadingIconButtonState extends State<LoadingIconButton> {
                 });
               }
             },
-      icon: _loading ? circularProgressIndicator() : widget.icon,
+      icon: _loading ? const CircularProgressIndicatorRainbow() : widget.icon,
     );
   }
 }

@@ -50,7 +50,7 @@ class _LoadingElevatedButtonState extends State<LoadingElevatedButton> {
                 });
               }
             },
-      icon: _loading ? circularProgressIndicator() : widget.icon,
+      icon: _loading ? const CircularProgressIndicatorRainbow() : widget.icon,
       label: widget.label,
     );
   }

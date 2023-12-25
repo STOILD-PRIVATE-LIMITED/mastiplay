@@ -10,6 +10,9 @@ class MessageData {
   /// The datetime object representing the
   late String id;
 
+  /// The chatID of this msg
+  late String chatId;
+
   /// The markdown text
   late String txt;
 
@@ -20,7 +23,7 @@ class MessageData {
   late DateTime createdAt;
 
   /// Modified At
-  DateTime? modifiedAt;
+  DateTime? updatedAt;
 
   /// Set of emails who have read this msg
   Set<String> readBy = {};
@@ -36,11 +39,12 @@ class MessageData {
 
   MessageData({
     required this.id,
+    required this.chatId,
     required this.txt,
     required this.from,
     required this.createdAt,
     this.indicative = false,
-    this.modifiedAt,
+    this.updatedAt,
     this.deletedAt,
   });
 
@@ -48,41 +52,35 @@ class MessageData {
     return {
       "txt": txt,
       "from": from,
+      "chatId": chatId,
       "indicative": indicative,
-      "createdAt": createdAt.millisecondsSinceEpoch,
-      "deletedAt": deletedAt?.millisecondsSinceEpoch,
-      if (modifiedAt != null) "modifiedAt": modifiedAt!.millisecondsSinceEpoch,
       "readBy": readBy.toList()
     };
   }
 
   factory MessageData.fromJson(Map<String, dynamic> json) {
     return MessageData(
-      id: json['id'],
+      id: json['_id'],
+      chatId: json['chatId'],
       txt: json['txt'],
       from: json['from'],
       indicative: json['indicative'],
-      createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt']),
+      createdAt: DateTime.parse(json['createdAt']).toLocal(),
       deletedAt: json['deletedAt'] == null
           ? null
-          : DateTime.fromMillisecondsSinceEpoch(json['deletedAt']),
-      modifiedAt: json['modifiedAt'] == null
-          ? null
-          : DateTime.fromMillisecondsSinceEpoch(json['modifiedAt']),
+          : DateTime.parse(json['deletedAt']).toLocal(),
+      updatedAt: DateTime.parse(json['updatedAt']).toLocal(),
     );
   }
 
   MessageData.load(this.id, Map<String, dynamic> data) {
     txt = data["txt"];
     from = data["from"];
-    createdAt = DateTime.fromMillisecondsSinceEpoch(data["createdAt"]);
-    deletedAt = data["deletedAt"] == null
-        ? null
-        : DateTime.fromMillisecondsSinceEpoch(data["deletedAt"]!);
+    chatId = data["chatId"];
+    createdAt = data["createdAt"];
+    deletedAt = data["deletedAt"];
     indicative = data["indicative"] ?? false;
-    modifiedAt = data["modifiedAt"] == null
-        ? null
-        : DateTime.fromMillisecondsSinceEpoch(data["modifiedAt"]);
+    updatedAt = data["updatedAt"];
     readBy = ((data['readBy'] ?? []) as List<dynamic>)
         .map((e) => e.toString())
         .toSet();
@@ -110,23 +108,39 @@ Future<MessageData?> fetchLastMessage(String path, {Source? src}) async {
   return null;
 }
 
-Future<void> addMessage(ChatData chat, MessageData msg) async {
-  await http.post(Uri.parse('$chatServer/api/chats/${chat.id}/messages'),
-      headers: {
-        "Content-Type": "application/json",
+Future<MessageData> addMessage(ChatData chat, MessageData msg) async {
+  final response = await http.post(Uri.parse('$chatServer/messages/${chat.id}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: json.encode(msg.toJson()));
+      body: jsonEncode(msg.toJson()));
+  if (response.statusCode == 200) {
+    return MessageData.fromJson(json.decode(response.body));
+  } else {
+    throw Exception('Failed to create chat: ${response.body}');
+  }
 }
 
 Future<void> deleteMessage(ChatData chat, MessageData msg) async {
-  await http.post(
-    Uri.parse('$chatServer/api/chats/${chat.id}/messages/${msg.id}'),
-    body: {"action": "delete"},
-  );
+  throw UnimplementedError();
+  // await http.post(
+  //   Uri.parse('$chatServer/messages/:chatId/${chat.id}/messages/${msg.id}'),
+  //   body: {"action": "delete"},
+  // );
 }
 
 Future<List<MessageData>> fetchMessages(
-    String chatID, String start, int limit) async {
-  log("This function for fetchMessages is still pending.");
-  return [];
+    String chatID, String? start, int limit) async {
+  final response = await http.get(Uri.parse(
+      '$chatServer/messages/$chatID?${start != null ? "start=$start&" : ""}limit=$limit'));
+  if (response.statusCode == 200) {
+    if (response.body == "null") {
+      return [];
+    }
+    return (json.decode(response.body) as List)
+        .map((e) => MessageData.fromJson(e))
+        .toList();
+  } else {
+    throw Exception('Failed to load messages: ${response.body}');
+  }
 }

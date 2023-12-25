@@ -33,6 +33,7 @@ class AudioLive extends StatefulWidget {
 
 class _AudioLiveState extends State<AudioLive> {
   String? lastUpdatedAt;
+  int refreshCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +41,15 @@ class _AudioLiveState extends State<AudioLive> {
       body: RefreshIndicator(
         onRefresh: () async {
           if (context.mounted) {
-            setState(() {});
+            setState(() {
+              refreshCount++;
+            });
           }
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ScrollBuilder(
-            key: UniqueKey(),
+            key: ValueKey("audioLive$refreshCount"),
             interval: 4,
             automaticLoading: true,
             loader: (context, start, interval) async {

@@ -8,13 +8,18 @@ import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 
 String chatServer =
-    "http://3.7.66.245:3001"; // keep this without trailing slash
+    // "http://3.7.66.245:3001";
+    "http://192.168.9.64:3000";
+
+// keep this without trailing slash
 
 class ChatData {
   String id;
   String title;
-  String? description;
+  String description;
   List<String> participants;
+  late DateTime createdAt;
+  late DateTime updatedAt;
   List<String> admins;
   List<MessageData> messages = [];
   bool locked = false;
@@ -22,7 +27,7 @@ class ChatData {
   ChatData({
     required this.admins,
     required this.participants,
-    this.description,
+    this.description = "",
     required this.title,
     required this.id,
     this.messages = const [],
@@ -30,30 +35,30 @@ class ChatData {
   });
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "title": title,
         "description": description,
-        "receivers": participants,
-        "owner": admins,
-        // "messages": messages.map((e) => e.toJson()).toList(),
+        "participants": participants,
+        "admins": admins,
         "locked": locked,
       };
 
   factory ChatData.fromJson(Map<String, dynamic> json) {
     return ChatData(
-      id: json['id'],
+      id: json['_id'],
       title: json['title'],
       description: json['description'],
-      participants: json['receivers'].cast<String>(),
-      admins: json['owner'].cast<String>(),
-      messages: json['messages'].map((e) => MessageData.fromJson(e)).toList(),
+      participants: json['participants'].cast<String>(),
+      admins: json['admins'].cast<String>(),
       locked: json['locked'],
-    );
+    )
+      ..createdAt = DateTime.parse(json['createdAt'])
+      ..updatedAt = DateTime.parse(json['updatedAt']);
   }
 }
 
 Future<ChatData> fetchChatData(String id) async {
-  final response = await http.get(Uri.parse("$chatServer/api/chats/$id"));
+  assert(id.isNotEmpty, "Chat ID cannot be empty while fetching");
+  final response = await http.get(Uri.parse("$chatServer/chats/$id"));
   if (response.statusCode == 200) {
     return ChatData.fromJson(json.decode(response.body));
   } else {
@@ -63,7 +68,10 @@ Future<ChatData> fetchChatData(String id) async {
 
 Future<ChatData> createChat(ChatData chat) async {
   final response = await http.post(
-    Uri.parse("$chatServer/chat"),
+    Uri.parse("$chatServer/chats"),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
     body: jsonEncode(chat.toJson()),
   );
   if (response.statusCode == 200) {
@@ -106,10 +114,8 @@ showChat(
   );
 }
 
-Future<List<ChatData>> fetchAllChats(
-    String userID, String startID, int limit) async {
-  final response = await http
-      .get(Uri.parse("$chatServer/api/chats/$userID/$startID/$limit"));
+Future<List<ChatData>> fetchAllChats(String userID) async {
+  final response = await http.get(Uri.parse("$chatServer/chats/all/$userID"));
   if (response.statusCode == 200) {
     return (json.decode(response.body) as List)
         .map((e) => ChatData.fromJson(e))

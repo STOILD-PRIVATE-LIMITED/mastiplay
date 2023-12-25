@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:spinner_try/chat/models/chat.dart';
+import 'package:spinner_try/chat/screens/chat_screen.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/shivanshu/utils/loading_icon_button.dart';
 import 'package:spinner_try/shivanshu/widgets/imgae_preview.dart';
 
 class MessageScreen extends StatelessWidget {
@@ -22,81 +24,124 @@ class MessageScreen extends StatelessWidget {
         title: const Text('Messages'),
         centerTitle: true,
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          return ListTile(
-            onTap: () {
-              showMsg(context, index.toString());
-            },
-            title: Text(
-              'Stranger Messages',
-              style: textTheme(context).bodyLarge!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            subtitle: const Text('Hehe, bfdkc dsjk kj'),
-            leading: Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                InkWell(
+      body: FutureBuilder(
+          future: fetchAllChats(currentUser.email),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicatorRainbow(),
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  snapshot.error.toString(),
+                  style: textTheme(context).bodyLarge!.copyWith(
+                        color: colorScheme(context).error,
+                      ),
+                ),
+              );
+            }
+            List<ChatData> chats = snapshot.data!;
+            chats = chats.reversed.toList();
+            return ListView.builder(
+              itemCount: chats.length,
+              itemBuilder: (context, index) {
+                final chatData = chats[index];
+                return ListTile(
                   onTap: () {
                     navigatorPush(
                         context,
-                        ImagePreview(
-                            image: Hero(
+                        ChatScreen(
+                          chat: chatData,
+                        ));
+                  },
+                  title: Text(
+                    chatData.title,
+                    style: textTheme(context).bodyLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  subtitle: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (chatData.description.isNotEmpty)
+                        Text(chatData.description),
+                      Text(chatData.participants.join(", ")),
+                    ],
+                  ),
+                  leading: Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          navigatorPush(
+                              context,
+                              ImagePreview(
+                                  image: Hero(
+                                tag: imgUrls[index % imgUrls.length] +
+                                    index.toString(),
+                                child: Image.network(
+                                    imgUrls[index % imgUrls.length]),
+                              )));
+                        },
+                        child: Hero(
                           tag: imgUrls[index % imgUrls.length] +
                               index.toString(),
-                          child: Image.network(imgUrls[index % imgUrls.length]),
-                        )));
-                  },
-                  child: Hero(
-                    tag: imgUrls[index % imgUrls.length] + index.toString(),
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        imgUrls[index % imgUrls.length],
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                              imgUrls[index % imgUrls.length],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const CircleAvatar(
+                        radius: 8,
+                        backgroundColor: Color.fromARGB(255, 252, 239, 22),
+                        child: Icon(
+                          Icons.network_cell_rounded,
+                          size: 10,
+                        ),
+                      ),
+                    ],
+                  ),
+                  trailing: [
+                    const Icon(
+                      Icons.heart_broken,
+                      color: Colors.red,
+                      size: 14,
+                    ),
+                    CircleAvatar(
+                      radius: 7,
+                      backgroundColor: Colors.red,
+                      child: Text(
+                        Random().nextInt(10).toString(),
+                        style: textTheme(context).bodySmall!.copyWith(
+                              fontSize: 7,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ),
-                  ),
-                ),
-                const CircleAvatar(
-                  radius: 8,
-                  backgroundColor: Color.fromARGB(255, 252, 239, 22),
-                  child: Icon(
-                    Icons.network_cell_rounded,
-                    size: 10,
-                  ),
-                ),
-              ],
-            ),
-            trailing: [
-              const Icon(
-                Icons.heart_broken,
-                color: Colors.red,
-                size: 14,
-              ),
-              CircleAvatar(
-                radius: 7,
-                backgroundColor: Colors.red,
-                child: Text(
-                  Random().nextInt(10).toString(),
-                  style: textTheme(context).bodySmall!.copyWith(
-                        fontSize: 7,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ),
-              const CircleAvatar(
-                radius: 4,
-                backgroundColor: Colors.red,
-              ),
-            ][index % 3],
-          );
-        },
-      ),
+                    const CircleAvatar(
+                      radius: 4,
+                      backgroundColor: Colors.red,
+                    ),
+                  ][index % 3],
+                );
+              },
+            );
+          }),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 200.0),
-        child: FloatingActionButton(
+        child: LoadingIconButton(
+          style: IconButton.styleFrom(
+            backgroundColor: colorScheme(context).primaryContainer,
+            foregroundColor: colorScheme(context).onPrimaryContainer,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            minimumSize: const Size(40, 40),
+          ),
           onPressed: () async {
             String? email = await promptUser(context,
                 question: "Enter the email address of recepient");
@@ -104,14 +149,22 @@ class MessageScreen extends StatelessWidget {
             if (email == null || email.isEmpty) {
               return;
             }
-            createChat(ChatData(
-              admins: [],
+            final chatData = await createChat(ChatData(
+              id: "-1",
+              admins: [currentUser.email, email],
               participants: [currentUser.email, email],
-              title: "Chat1",
-              id: "0",
+              title: "New Chat",
             ));
+            if (context.mounted) {
+              navigatorPush(
+                context,
+                ChatScreen(
+                  chat: chatData,
+                ),
+              );
+            }
           },
-          child: const Icon(Icons.add_rounded),
+          icon: const Icon(Icons.add_rounded),
         ),
       ),
     );

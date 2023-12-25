@@ -36,11 +36,12 @@ class _ProfileImageState extends State<ProfileImage> {
                     ),
             ),
           ),
-          Image.asset(
-            // 'assets/Frame 2.png',
-            'assets/Frame ${widget.user.frame}.png',
-            fit: BoxFit.cover,
-            height: constraints.maxHeight,
+          Positioned.fill(
+            child: Image.asset(
+              'assets/Frame ${widget.user.frame}.png',
+              fit: BoxFit.cover,
+              height: constraints.maxHeight,
+            ),
           ),
         ],
       );
