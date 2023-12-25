@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
@@ -54,20 +52,38 @@ class _AudioRoomState extends State<AudioRoom> {
       roomId: widget.room.id,
       builder: (context, roomId, usersData, videoViews, myUserData, myVideoView,
           controls) {
-        log("usersData: $usersData");
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: widget.maxParticipants ~/ 2,
-            childAspectRatio: 1 / 2,
+            childAspectRatio: 1 / 1.3,
             children: [
-              SizedBox(
-                // height: 100,
-                // width: 100,
-                child: AudioUserTile(
-                  user: UserModel.fromJson(myUserData),
+              AudioUserTile(
+                user: UserModel.fromJson(myUserData),
+                onTap: () {
+                  showModalBottomSheet(
+                    backgroundColor: const Color(0xFF011a51),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    context: context,
+                    builder: ((context) {
+                      return BottomModel(
+                        user: UserModel.fromJson(myUserData),
+                        roomId: myUserData["id"],
+                      );
+                    }),
+                  );
+                },
+              ),
+              for (int i = 0; i < usersData.length; ++i)
+                AudioUserTile(
+                  user: UserModel.fromJson(usersData[i]),
                   onTap: () {
                     showModalBottomSheet(
                       backgroundColor: const Color(0xFF011a51),
@@ -80,60 +96,17 @@ class _AudioRoomState extends State<AudioRoom> {
                       context: context,
                       builder: ((context) {
                         return BottomModel(
-                          frame: myUserData['frame'],
-                          imageUrl: myUserData['photo'],
-                          name: myUserData == null
-                              ? "You"
-                              : myUserData['name'] ??
-                                  myUserData['email'] ??
-                                  "Anonymous",
-                          roomId: myUserData["id"],
+                          user: UserModel.fromJson(usersData[i]),
+                          roomId: usersData[i]["id"],
                         );
                       }),
                     );
                   },
                 ),
-              ),
-              for (int i = 0; i < usersData.length; ++i)
-                SizedBox(
-                  // height: 100,
-                  // width: 100,
-                  child: AudioUserTile(
-                    user: UserModel.fromJson(usersData[i]),
-                    onTap: () {
-                      showModalBottomSheet(
-                        backgroundColor: const Color(0xFF011a51),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                          ),
-                        ),
-                        context: context,
-                        builder: ((context) {
-                          return BottomModel(
-                            frame: usersData[i]['frame'],
-                            imageUrl: usersData[i]['photo'],
-                            name: usersData[i] == null
-                                ? "You"
-                                : usersData[i]['name'] ??
-                                    usersData[i]['email'] ??
-                                    "Anonymous",
-                            roomId: usersData[i]["id"],
-                          );
-                        }),
-                      );
-                    },
-                  ),
-                ),
               for (int i = usersData.length + 1;
                   i < widget.maxParticipants;
                   ++i)
-                SizedBox(
-                  // height: 100,
-                  // width: 100,
-                  child: AudioUserTile(user: UserModel()),
-                ),
+                AudioUserTile(user: UserModel()),
             ],
           ),
         );

@@ -31,6 +31,7 @@ class HomeLive extends StatefulWidget {
 
 class _HomeLiveState extends State<HomeLive> {
   String? lastUpdatedAt;
+  int refreshCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +39,15 @@ class _HomeLiveState extends State<HomeLive> {
       body: RefreshIndicator(
         onRefresh: () async {
           if (context.mounted) {
-            setState(() {});
+            setState(() {
+              refreshCount++;
+            });
           }
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ScrollBuilder(
-            key: UniqueKey(),
+            key: ValueKey('home_live$refreshCount'),
             interval: 4,
             automaticLoading: true,
             loader: (context, start, interval) async {

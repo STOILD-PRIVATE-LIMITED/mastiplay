@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/loading_elevated_button.dart';
@@ -43,20 +41,22 @@ class _ScrollBuilderState extends State<ScrollBuilder>
   @override
   void initState() {
     super.initState();
-    _loadMore(0).then((value) {
-      if (context.mounted) {
-        setState(() {
-          initialized = true;
-        });
-      }
-    }).onError((error, stackTrace) async {
-      if (context.mounted) {
-        showMsg(context, error.toString());
-        setState(() {
-          showRetry = true;
-          initialized = true;
-        });
-      }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadMore(0).then((value) {
+        if (context.mounted) {
+          setState(() {
+            initialized = true;
+          });
+        }
+      }).onError((error, stackTrace) async {
+        if (context.mounted) {
+          showMsg(context, error.toString());
+          setState(() {
+            showRetry = true;
+            initialized = true;
+          });
+        }
+      });
     });
   }
 
@@ -66,13 +66,14 @@ class _ScrollBuilderState extends State<ScrollBuilder>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    log("FirstPage.build");
     int length = items.length +
         1 +
         (widget.header != null ? 1 : 0) +
         (widget.footer != null ? 1 : 0);
     return !initialized
-        ? Center(child: widget.loadingWidget ?? circularProgressIndicator())
+        ? Center(
+            child: widget.loadingWidget ??
+                const CircularProgressIndicatorRainbow())
         : ListView.separated(
             reverse: widget.reverse,
             separatorBuilder:
@@ -98,7 +99,7 @@ class _ScrollBuilderState extends State<ScrollBuilder>
                 if (widget.automaticLoading && !showRetry) {
                   _loadMore(index);
                   return widget.loadingWidget ??
-                      Center(child: circularProgressIndicator());
+                      const Center(child: CircularProgressIndicatorRainbow());
                 }
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,

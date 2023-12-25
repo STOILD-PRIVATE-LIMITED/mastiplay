@@ -335,41 +335,47 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 /// A widget which is primarily used to show a [CircularProgressIndicator]
 /// in a sizedbox
-SizedBox circularProgressIndicator({
-  double? height = 16,
-  double? width = 16,
-}) {
-  final widget = Animate(
-    onComplete: (controller) {
-      controller.repeat();
-    },
-  ).custom(
-      duration: const Duration(seconds: 2), // Adjust the duration as needed
-      curve: Curves.linear,
-      builder: (context, value, child) {
-        final colors = <Color>[
-          Colors.blue,
-          Colors.red,
-          Colors.orange,
-          Colors.yellow,
-          Colors.green,
-          Colors.cyan,
-          Colors.indigo,
-          Colors.purple,
-        ];
+class CircularProgressIndicatorRainbow extends StatelessWidget {
+  final double? height;
+  final double? width;
+  const CircularProgressIndicatorRainbow(
+      {super.key, this.height = 16, this.width = 16});
 
-        return CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(
-            colors[(value * colors.length).floor() % colors.length],
-          ),
-        );
-      });
-  widget.onComplete;
-  return SizedBox(
-    height: height,
-    width: width,
-    child: widget,
-  );
+  @override
+  Widget build(BuildContext context) {
+    final colors = <Color>[
+      Colors.blue,
+      Colors.red,
+      Colors.orange,
+      Colors.yellow,
+      Colors.green,
+      Colors.cyan,
+      Colors.indigo,
+      Colors.purple,
+    ];
+    return SizedBox(
+      height: height,
+      width: width,
+      child: Animate(
+        onComplete: (controller) {
+          controller.repeat();
+        },
+      )
+          .custom(
+            duration:
+                const Duration(seconds: 2), // Adjust the duration as needed
+            curve: Curves.linear,
+            builder: (context, value, child) {
+              return CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  colors[(value * colors.length).floor() % colors.length],
+                ),
+              );
+            },
+          )
+          .animate(),
+    );
+  }
 }
 
 /// contains validating functions for input text fields

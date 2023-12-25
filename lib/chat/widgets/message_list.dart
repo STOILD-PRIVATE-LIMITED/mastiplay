@@ -20,10 +20,10 @@ class _MessageListState extends State<MessageList> {
   Widget build(BuildContext context) {
     // TODO: add more functionality like edit a message and send messages in reference to other messages
     return FutureBuilder(
-      future: fetchMessages(widget.chat.id, "some-id", 10),
+      future: fetchMessages(widget.chat.id, null, 10),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: circularProgressIndicator());
+          return const Center(child: CircularProgressIndicatorRainbow());
         }
 
         if (!snapshot.hasData ||
@@ -38,7 +38,7 @@ class _MessageListState extends State<MessageList> {
         }
 
         widget.chat.messages = snapshot.data!.map((e) => e).toList();
-        widget.chat.messages = widget.chat.messages.reversed.toList();
+        // widget.chat.messages = widget.chat.messages.reversed.toList();
         for (final msg in widget.chat.messages) {
           if (msg.readBy.contains(auth.currentUser!.email)) break;
           addMeInReadBy(widget.chat, msg);

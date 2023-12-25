@@ -328,7 +328,7 @@ class Message extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (msg.modifiedAt != null)
+                if (msg.updatedAt != null)
                   Align(
                     alignment: Alignment.centerLeft,
                     child: SizedBox(
@@ -343,7 +343,7 @@ class Message extends StatelessWidget {
                                 ),
                           ),
                           Text(
-                            "${ddmmyyyy(msg.modifiedAt!)} | ${timeFrom(msg.modifiedAt!)}",
+                            "${ddmmyyyy(msg.updatedAt!)} | ${timeFrom(msg.updatedAt!)}",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!

@@ -3,8 +3,6 @@
 // import 'package:emoji_keyboard_flutter/emoji_keyboard_flutter.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 // import 'package:flutter/foundation.dart' as foundation;
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
@@ -36,10 +34,6 @@ class _AudioPageState extends State<AudioPage> {
   // );
   @override
   Widget build(BuildContext context) {
-    log("height = $height");
-    log("MediaQuery.of(context).viewInsets.bottom = ${MediaQuery.of(context).viewInsets.bottom}");
-    log("MediaQuery.of(context).viewPadding.bottom = ${MediaQuery.of(context).viewPadding.bottom}");
-    log("MediaQuery.of(context).padding.bottom = ${MediaQuery.of(context).padding.bottom}");
     return Scaffold(
       body: Stack(
         children: [
@@ -169,7 +163,7 @@ class _AudioPageState extends State<AudioPage> {
             body: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.only(
-                  top: 20.0,
+                  top: 10.0,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,7 +181,7 @@ class _AudioPageState extends State<AudioPage> {
                             width: 300.sp,
                             child: ListView.separated(
                               separatorBuilder: (ctx, index) =>
-                                  const SizedBox(height: 5),
+                                  const SizedBox(height: 3),
                               reverse: true,
                               itemCount: messages.length,
                               itemBuilder: (ctx, index) {
@@ -198,13 +192,15 @@ class _AudioPageState extends State<AudioPage> {
                                 return Container(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 10,
-                                    vertical: 5,
+                                    vertical: 0,
                                   ),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(50),
                                     color: Colors.black38,
                                   ),
                                   child: ListTile(
+                                    dense: true,
+                                    contentPadding: EdgeInsets.zero,
                                     leading: CircleAvatar(
                                       backgroundImage: photo.isEmpty
                                           ? null
@@ -443,14 +439,12 @@ class _AudioUserTileState extends State<AudioUserTile> {
                   : ProfileImage(user: widget.user)),
         ),
         const SizedBox(height: 5),
-        Expanded(
-          child: Text(
-            widget.user.name.isEmpty ? "Name is empty" : widget.user.name,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+        Text(
+          widget.user.name.isEmpty ? "Name is empty" : widget.user.name,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ],

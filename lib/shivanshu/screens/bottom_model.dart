@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/shivanshu/utils/profile_image.dart';
+import 'package:spinner_try/user_model.dart';
 
 class BottomModel extends StatefulWidget {
-  final String imageUrl;
-  final String name;
-  final String frame;
+  final UserModel user;
   final String roomId;
-  const BottomModel(
-      {super.key,
-      required this.imageUrl,
-      required this.name,
-      required this.frame,
-      required this.roomId});
+  const BottomModel({super.key, required this.roomId, required this.user});
 
   @override
   State<BottomModel> createState() => _BottomModelState();
@@ -31,36 +26,14 @@ class _BottomModelState extends State<BottomModel> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                GestureDetector(
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        left: 5,
-                        top: 10,
-                        child: Container(
-                          clipBehavior: Clip.hardEdge,
-                          decoration:
-                              const BoxDecoration(shape: BoxShape.circle),
-                          child: Image.network(
-                            widget.imageUrl,
-                            fit: BoxFit.cover,
-                            width: 65,
-                            height: 65,
-                          ),
-                        ),
-                      ),
-                      Image.asset(
-                        'assets/Frame ${widget.frame}.png',
-                        fit: BoxFit.cover,
-                        width: 80,
-                        height: 80,
-                      ),
-                    ],
-                  ),
+                SizedBox(
+                  height: 90,
+                  width: 90,
+                  child: ProfileImage(user: widget.user),
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  widget.name.isEmpty ? "Name is empty" : widget.name,
+                  widget.user.name.isEmpty ? "Name is empty" : widget.user.name,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       color: Colors.white,

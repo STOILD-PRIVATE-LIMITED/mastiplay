@@ -124,24 +124,27 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
   void initState() {
     super.initState();
     assert(widget.roomId.isNotEmpty, "RoomId can't be empty");
-    if (socket != null) {
-      return;
-    }
-    connectToServer();
-    if (widget.controller != null) {
-      isAudioOn = widget.controller!.audio;
-      isVideoOn = widget.controller!.video;
-      isFrontCameraSelected = widget.controller!.isFrontCameraSelected;
-      widget.controller!._audio.addListener(() {
-        _toggleMic(widget.controller!._audio.value);
-      });
-      widget.controller!._video.addListener(() {
-        _toggleCamera(widget.controller!._video.value);
-      });
-      widget.controller!._isFrontCameraSelected.addListener(() {
-        _switchCamera(widget.controller!._isFrontCameraSelected.value);
-      });
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (socket != null) {
+        log("Socket is already connected. That is why we aren't doing it again.");
+      } else {
+        connectToServer();
+      }
+      if (widget.controller != null) {
+        isAudioOn = widget.controller!.audio;
+        isVideoOn = widget.controller!.video;
+        isFrontCameraSelected = widget.controller!.isFrontCameraSelected;
+        widget.controller!._audio.addListener(() {
+          _toggleMic(widget.controller!._audio.value);
+        });
+        widget.controller!._video.addListener(() {
+          _toggleCamera(widget.controller!._video.value);
+        });
+        widget.controller!._isFrontCameraSelected.addListener(() {
+          _switchCamera(widget.controller!._isFrontCameraSelected.value);
+        });
+      }
+    });
   }
 
   @override
