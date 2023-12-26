@@ -7,6 +7,8 @@ import 'package:spinner_try/chat/models/chat.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/settings.dart';
 
+bool fcmInitialized = false;
+
 Future<void> sendFCMToken(String fcmToken) async {
   http
       .post(
@@ -35,6 +37,7 @@ Future<void> setupFCMTokenMangement() async {
     return;
   }
 
+  if (fcmInitialized) return;
   FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) async {
     log("FCM token refresh: $fcmToken");
     assert(currentUser.id != null);
@@ -49,11 +52,24 @@ Future<void> setupFCMTokenMangement() async {
 
   final fcmToken = await FirebaseMessaging.instance.getToken();
   log("This device fcm token: $fcmToken");
-  if (fcmToken != null && currentUser.id != null
-      //  && PrefStorage.fcmToken != fcmToken
-      ) {
+  if (fcmToken != null &&
+      currentUser.id != null &&
+      PrefStorage.fcmToken != fcmToken) {
     await sendFCMToken(fcmToken);
   }
+  log("Setting up listeners for fcm");
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    log("FCM foreground message received: ${message.data}");
+  });
+
+  // onMessageOpenedApp is handled in NewAuth
+  // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+  //   log("FCM message opened: ${message.data}");
+  // });
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  fcmInitialized = true;
 }
 
 @pragma('vm:entry-point')

@@ -192,8 +192,7 @@ class Message extends StatelessWidget {
                               if (msgAlignment)
                                 Icon(
                                   msg.readBy.containsAll(chat.participants) &&
-                                          msg.readBy.contains(
-                                              auth.currentUser!.email!)
+                                          msg.readBy.contains(currentUser.id!)
                                       ? Icons.done_all_rounded
                                       : Icons.done_rounded,
                                   color: Theme.of(context).colorScheme.primary,

@@ -1,15 +1,14 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:spinner_try/chat/models/message.dart';
 import 'package:spinner_try/chat/screens/chat_screen.dart';
-import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 
 String chatServer =
-    // "http://3.7.66.245:3001";
-    "http://192.168.9.64:3000";
+    kDebugMode ? "http://192.168.9.64:3000" : "http://3.7.66.245:3001";
 
 // keep this without trailing slash
 
@@ -96,19 +95,43 @@ Future<ChatData> createChat(ChatData chat) async {
 //   }
 // }
 
-showChat(
-  BuildContext context, {
-  required String chatId,
-  required List<String> emails,
-}) {
+Future showChat(BuildContext context, {required String chatId}) {
   return navigatorPush(
     context,
-    ChatScreen(
-      chat: ChatData(
-        admins: [auth.currentUser!.email!],
-        participants: emails,
-        title: chatId,
-        id: chatId,
+    Scaffold(
+      body: FutureBuilder(
+        future: fetchChatData(chatId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicatorRainbow());
+          }
+          if (snapshot.hasError) {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    snapshot.error.toString(),
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Go Back'),
+                  ),
+                ],
+              ),
+            );
+          }
+          final chat = snapshot.data!;
+          return ChatScreen(
+            chat: chat,
+            initialMsg: null,
+          );
+        },
       ),
     ),
   );

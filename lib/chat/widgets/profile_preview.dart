@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/chat/models/chat.dart';
+import 'package:spinner_try/chat/screens/chat_screen.dart';
 import 'package:spinner_try/chat/screens/image_preview.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/shivanshu/utils/loading_icon_button.dart';
 import 'package:spinner_try/user_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -96,13 +98,22 @@ class ProfilePreview extends StatelessWidget {
           alignment: WrapAlignment.spaceAround,
           children: [
             if (showChatButton)
-              IconButton(
-                onPressed: () {
-                  final String id =
-                      (auth.currentUser!.email!.compareTo(user.email) < 0)
-                          ? "${auth.currentUser!.email}-${user.email}"
-                          : "${user.email}-${auth.currentUser!.email}";
-                  showChat(context, chatId: id, emails: [user.email]);
+              LoadingIconButton(
+                onPressed: () async {
+                  final chat = await createChat(
+                    ChatData(
+                      id: "-1",
+                      admins: [currentUser.id!, user.id!],
+                      participants: [currentUser.id!, user.id!],
+                      title: "New Chat",
+                    ),
+                  );
+                  if (context.mounted) {
+                    navigatorPush(
+                      context,
+                      ChatScreen(chat: chat),
+                    );
+                  }
                 },
                 icon: const Icon(Icons.chat_rounded),
               ),

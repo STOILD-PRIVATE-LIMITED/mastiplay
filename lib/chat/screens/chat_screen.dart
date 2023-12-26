@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:spinner_try/chat/models/chat.dart';
 import 'package:spinner_try/chat/models/message.dart';
-import 'package:spinner_try/chat/widgets/call_button.dart';
 import 'package:spinner_try/chat/widgets/message_input_field.dart';
 import 'package:spinner_try/chat/widgets/message_list.dart';
 
@@ -35,10 +33,10 @@ class ChatScreen extends StatelessWidget {
       body: Scaffold(
         appBar: AppBar(
           titleSpacing: 0,
-          actions: [
-            CallButton(emails: chat.participants)
-                .animate()
-                .fade(duration: const Duration(seconds: 1)),
+          actions: const [
+            // CallButton(emails: chat.participants)
+            //     .animate()
+            //     .fade(duration: const Duration(seconds: 1)),
           ],
           bottom: (bottomBar == null)
               ? null

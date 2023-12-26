@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -7,6 +8,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spinner_try/chat/models/chat.dart';
+import 'package:spinner_try/chat/models/message.dart';
 import 'package:spinner_try/screen/login.dart';
 import 'package:spinner_try/shivanshu/models/firestore/fcm.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
@@ -43,50 +46,27 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  runApp(
-    const MyApp(),
-  );
+  runApp(const MyApp());
 }
 
-class WrapperApp extends StatefulWidget {
-  const WrapperApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
 
   @override
-  State<WrapperApp> createState() => _WrapperAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
-class _WrapperAppState extends State<WrapperApp> {
+class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      log("FCM message received: ${message.data}");
-      showMsg(context, message.data);
-    });
-
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      log("FCM message opened: ${message.data}");
-      showMsg(context, message.data);
+      final messageData = message.data['message'];
+      final msg = MessageData.fromJson(jsonDecode(messageData));
+      showChat(context, chatId: msg.chatId);
     });
-
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Masti Play',
-      home: Scaffold(
-        body: MyApp(),
-      ),
-    );
-  }
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

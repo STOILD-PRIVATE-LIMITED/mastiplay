@@ -25,7 +25,7 @@ class MessageScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: FutureBuilder(
-          future: fetchAllChats(currentUser.email),
+          future: fetchAllChats(currentUser.id!),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
@@ -143,16 +143,16 @@ class MessageScreen extends StatelessWidget {
             minimumSize: const Size(40, 40),
           ),
           onPressed: () async {
-            String? email = await promptUser(context,
-                question: "Enter the email address of recepient");
-            email = email?.trim();
-            if (email == null || email.isEmpty) {
+            String? id = await promptUser(context,
+                question: "Enter the id of the recepient");
+            id = id?.trim();
+            if (id == null || id.isEmpty) {
               return;
             }
             final chatData = await createChat(ChatData(
               id: "-1",
-              admins: [currentUser.email, email],
-              participants: [currentUser.email, email],
+              admins: [currentUser.id!, id],
+              participants: [currentUser.id!, id],
               title: "New Chat",
             ));
             if (context.mounted) {

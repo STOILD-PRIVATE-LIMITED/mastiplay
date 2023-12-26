@@ -1,3 +1,8 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/chat/models/chat.dart';
 import 'package:spinner_try/chat/models/message.dart';
@@ -16,12 +21,45 @@ class MessageList extends StatefulWidget {
 }
 
 class _MessageListState extends State<MessageList> {
+  late StreamSubscription<RemoteMessage> subscription;
+  @override
+  void initState() {
+    super.initState();
+    subscription = FirebaseMessaging.onMessage.listen(addMsg);
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+  void addMsg(RemoteMessage message) {
+    log("FCM foreground message received: ${message.data}");
+    final messageData = message.data['message'];
+    final msg = MessageData.fromJson(jsonDecode(messageData));
+    if (msg.chatId == widget.chat.id) {
+      widget.chat.messages.insert(0, msg);
+      if (context.mounted) {
+        setState(() {});
+      }
+    }
+  }
+
+  bool _loaded = false;
+
   @override
   Widget build(BuildContext context) {
     // TODO: add more functionality like edit a message and send messages in reference to other messages
     return FutureBuilder(
-      future: fetchMessages(widget.chat.id, null, 10),
+      key: ValueKey('messageList: ${widget.chat.id}'),
+      future: _loaded
+          ? () async {
+              return widget.chat.messages;
+            }()
+          : fetchMessages(widget.chat.id, null, 10),
       builder: (context, snapshot) {
+        log("Message list was rebuilt");
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicatorRainbow());
         }
@@ -38,6 +76,7 @@ class _MessageListState extends State<MessageList> {
         }
 
         widget.chat.messages = snapshot.data!.map((e) => e).toList();
+        _loaded = true;
         // widget.chat.messages = widget.chat.messages.reversed.toList();
         for (final msg in widget.chat.messages) {
           if (msg.readBy.contains(auth.currentUser!.email)) break;
