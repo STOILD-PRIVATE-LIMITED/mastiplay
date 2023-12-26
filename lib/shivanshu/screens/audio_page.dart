@@ -10,6 +10,7 @@ import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/audio_room.dart';
 import 'package:spinner_try/webRTC/live_chat_widget.dart';
+import 'package:video_player/video_player.dart';
 
 class AudioPage extends StatefulWidget {
   final Room room;
@@ -25,7 +26,21 @@ class _AudioPageState extends State<AudioPage> {
   @override
   void dispose() {
     _controller.dispose();
+    // _controllerr.dispose();
     super.dispose();
+  }
+
+  late VideoPlayerController _controllerr;
+
+  @override
+  void initState() {
+    super.initState();
+    _controllerr = VideoPlayerController.asset('assets/video.mp4')
+      ..initialize().then((_) {
+        setState(() {});
+      });
+    _controllerr.setLooping(true);
+    _controllerr.play();
   }
 
   // final WebRtcController controller = WebRtcController(
@@ -42,10 +57,12 @@ class _AudioPageState extends State<AudioPage> {
             child: SizedBox(
               height: height,
               width: width,
-              child: Image.asset(
-                'assets/1.png',
-                fit: BoxFit.cover,
-              ),
+              child: _controllerr.value.isInitialized
+                  ? AspectRatio(
+                      aspectRatio: _controllerr.value.aspectRatio,
+                      child: VideoPlayer(_controllerr),
+                    )
+                  : const CircularProgressIndicator(), // Show a loading indicator while the video is being loaded
             ),
           ),
           Scaffold(
