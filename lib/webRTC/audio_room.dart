@@ -60,26 +60,34 @@ class _AudioRoomState extends State<AudioRoom> {
             crossAxisCount: widget.maxParticipants ~/ 2,
             childAspectRatio: 1 / 1.3,
             children: [
-              AudioUserTile(
-                user: UserModel.fromJson(myUserData),
-                onTap: () {
-                  showModalBottomSheet(
-                    backgroundColor: const Color(0xFF011a51),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
+              SizedBox(
+                child: AudioUserTile(
+                  user: UserModel.fromJson(myUserData),
+                  onTap: () {
+                    showModalBottomSheet(
+                      backgroundColor: const Color(0xFF011a51),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
                       ),
-                    ),
-                    context: context,
-                    builder: ((context) {
-                      return BottomModel(
-                        user: UserModel.fromJson(myUserData),
-                        roomId: myUserData["id"],
-                      );
-                    }),
-                  );
-                },
+                      context: context,
+                      builder: ((context) {
+                        return BottomModel(
+                          frame: myUserData['frame'],
+                          imageUrl: myUserData['photo'],
+                          name: myUserData == null
+                              ? "You"
+                              : myUserData['name'] ??
+                                  myUserData['email'] ??
+                                  "Anonymous",
+                          roomId: myUserData["id"], user: null,
+                        );
+                      }),
+                    );
+                  },
+                ),
               ),
               for (int i = 0; i < usersData.length; ++i)
                 AudioUserTile(
