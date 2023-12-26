@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_octicons/flutter_octicons.dart';
-import 'package:spinner_try/model/model.dart';
 import 'package:spinner_try/screen/share_moments.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:http/http.dart' as http;
