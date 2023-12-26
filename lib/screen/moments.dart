@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_octicons/flutter_octicons.dart';
+import 'package:spinner_try/model/model.dart';
 import 'package:spinner_try/screen/share_moments.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:http/http.dart' as http;
 
 class Moments extends StatefulWidget {
   const Moments({super.key});
@@ -11,6 +15,43 @@ class Moments extends StatefulWidget {
 }
 
 class _MomentsState extends State<Moments> {
+  String url = "https://s65zvs58-3002.inc1.devtunnels.ms";
+
+  List<String> tags = [
+    "mastiplay",
+    'hot',
+  ];
+
+  sendPost() async {
+    await http.post(
+      Uri.parse('$url/'),
+      body: {
+        'id': '1',
+        'title': 'Doodle',
+        'description': 'A book about a doodle',
+        'imageUrl': 'Image URl HERE',
+        'likes': 3,
+        'tags': tags,
+      },
+    );
+  }
+
+  List<MomentsModel> momentsModel = [];
+
+  getAllMoments() async {
+    final response = await http.get(Uri.parse("$url/moments"), headers: {
+      "Accept": "application/json",
+    });
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      momentsModel = data['moments']
+          .map<MomentsModel>((json) => MomentsModel.fromJson(json))
+          .toList();
+      print(momentsModel.length);
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -186,29 +227,34 @@ class _MomentsState extends State<Moments> {
                       ),
                       Row(
                         children: [
-                          Container(
-                            height: height / 20,
-                            width: width / 5,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              border: Border.all(color: Colors.yellow),
-                            ),
-                            alignment: Alignment.center,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.person_add,
-                                  color: Colors.yellow,
-                                  size: height / 50,
-                                ),
-                                Text(
-                                  'Follow',
-                                  style: TextStyle(
-                                      fontSize: height / 60,
-                                      color: Colors.yellow),
-                                ),
-                              ],
+                          GestureDetector(
+                            onTap: () {
+                              sendPost();
+                            },
+                            child: Container(
+                              height: height / 20,
+                              width: width / 5,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(color: Colors.yellow),
+                              ),
+                              alignment: Alignment.center,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.person_add,
+                                    color: Colors.yellow,
+                                    size: height / 50,
+                                  ),
+                                  Text(
+                                    'Follow',
+                                    style: TextStyle(
+                                        fontSize: height / 60,
+                                        color: Colors.yellow),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           SizedBox(

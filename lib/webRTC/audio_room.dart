@@ -64,8 +64,6 @@ class _AudioRoomState extends State<AudioRoom> {
             childAspectRatio: 1 / 2,
             children: [
               SizedBox(
-                // height: 100,
-                // width: 100,
                 child: AudioUserTile(
                   user: UserModel.fromJson(myUserData),
                   onTap: () {
