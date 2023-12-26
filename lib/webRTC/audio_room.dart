@@ -75,14 +75,8 @@ class _AudioRoomState extends State<AudioRoom> {
                       context: context,
                       builder: ((context) {
                         return BottomModel(
-                          frame: myUserData['frame'],
-                          imageUrl: myUserData['photo'],
-                          name: myUserData == null
-                              ? "You"
-                              : myUserData['name'] ??
-                                  myUserData['email'] ??
-                                  "Anonymous",
-                          roomId: myUserData["id"], user: null,
+                          user: UserModel.fromJson(myUserData),
+                          roomId: myUserData["id"],
                         );
                       }),
                     );
