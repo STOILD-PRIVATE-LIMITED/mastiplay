@@ -455,10 +455,10 @@ class _AudioUserTileState extends State<AudioUserTile> {
                     )
                   : ProfileImage(user: widget.user)),
         ),
-        const SizedBox(height: 5),
         Text(
-          widget.user.name.isEmpty ? "Name is empty" : widget.user.name,
+          widget.user.name.isEmpty ? "Empty Name" : widget.user.name,
           overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
