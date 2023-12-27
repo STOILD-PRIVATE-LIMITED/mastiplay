@@ -31,16 +31,7 @@ class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
   File? img;
   final user = FirebaseAuth.instance.currentUser;
 
-  uploadImageToFirebase() async {
-    final email = user!.email;
-    var data = await uploadImage(context, img, 'images', email!);
-    final userRef = FirebaseFirestore.instance.collection('users');
-    final userDoc = await userRef.where('email', isEqualTo: email).get();
-    final userDocId = userDoc.docs.first.id;
-    await userRef.doc(userDocId).update({
-      'photo': data,
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +107,6 @@ class _LiveVideoRoomPageState extends State<LiveVideoRoomPage> {
                   setState(() {
                     img = File(value.path);
                   });
-                  await uploadImageToFirebase();
                 });
               },
               child: Container(
