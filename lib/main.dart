@@ -42,6 +42,7 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   prefs = await SharedPreferences.getInstance();
+  prefs.clear();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -49,24 +50,8 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      final messageData = message.data['message'];
-      final msg = MessageData.fromJson(jsonDecode(messageData));
-      showChat(context, chatId: msg.chatId);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +81,23 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class NewAuth extends StatelessWidget {
+class NewAuth extends StatefulWidget {
   const NewAuth({super.key});
+
+  @override
+  State<NewAuth> createState() => _NewAuthState();
+}
+
+class _NewAuthState extends State<NewAuth> {
+  @override
+  void initState() {
+    super.initState();
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      final messageData = message.data['message'];
+      final msg = MessageData.fromJson(jsonDecode(messageData));
+      showChat(context, chatId: msg.chatId);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

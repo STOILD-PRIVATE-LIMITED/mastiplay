@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:spinner_try/main.dart';
 import 'package:spinner_try/shivanshu/models/firestore/firestore_document.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/screens/family_room_page.dart';
@@ -84,9 +85,7 @@ class _FrameChooseScreenState extends State<FrameChooseScreen> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return HomeLive(
-              email: widget.email,
-            );
+            return NewAuth();
           },
         ),
       );

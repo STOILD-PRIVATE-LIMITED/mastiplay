@@ -41,7 +41,7 @@ class _MessageInputFieldState extends State<MessageInputField> {
               "message_input_field.dart file mein chatID change nhi hui hai",
           id: DateTime.now().millisecondsSinceEpoch.toString(),
           txt: txt,
-          from: auth.currentUser!.email!,
+          from: currentUser.id!,
           createdAt: DateTime.now(),
         ),
       );

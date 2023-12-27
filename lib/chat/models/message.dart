@@ -109,6 +109,7 @@ Future<MessageData?> fetchLastMessage(String path, {Source? src}) async {
 }
 
 Future<MessageData> addMessage(ChatData chat, MessageData msg) async {
+  msg.chatId = chat.id;
   final response = await http.post(Uri.parse('$chatServer/messages/${chat.id}'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',

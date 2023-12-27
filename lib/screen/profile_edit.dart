@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
+import 'package:spinner_try/main.dart';
 import 'package:spinner_try/screen/login.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
@@ -457,7 +458,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                     await FirebaseAuth.instance.signOut();
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => const Login(),
+                        builder: (context) => const NewAuth(),
                       ),
                     );
                   },

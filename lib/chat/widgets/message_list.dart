@@ -123,7 +123,7 @@ class _MessageListState extends State<MessageList> {
                   preMsg.from != msg.from ||
                   !_sameDay(msg.createdAt, preMsg.createdAt),
               first: first,
-              msgAlignment: msg.from == auth.currentUser!.email,
+              msgAlignment: msg.from == currentUser.id,
             );
           },
           itemCount: widget.chat.messages.length + 1,
