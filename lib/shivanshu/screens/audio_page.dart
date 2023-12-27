@@ -26,7 +26,7 @@ class _AudioPageState extends State<AudioPage> {
   @override
   void dispose() {
     _controller.dispose();
-    // _controllerr.dispose();
+    _controllerr.dispose();
     super.dispose();
   }
 
@@ -35,7 +35,7 @@ class _AudioPageState extends State<AudioPage> {
   @override
   void initState() {
     super.initState();
-    _controllerr = VideoPlayerController.asset('assets/video.mp4')
+    _controllerr = VideoPlayerController.asset('assets/videoo.mp4')
       ..initialize().then((_) {
         setState(() {});
       });
