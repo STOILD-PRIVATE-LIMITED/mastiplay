@@ -7,9 +7,7 @@ import 'package:spinner_try/chat/models/message.dart';
 import 'package:spinner_try/chat/screens/chat_screen.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 
-String chatServer = kDebugMode
-    ? "https://v9nm4hsv-3000.asse.devtunnels.ms"
-    : "http://3.7.66.245:3001";
+String chatServer = "https://v9nm4hsv-3000.asse.devtunnels.ms";
 // keep this without trailing slash
 
 class ChatData {
