@@ -151,3 +151,110 @@ class _ScrollBuilderState extends State<ScrollBuilder>
     }
   }
 }
+
+class ScrollBuilder2<T> extends StatefulWidget {
+  const ScrollBuilder2({
+    super.key,
+    required this.loader,
+    required this.itemBuilder,
+    this.separatorBuilder,
+    this.loadingMargin = 1000,
+    this.footer,
+  });
+  final double loadingMargin;
+  final Future<List<T>> Function(int start) loader;
+  final Widget Function(BuildContext context, T item) itemBuilder;
+  final Widget Function(BuildContext context, int index)? separatorBuilder;
+  final Widget? footer;
+
+  @override
+  State<ScrollBuilder2> createState() => _ScrollBuilder2State<T>();
+}
+
+class _ScrollBuilder2State<T> extends State<ScrollBuilder2<T>> {
+  // final _scrollController = ScrollController();
+  final List<T> items = [];
+  bool finished = false;
+  String? err;
+
+  @override
+  void initState() {
+    super.initState();
+    // _scrollController.addListener(_scrollListener);
+    fetchData();
+  }
+
+  // @override
+  // void dispose() {
+  //   _scrollController.dispose();
+  //   super.dispose();
+  // }
+
+  // void _scrollListener() {
+  //   if (_scrollController.position.pixels >=
+  //       _scrollController.position.maxScrollExtent - widget.loadingMargin) {
+  //     fetchData();
+  //   }
+  // }
+
+  Future<void> fetchData() async {
+    try {
+      err = null;
+      final List<T> fetchedItems = (await widget.loader(items.length)).cast();
+      if (fetchedItems.isEmpty) {
+        setState(() {
+          finished = true;
+        });
+        return;
+      }
+      setState(() {
+        items.addAll(fetchedItems);
+      });
+    } catch (e) {
+      setState(() {
+        err = e.toString();
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      itemBuilder: (context, index) {
+        if (index == items.length) {
+          if (err != null) {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(err!),
+                  LoadingElevatedButton(
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Retry'),
+                    onPressed: fetchData,
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.red,
+                    ),
+                  )
+                ],
+              ),
+            );
+          }
+          if (finished) {
+            return widget.footer ?? Container();
+          }
+          return FutureBuilder(
+              future: fetchData(),
+              builder: (context, snapshot) {
+                return const Center(child: CircularProgressIndicatorRainbow());
+              });
+        }
+        return widget.itemBuilder(context, items[index]);
+      },
+      // controller: _scrollController,
+      separatorBuilder:
+          widget.separatorBuilder ?? (ctx, index) => const SizedBox(height: 10),
+      itemCount: items.length + (finished ? 0 : 1),
+    );
+  }
+}
