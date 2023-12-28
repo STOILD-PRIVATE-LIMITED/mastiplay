@@ -79,7 +79,7 @@ class _MessageListState extends State<MessageList> {
         _loaded = true;
         // widget.chat.messages = widget.chat.messages.reversed.toList();
         for (final msg in widget.chat.messages) {
-          if (msg.readBy.contains(auth.currentUser!.email)) break;
+          if (msg.readBy.contains(currentUser.id)) break;
           addMeInReadBy(widget.chat, msg);
         }
         return ListView.separated(

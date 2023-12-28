@@ -108,7 +108,7 @@ class _NewAuthState extends State<NewAuth> {
         if (snapshot.hasData) {
           return FutureBuilder(
             key: const ValueKey('newAuthFutureBuilder'),
-            future: fetchUser(auth.currentUser!.email!),
+            future: fetchUserWithEmail(auth.currentUser!.email!),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return GenderScreen(

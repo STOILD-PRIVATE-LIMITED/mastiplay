@@ -98,7 +98,7 @@ class _AudioPageState extends State<AudioPage> {
                           shape: BoxShape.circle,
                         ),
                         child: FutureBuilder(
-                          future: fetchUser(widget.room.admin!),
+                          future: fetchUserWithEmail(widget.room.admin!),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               final user = snapshot.data!;

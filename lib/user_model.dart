@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/chat/widgets/profile_preview.dart';
+import 'package:spinner_try/shivanshu/models/firestore/firestore_collection.dart';
+import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 
 import 'shivanshu/models/firestore/firestore_document.dart';
@@ -63,17 +65,32 @@ class UserModel {
   }
 }
 
-Future<UserModel> fetchUser(String email) async {
-  final doc = (await FirestoreDocument(id: email, path: "users").fetch());
-  return UserModel.fromJson(doc.data);
+Future<UserModel> fetchUserWithEmail(String email) async {
+  final doc = (await firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get())
+      .docs
+      .single;
+  return UserModel.fromJson(doc.data());
 }
 
-Future<List<UserModel>> fetchUsers(List<String> emails) async {
-  List<Future<UserModel>> futures = [];
-  for (String email in emails) {
-    futures.add(fetchUser(email));
+Future<UserModel> fetchUserWithId(String id) async {
+  final doc =
+      (await firestore.collection('users').where('id', isEqualTo: id).get())
+          .docs
+          .single;
+  return UserModel.fromJson(doc.data());
+}
+
+Future<List<UserModel>> fetchUsers(List<String> ids) async {
+  final List<Future> futures = [];
+  for (final id in ids) {
+    futures.add(firestore.collection('users').where('id', isEqualTo: id).get());
   }
-  List<UserModel> users = await Future.wait(futures);
+  final docs = await Future.wait(futures);
+  final users =
+      docs.map((e) => UserModel.fromJson(e.docs.single.data())).toList();
   return users;
 }
 

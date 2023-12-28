@@ -45,7 +45,7 @@ class Message extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: FutureBuilder(
-                    future: fetchUser(msg.from),
+                    future: fetchUserWithId(msg.from),
                     builder: (ctx, snapshot) {
                       final userData =
                           !snapshot.hasData ? UserModel() : snapshot.data!;
@@ -78,7 +78,8 @@ class Message extends StatelessWidget {
                 child: Container(
                   constraints: BoxConstraints(
                     minWidth: 100,
-                    maxWidth: size.width - 35,
+                    maxWidth: size.width - 100,
+                    // maxHeight: size.height * 0.5,
                   ),
                   padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
                   margin: const EdgeInsets.only(
@@ -104,12 +105,12 @@ class Message extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (first && msg.from != auth.currentUser!.email)
+                          if (first && msg.from != currentUser.id)
                             Padding(
                               padding: const EdgeInsets.only(
                                   right: 5.0, left: 1, top: 2),
                               child: FutureBuilder(
-                                future: fetchUser(msg.from),
+                                future: fetchUserWithId(msg.from),
                                 builder: (context, snapshot) {
                                   final userData = !snapshot.hasData
                                       ? UserModel()
@@ -119,7 +120,7 @@ class Message extends StatelessWidget {
                                       showUserPreview(context, userData);
                                     },
                                     child: Text(
-                                      userData.name ?? userData.email,
+                                      userData.name,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall!

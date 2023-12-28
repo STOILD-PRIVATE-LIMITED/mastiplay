@@ -6,14 +6,14 @@ import 'package:spinner_try/user_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CallButton extends StatelessWidget {
-  final List<String> emails;
+  final List<String> ids;
   final Source? src;
-  const CallButton({super.key, required this.emails, this.src});
+  const CallButton({super.key, required this.ids, this.src});
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: fetchUsers(emails),
+      future: fetchUsers(ids),
       builder: (ctx, snapshot) {
         if (snapshot.hasError) {
           showMsg(context, snapshot.error.toString());
@@ -23,7 +23,7 @@ class CallButton extends StatelessWidget {
           Source anotherMethod = Source.cache;
           if (src != anotherMethod) {
             return CallButton(
-              emails: emails,
+              ids: ids,
               src: anotherMethod,
             );
           } else {
