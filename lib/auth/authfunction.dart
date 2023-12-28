@@ -97,8 +97,8 @@ Future<UserCredential?> signInWithGoogle(context) async {
         await FirebaseAuth.instance.signInWithCredential(credential);
     final user = FirebaseAuth.instance.currentUser;
     try {
-      await fetchUser('${user!.email}');
-      final variable = await fetchUser('${user.email}');
+      await fetchUserWithEmail('${user!.email}');
+      final variable = await fetchUserWithEmail('${user.email}');
       if (variable.id == null || variable.id!.isEmpty) {
         Navigator.pushReplacement(
           context,

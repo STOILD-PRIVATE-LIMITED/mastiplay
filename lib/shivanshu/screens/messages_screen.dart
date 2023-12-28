@@ -6,7 +6,9 @@ import 'package:spinner_try/chat/screens/chat_screen.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/loading_icon_button.dart';
+import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'package:spinner_try/shivanshu/widgets/imgae_preview.dart';
+import 'package:spinner_try/user_model.dart';
 
 class MessageScreen extends StatelessWidget {
   const MessageScreen({super.key});
@@ -69,40 +71,32 @@ class MessageScreen extends StatelessWidget {
                       Text(chatData.participants.join(", ")),
                     ],
                   ),
-                  leading: Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          navigatorPush(
+                  leading: FutureBuilder(
+                    future: fetchUserWithId(chatData.participants[0]),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicatorRainbow();
+                      } else if (snapshot.hasError) {
+                        return const Icon(Icons.error_outline_rounded);
+                      }
+                      return SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: ProfileImage(
+                          user: snapshot.data!,
+                          onTap: (user) {
+                            navigatorPush(
                               context,
                               ImagePreview(
-                                  image: Hero(
-                                tag: imgUrls[index % imgUrls.length] +
-                                    index.toString(),
-                                child: Image.network(
-                                    imgUrls[index % imgUrls.length]),
-                              )));
-                        },
-                        child: Hero(
-                          tag: imgUrls[index % imgUrls.length] +
-                              index.toString(),
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                              imgUrls[index % imgUrls.length],
-                            ),
-                          ),
+                                image: ProfileImage(
+                                  user: snapshot.data!,
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      ),
-                      const CircleAvatar(
-                        radius: 8,
-                        backgroundColor: Color.fromARGB(255, 252, 239, 22),
-                        child: Icon(
-                          Icons.network_cell_rounded,
-                          size: 10,
-                        ),
-                      ),
-                    ],
+                      );
+                    },
                   ),
                   trailing: [
                     const Icon(

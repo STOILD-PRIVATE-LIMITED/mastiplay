@@ -24,7 +24,7 @@ class UserTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             FutureBuilder(
-              future: fetchUser(email),
+              future: fetchUserWithEmail(email),
               builder: (ctx, snapshot) {
                 if (snapshot.hasData) {
                   user = snapshot.data!;
