@@ -272,10 +272,6 @@ class _AudioPageState extends State<AudioPage> {
             ),
             floatingActionButton: FloatingActionButton(
                 onPressed: () {},
-                // child: Image.asset(
-                //   'assets/Group 18118.png',
-                //   height: 25,
-                // ),
                 child: CarouselSlider(
                   options: CarouselOptions(
                     enlargeCenterPage: true,
