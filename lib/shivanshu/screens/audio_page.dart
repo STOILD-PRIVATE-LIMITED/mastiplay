@@ -11,6 +11,7 @@ import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/audio_room.dart';
 import 'package:spinner_try/webRTC/live_chat_widget.dart';
 import 'package:video_player/video_player.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class AudioPage extends StatefulWidget {
   final Room room;
@@ -30,8 +31,15 @@ class _AudioPageState extends State<AudioPage> {
     super.dispose();
   }
 
+  List<IconData> iconList = [
+    Icons.star,
+    Icons.favorite,
+    Icons.thumb_up,
+    Icons.thumb_down,
+  ];
   late VideoPlayerController _controllerr;
 
+  int _currentIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -262,6 +270,33 @@ class _AudioPageState extends State<AudioPage> {
                 ),
               ),
             ),
+            floatingActionButton: FloatingActionButton(
+                onPressed: () {},
+                // child: Image.asset(
+                //   'assets/Group 18118.png',
+                //   height: 25,
+                // ),
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    enlargeCenterPage: true,
+                    autoPlay: true,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _currentIndex = index;
+                      });
+                    },
+                  ),
+                  items: iconList.map((icon) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Icon(
+                          icon,
+                          color: Colors.blue,
+                        );
+                      },
+                    );
+                  }).toList(),
+                )),
             bottomNavigationBar: Card(
               color: Colors.black26,
               child: Row(
@@ -410,9 +445,11 @@ class _AudioPageState extends State<AudioPage> {
 class AudioUserTile extends StatefulWidget {
   final UserModel user;
   final void Function()? onTap;
+  final int? index;
   const AudioUserTile({
     super.key,
     required this.user,
+    this.index,
     this.onTap,
   });
 
@@ -434,9 +471,10 @@ class _AudioUserTileState extends State<AudioUserTile> {
               onTap: () {
                 if (widget.onTap != null) {
                   widget.onTap!();
-                  setState(() {
-                    isMuted = !isMuted;
-                  });
+                  // setState(() {
+                  //   isMuted = !isMuted;
+                  //   print("object");
+                  // });
                 }
               },
               child: widget.user.photo.isEmpty
@@ -456,7 +494,7 @@ class _AudioUserTileState extends State<AudioUserTile> {
                   : ProfileImage(user: widget.user)),
         ),
         Text(
-          widget.user.name.isEmpty ? "Empty Name" : widget.user.name,
+          widget.user.name.isEmpty ? "No. ${widget.index}" : widget.user.name,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
           style: const TextStyle(

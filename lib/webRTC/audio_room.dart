@@ -108,7 +108,7 @@ class _AudioRoomState extends State<AudioRoom> {
               for (int i = usersData.length + 1;
                   i < widget.maxParticipants;
                   ++i)
-                AudioUserTile(user: UserModel()),
+                AudioUserTile(user: UserModel(),index: i,),
             ],
           ),
         );
