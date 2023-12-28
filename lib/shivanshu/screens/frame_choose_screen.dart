@@ -6,7 +6,6 @@ import 'package:spinner_try/main.dart';
 import 'package:spinner_try/shivanshu/models/firestore/firestore_document.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/screens/family_room_page.dart';
-import 'package:spinner_try/shivanshu/screens/home_live.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/loading_elevated_button.dart';
 import 'package:spinner_try/user_model.dart';
@@ -85,7 +84,7 @@ class _FrameChooseScreenState extends State<FrameChooseScreen> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return NewAuth();
+            return const NewAuth();
           },
         ),
       );

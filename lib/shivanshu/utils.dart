@@ -526,7 +526,8 @@ Future<void> shareRoomLink(String roomID) async {
   return shareLink(
     "https://mastiplay.com/room/?id=$roomID",
     true
-        ? roomID
+        ? 
+        roomID
         : "Join my room at Masti Play. Click on the below link to join. Or enter room id: $roomID manually",
   );
 }

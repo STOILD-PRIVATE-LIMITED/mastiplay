@@ -26,9 +26,6 @@ class _FamilyScreenState extends State<FamilyScreen>
 
   @override
   Widget build(BuildContext context) {
-    const bool pinned = true;
-    const bool snap = true;
-    const bool floating = true;
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: PreferredSize(

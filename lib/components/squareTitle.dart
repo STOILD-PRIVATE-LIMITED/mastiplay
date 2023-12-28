@@ -24,10 +24,6 @@ class SquareTile extends StatelessWidget {
           
         )
       ),
-      
-        
-      
-      
     );
   }
 }

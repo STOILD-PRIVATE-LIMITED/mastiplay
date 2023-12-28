@@ -1,14 +1,11 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/settings.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
-
-import '../utils/image.dart';
 
 class LiveVideoRoomPage extends StatefulWidget {
   final bool showVideoButton;
