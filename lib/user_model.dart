@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/chat/widgets/profile_preview.dart';
-import 'package:spinner_try/shivanshu/models/firestore/firestore_collection.dart';
+import 'package:http/http.dart' as http;
 import 'package:spinner_try/shivanshu/models/globals.dart';
+import 'package:spinner_try/shivanshu/models/momets/post.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 
 import 'shivanshu/models/firestore/firestore_document.dart';
@@ -92,6 +95,21 @@ Future<List<UserModel>> fetchUsers(List<String> ids) async {
   final users =
       docs.map((e) => UserModel.fromJson(e.docs.single.data())).toList();
   return users;
+}
+
+Future<void> followUser(String userId) async {
+  try {
+    final response =
+        await http.post(Uri.parse("$momentsServer/api/follow"), body: {
+      "followerId": userId,
+      "followingId": currentUser.id!,
+    });
+    if (response.statusCode != 200) {
+      throw Exception('Failed to follow: ${response.body}');
+    }
+  } catch (e) {
+    log("Failed to follow: $e");
+  }
 }
 
 Future showUserPreview(BuildContext context, UserModel user) {

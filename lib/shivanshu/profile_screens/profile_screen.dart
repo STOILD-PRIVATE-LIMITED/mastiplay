@@ -6,15 +6,14 @@ import 'package:spinner_try/screen/agent.dart';
 import 'package:spinner_try/screen/creator_page.dart';
 import 'package:spinner_try/screen/help_form.dart';
 import 'package:spinner_try/screen/inv_friends.dart';
-import 'package:spinner_try/screen/moments.dart';
 import 'package:spinner_try/screen/nobel_center.dart';
 import 'package:spinner_try/screen/setting.dart';
 import 'package:spinner_try/screen/store.dart';
 import 'package:spinner_try/shivanshu/profile_screens/family_screen.dart';
+import 'package:spinner_try/shivanshu/screens/moments.dart';
 import 'package:spinner_try/shivanshu/screens/wallet_screen.dart';
 import 'package:spinner_try/shivanshu/user_level/user_level_page.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
-
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
