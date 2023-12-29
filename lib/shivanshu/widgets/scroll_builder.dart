@@ -162,7 +162,7 @@ class ScrollBuilder2<T> extends StatefulWidget {
     this.footer,
   });
   final double loadingMargin;
-  final Future<List<T>> Function(int start) loader;
+  final Future<List<T>> Function(int start, T? lastItem) loader;
   final Widget Function(BuildContext context, T item) itemBuilder;
   final Widget Function(BuildContext context, int index)? separatorBuilder;
   final Widget? footer;
@@ -177,12 +177,12 @@ class _ScrollBuilder2State<T> extends State<ScrollBuilder2<T>> {
   bool finished = false;
   String? err;
 
-  @override
-  void initState() {
-    super.initState();
-    // _scrollController.addListener(_scrollListener);
-    fetchData();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // _scrollController.addListener(_scrollListener);
+  //   // fetchData();
+  // }
 
   // @override
   // void dispose() {
@@ -200,7 +200,9 @@ class _ScrollBuilder2State<T> extends State<ScrollBuilder2<T>> {
   Future<void> fetchData() async {
     try {
       err = null;
-      final List<T> fetchedItems = (await widget.loader(items.length)).cast();
+      final List<T> fetchedItems =
+          (await widget.loader(items.length, items.isEmpty ? null : items.last))
+              .cast();
       if (fetchedItems.isEmpty) {
         setState(() {
           finished = true;

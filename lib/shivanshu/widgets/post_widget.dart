@@ -25,11 +25,16 @@ class PostWidget extends StatelessWidget {
                   Expanded(
                     child: Row(
                       children: [
-                        (snapshot.connectionState == ConnectionState.waiting)
-                            ? const CircularProgressIndicatorRainbow()
-                            : snapshot.hasError || !snapshot.hasData
-                                ? const Icon(Icons.error, color: Colors.red)
-                                : ProfileImage(user: snapshot.data!),
+                        SizedBox(
+                          height: 56,
+                          width: 56,
+                          child: (snapshot.connectionState ==
+                                  ConnectionState.waiting)
+                              ? const CircularProgressIndicatorRainbow()
+                              : snapshot.hasError || !snapshot.hasData
+                                  ? const Icon(Icons.error, color: Colors.red)
+                                  : ProfileImage(user: snapshot.data!),
+                        ),
                         SizedBox(
                           width: width / 30,
                         ),
@@ -120,7 +125,8 @@ class PostWidget extends StatelessWidget {
           Container(
             height: height / 2.8,
             width: width,
-            alignment: Alignment.center,
+            // alignment: Alignment.center,
+            clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: const Color(0xFFE2FBF5),
@@ -196,6 +202,9 @@ class PostWidget extends StatelessWidget {
             LoadingIconButton(
               icon: const Icon(Icons.share),
               onPressed: () async {
+                await shareLink(
+                    "https://mastiplay.com/posts/${post.postId.toString()}",
+                    "See my wonderful post 👇");
                 await sharePost(post.postId);
               },
             ),

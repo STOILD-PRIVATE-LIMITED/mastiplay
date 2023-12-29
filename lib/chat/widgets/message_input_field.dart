@@ -7,8 +7,23 @@ import 'package:spinner_try/shivanshu/utils/image.dart';
 
 class MessageInputField extends StatefulWidget {
   final String initialValue;
-  const MessageInputField(
-      {super.key, required this.onSubmit, required this.initialValue});
+  final String hintText;
+  late final TextEditingController controller;
+  final int minLines;
+  final bool showImage;
+  final bool showSend;
+  MessageInputField({
+    super.key,
+    required this.onSubmit,
+    required this.initialValue,
+    TextEditingController? controller,
+    this.minLines = 1,
+    this.showImage = true,
+    this.showSend = true,
+    this.hintText = "Enter your message here",
+  }) {
+    this.controller = controller ?? TextEditingController();
+  }
 
   final Future<void> Function(MessageData msg) onSubmit;
 
@@ -21,18 +36,16 @@ class _MessageInputFieldState extends State<MessageInputField> {
 
   String txt = "";
 
-  final _msgTxtBox = TextEditingController();
-
   @override
   void initState() {
     super.initState();
-    _msgTxtBox.text = widget.initialValue;
+    widget.controller.text = widget.initialValue;
   }
 
   void submit(context) async {
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
-    _msgTxtBox.text = "";
+    widget.controller.text = "";
     txt = txt.replaceAll('\n', '\n\n');
     try {
       await widget.onSubmit(
@@ -64,47 +77,53 @@ class _MessageInputFieldState extends State<MessageInputField> {
             children: [
               Expanded(
                 child: TextFormField(
-                  key: GlobalKey(),
                   maxLines: 10,
-                  minLines: 1,
+                  minLines: widget.minLines,
                   keyboardType: TextInputType.multiline,
                   contextMenuBuilder: contextMenuBuilder,
-                  controller: _msgTxtBox,
+                  controller: widget.controller,
                   validator: Validate.text,
                   decoration: InputDecoration(
-                    prefixIcon: IconButton(
-                      onPressed: () async {
-                        final url = await getLocalImageOnCloud(context,
-                            fileName:
-                                "${DateTime.now().millisecondsSinceEpoch}.jpg");
-                        if (url == null) return;
-                        _msgTxtBox.text = "![image]($url)";
-                        // ignore: use_build_context_synchronously
-                        submit(context);
-                      },
-                      icon: const Icon(Icons.add_photo_alternate_outlined),
-                      color: Theme.of(context).colorScheme.primary,
-                    )
-                        .animate()
-                        .scaleXY(begin: 1.5, end: 1, duration: duration * 4)
-                        .fade(duration: duration * 4),
+                    prefixIcon: !widget.showImage
+                        ? null
+                        : IconButton(
+                            onPressed: () async {
+                              final url = await getLocalImageOnCloud(context,
+                                  fileName:
+                                      "${DateTime.now().millisecondsSinceEpoch}.jpg");
+                              if (url == null) return;
+                              widget.controller.text = "![image]($url)";
+                              // ignore: use_build_context_synchronously
+                              submit(context);
+                            },
+                            icon:
+                                const Icon(Icons.add_photo_alternate_outlined),
+                            color: Theme.of(context).colorScheme.primary,
+                          )
+                            .animate()
+                            .scaleXY(begin: 1.5, end: 1, duration: duration * 4)
+                            .fade(duration: duration * 4),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                    hintText: "Enter your message here",
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 15,
+                    ),
+                    hintText: widget.hintText,
                   ),
                   onSaved: (value) => txt = value!.trim(),
                 ).animate().fade(duration: duration * 4).then(),
               ),
-              IconButton(
-                onPressed: () => submit(context),
-                icon: const Icon(Icons.send_rounded),
-              ).animate(delay: duration * 4).fade().slideX(
-                    begin: -0.2,
-                    end: 0,
-                    duration: duration,
-                  )
+              if (widget.showSend)
+                IconButton(
+                  onPressed: () => submit(context),
+                  icon: const Icon(Icons.send_rounded),
+                ).animate(delay: duration * 4).fade().slideX(
+                      begin: -0.2,
+                      end: 0,
+                      duration: duration,
+                    )
             ],
           ),
           Container(
@@ -246,7 +265,8 @@ class _MessageInputFieldState extends State<MessageInputField> {
       BuildContext context, EditableTextState editableTextState) {
     final List<ContextMenuButtonItem> buttonItems =
         editableTextState.contextMenuButtonItems;
-    if (_msgTxtBox.selection.end - _msgTxtBox.selection.start > 0) {
+    if (widget.controller.selection.end - widget.controller.selection.start >
+        0) {
       buttonItems.addAll(
         [
           ContextMenuButtonItem(
@@ -301,23 +321,26 @@ class _MessageInputFieldState extends State<MessageInputField> {
   }
 
   void bold() {
-    if (_msgTxtBox.selection.end - _msgTxtBox.selection.start > 0) {
-      _msgTxtBox.text =
-          "${_msgTxtBox.selection.textBefore(_msgTxtBox.text)}**${_msgTxtBox.selection.textInside(_msgTxtBox.text)}**${_msgTxtBox.selection.textAfter(_msgTxtBox.text)}";
+    if (widget.controller.selection.end - widget.controller.selection.start >
+        0) {
+      widget.controller.text =
+          "${widget.controller.selection.textBefore(widget.controller.text)}**${widget.controller.selection.textInside(widget.controller.text)}**${widget.controller.selection.textAfter(widget.controller.text)}";
     }
   }
 
   void italic() {
-    if (_msgTxtBox.selection.end - _msgTxtBox.selection.start > 0) {
-      _msgTxtBox.text =
-          "${_msgTxtBox.selection.textBefore(_msgTxtBox.text)}*${_msgTxtBox.selection.textInside(_msgTxtBox.text)}*${_msgTxtBox.selection.textAfter(_msgTxtBox.text)}";
+    if (widget.controller.selection.end - widget.controller.selection.start >
+        0) {
+      widget.controller.text =
+          "${widget.controller.selection.textBefore(widget.controller.text)}*${widget.controller.selection.textInside(widget.controller.text)}*${widget.controller.selection.textAfter(widget.controller.text)}";
     }
   }
 
   void strikethrough() {
-    if (_msgTxtBox.selection.end - _msgTxtBox.selection.start > 0) {
-      _msgTxtBox.text =
-          "${_msgTxtBox.selection.textBefore(_msgTxtBox.text)}~~${_msgTxtBox.selection.textInside(_msgTxtBox.text)}~~${_msgTxtBox.selection.textAfter(_msgTxtBox.text)}";
+    if (widget.controller.selection.end - widget.controller.selection.start >
+        0) {
+      widget.controller.text =
+          "${widget.controller.selection.textBefore(widget.controller.text)}~~${widget.controller.selection.textInside(widget.controller.text)}~~${widget.controller.selection.textAfter(widget.controller.text)}";
     }
   }
 
@@ -346,23 +369,26 @@ class _MessageInputFieldState extends State<MessageInputField> {
   }
 
   void makeTitle() {
-    if (_msgTxtBox.selection.end - _msgTxtBox.selection.start > 0) {
-      _msgTxtBox.text =
-          "${_msgTxtBox.selection.textBefore(_msgTxtBox.text)}\n# ${_msgTxtBox.selection.textInside(_msgTxtBox.text)}\n${_msgTxtBox.selection.textAfter(_msgTxtBox.text)}";
+    if (widget.controller.selection.end - widget.controller.selection.start >
+        0) {
+      widget.controller.text =
+          "${widget.controller.selection.textBefore(widget.controller.text)}\n# ${widget.controller.selection.textInside(widget.controller.text)}\n${widget.controller.selection.textAfter(widget.controller.text)}";
     }
   }
 
   void quote() {
-    if (_msgTxtBox.selection.end - _msgTxtBox.selection.start > 0) {
-      _msgTxtBox.text =
-          "${_msgTxtBox.selection.textBefore(_msgTxtBox.text)}\n> ${_msgTxtBox.selection.textInside(_msgTxtBox.text)}\n${_msgTxtBox.selection.textAfter(_msgTxtBox.text)}";
+    if (widget.controller.selection.end - widget.controller.selection.start >
+        0) {
+      widget.controller.text =
+          "${widget.controller.selection.textBefore(widget.controller.text)}\n> ${widget.controller.selection.textInside(widget.controller.text)}\n${widget.controller.selection.textAfter(widget.controller.text)}";
     }
   }
 
   void codeBlock() {
-    if (_msgTxtBox.selection.end - _msgTxtBox.selection.start > 0) {
-      _msgTxtBox.text =
-          "${_msgTxtBox.selection.textBefore(_msgTxtBox.text)}```${_msgTxtBox.selection.textInside(_msgTxtBox.text)}```${_msgTxtBox.selection.textAfter(_msgTxtBox.text)}";
+    if (widget.controller.selection.end - widget.controller.selection.start >
+        0) {
+      widget.controller.text =
+          "${widget.controller.selection.textBefore(widget.controller.text)}```${widget.controller.selection.textInside(widget.controller.text)}```${widget.controller.selection.textAfter(widget.controller.text)}";
     }
   }
 
@@ -409,35 +435,35 @@ class _MessageInputFieldState extends State<MessageInputField> {
   void addLink(String url) {
     if (!url.startsWith("www.")) url = "www.$url";
     url = url.replaceAll(" ", '');
-    var cursorPos = _msgTxtBox.selection.base.offset;
+    var cursorPos = widget.controller.selection.base.offset;
     if (cursorPos == -1) {
-      _msgTxtBox.text = url;
+      widget.controller.text = url;
       return;
     }
-    String prefixText = _msgTxtBox.text.substring(0, cursorPos);
-    String suffixText = _msgTxtBox.text.substring(cursorPos);
+    String prefixText = widget.controller.text.substring(0, cursorPos);
+    String suffixText = widget.controller.text.substring(cursorPos);
     int length = url.length + 2;
-    _msgTxtBox.text = "$prefixText $url $suffixText";
+    widget.controller.text = "$prefixText $url $suffixText";
 
-    _msgTxtBox.selection = TextSelection(
+    widget.controller.selection = TextSelection(
       baseOffset: cursorPos + length,
       extentOffset: cursorPos + length,
     );
   }
 
   void addHrLine() {
-    var cursorPos = _msgTxtBox.selection.base.offset;
+    var cursorPos = widget.controller.selection.base.offset;
     if (cursorPos == -1) {
-      _msgTxtBox.text = "---\n";
+      widget.controller.text = "---\n";
       return;
     }
-    String prefixText = _msgTxtBox.text.substring(0, cursorPos);
-    String suffixText = _msgTxtBox.text.substring(cursorPos);
+    String prefixText = widget.controller.text.substring(0, cursorPos);
+    String suffixText = widget.controller.text.substring(cursorPos);
     String iCode = '\n---\n';
     int length = iCode.length;
-    _msgTxtBox.text = prefixText + iCode + suffixText;
+    widget.controller.text = prefixText + iCode + suffixText;
 
-    _msgTxtBox.selection = TextSelection(
+    widget.controller.selection = TextSelection(
       baseOffset: cursorPos + length,
       extentOffset: cursorPos + length,
     );

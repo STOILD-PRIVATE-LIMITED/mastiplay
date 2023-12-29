@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:spinner_try/shivanshu/models/momets/post.dart';
 
 class Tag {
   String tag;
@@ -30,9 +31,10 @@ class Tag {
   }
 }
 
-Future<List<Tag>> getTags() async {
+Future<List<Tag>> getTags(DateTime? start) async {
+  start ??= DateTime.utc(1997);
   final response = await http.get(
-    Uri.parse('https://api.momentslabs.in/api/tags'),
+    Uri.parse('$momentsServer/api/tags?date=${start.toIso8601String()}'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
