@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:spinner_try/screen/share_moments.dart';
+import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/momets/post.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/widgets/post_widget.dart';
@@ -22,20 +23,29 @@ class _MomentsState extends State<Moments> {
 
     return Scaffold(
       floatingActionButton: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(bottom: 100.sp),
-          child: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ShareMoments(),
-                ),
-              );
-            },
-            child: const Icon(
-              Icons.camera,
-              color: Colors.black,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 100.sp),
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditPost(
+                      post: Post(
+                        postedBy: currentUser.id!,
+                      ),
+                      onPost: (post) async {
+                        await postPost(post);
+                      },
+                    ),
+                  ),
+                );
+              },
+              child: const Icon(
+                Icons.camera,
+                color: Colors.black,
+              ),
             ),
           ),
         ),
@@ -164,7 +174,7 @@ class _MomentsState extends State<Moments> {
                       fontStyle: FontStyle.italic,
                       color: Colors.black),
                 ),
-                loader: (start) async {
+                loader: (start, lastPost) async {
                   log("$start");
                   return await getHotPosts(20, start);
                 },

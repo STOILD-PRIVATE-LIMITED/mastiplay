@@ -74,7 +74,7 @@ Future<void> postPost(Post post) async {
     },
     body: jsonEncode(post.toJson()),
   );
-  if (response.statusCode != 201) {
+  if (response.statusCode != 200) {
     throw Exception('Failed to post post');
   }
 }
@@ -127,7 +127,7 @@ Future<List<Post>> getFollowingPost(int userId, int limit, int start) async {
 
 Future<void> sharePost(String postId) async {
   try {
-    final response = await http.post(
+    final response = await http.put(
       Uri.parse('$momentsServer/api/posts/share'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
