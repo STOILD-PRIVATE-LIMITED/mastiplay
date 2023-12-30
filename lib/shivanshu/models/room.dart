@@ -15,9 +15,11 @@ class Room extends FirestoreDocument {
   late RoomType roomType;
   String name = "";
   String? imgUrl;
+  String? announcement;
 
   Room({
     this.admin,
+    this.announcement,
     this.name = "",
     required this.roomType,
     this.imgUrl,
@@ -31,6 +33,7 @@ class Room extends FirestoreDocument {
     name = data['name'] ?? name;
     imgUrl = data['imgUrl'] ?? imgUrl;
     admin = data['admin'] ?? admin;
+    announcement = data['announcement'] ?? announcement;
     roomType = RoomType.values[data['roomType'] ?? roomType.index];
     askBeforeJoining = data['askBeforeJoining'] ?? askBeforeJoining;
   }
@@ -43,6 +46,7 @@ class Room extends FirestoreDocument {
         "name": name,
         "imgUrl": imgUrl,
         "askBeforeJoining": askBeforeJoining,
+        "announcement": announcement,
         "roomType": roomType.index,
       });
   }

@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_octicons/flutter_octicons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spinner_try/chat/widgets/message_input_field.dart';
+import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/momets/post.dart';
 import 'package:spinner_try/shivanshu/models/momets/tag.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/image.dart';
+import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'package:spinner_try/shivanshu/widgets/scroll_builder.dart';
 
 class EditPost extends StatefulWidget {
@@ -32,6 +34,32 @@ class _EditPostState extends State<EditPost> {
 
   final TextEditingController _tagController = TextEditingController();
 
+  final _titleController = TextEditingController();
+
+  bool chooseUser = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController.text = widget.post.title;
+    // TODO: add a taging feature
+    // mindCotroller.addListener(() {
+    //   if (mindCotroller.text.isNotEmpty &&
+    //       mindCotroller.text.lastIndexOf('@') ==
+    //           mindCotroller.text.length - 1) {
+    //     setState(() {
+    //       chooseUser = true;
+    //     });
+    //   }
+    // });
+  }
+
+  @override
+  void dispose() {
+    mindCotroller.clear();
+    super.dispose();
+  }
+
   Future<void> submit() async {
     if (mindCotroller.text.isEmpty) {
       showMsg(context, 'Please enter some text');
@@ -39,6 +67,7 @@ class _EditPostState extends State<EditPost> {
     }
     widget.post.description = mindCotroller.text;
     widget.post.tags = chosenTags;
+    widget.post.title = _titleController.text;
     widget.post.imgUrl = await uploadImage(context, img, "posts",
         "${DateTime.now()}${Random().nextInt(100000)}.jpg");
     try {
@@ -133,23 +162,23 @@ class _EditPostState extends State<EditPost> {
                   // )
                 ],
               ),
-              TextField(
-                controller: TextEditingController(text: widget.post.title),
-                onChanged: (value) {
-                  widget.post.title = value.trim();
-                },
-                decoration: InputDecoration(
-                  prefixText: "#",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 15,
-                  ),
-                  hintText: "Title",
-                ),
-              ),
+              // TextField(
+              //   controller: _titleController,
+              //   onChanged: (value) {
+              //     widget.post.title = value.trim();
+              //   },
+              //   decoration: InputDecoration(
+              //     prefixText: "#",
+              //     border: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(25),
+              //     ),
+              //     contentPadding: const EdgeInsets.symmetric(
+              //       horizontal: 15,
+              //       vertical: 15,
+              //     ),
+              //     hintText: "Title",
+              //   ),
+              // ),
               SizedBox(height: height / 50),
               InkWell(
                 onTap: () async {
@@ -195,6 +224,25 @@ class _EditPostState extends State<EditPost> {
                 ),
               ),
               SizedBox(height: height / 50),
+              if (chooseUser)
+                Container(
+                  // padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.grey[200],
+                  ),
+                  child: ListTile(
+                    leading: SizedBox(
+                      height: 40,
+                      width: 40,
+                      child: ProfileImage(user: currentUser),
+                    ),
+                    title: Text(
+                      'Shivanshu Gupta',
+                      style: textTheme(context).bodyMedium,
+                    ),
+                  ),
+                ),
               MessageInputField(
                 minLines: 5,
                 hintText: "What is on your mind?",
@@ -343,12 +391,16 @@ class _EditPostState extends State<EditPost> {
                 controller: _tagController,
                 onChanged: (value) {
                   value = value.trim();
-                  value.replaceAll(' ', '');
-                  value.replaceAll('#', '');
-                  _tagController.text = value;
+                  value = value.replaceAll(' ', '');
+                  value = value.replaceAll('#', '');
+                  // _tagController.text = value;
                   searchValue = value;
                 },
                 onEditingComplete: () {
+                  _tagController.text = _tagController.text.trim();
+                  _tagController.text = _tagController.text.replaceAll(' ', '');
+                  _tagController.text = _tagController.text.replaceAll('#', '');
+                  searchValue = _tagController.text;
                   setState(() {
                     showAddButton = false;
                   });

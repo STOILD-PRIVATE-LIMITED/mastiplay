@@ -178,7 +178,7 @@ class MyColumn extends StatelessWidget {
 }
 
 Future<String?> promptUser(BuildContext context,
-    {String? question, String? description}) async {
+    {String? question, String? defaultAns, String? description}) async {
   String? ans;
   List<Widget> buttons = [
     TextButton.icon(
@@ -206,6 +206,7 @@ Future<String?> promptUser(BuildContext context,
           ],
         ),
         content: TextFormField(
+          initialValue: defaultAns,
           onChanged: (value) => ans = value,
           decoration: InputDecoration(
             hintText: 'Enter your input here',
@@ -526,8 +527,7 @@ Future<void> shareRoomLink(String roomID) async {
   return shareLink(
     "https://mastiplay.com/room/?id=$roomID",
     true
-        ? 
-        roomID
+        ? roomID
         : "Join my room at Masti Play. Click on the below link to join. Or enter room id: $roomID manually",
   );
 }
