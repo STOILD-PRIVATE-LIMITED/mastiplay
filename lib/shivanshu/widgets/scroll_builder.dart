@@ -159,13 +159,13 @@ class ScrollBuilder2<T> extends StatefulWidget {
     required this.itemBuilder,
     this.separatorBuilder,
     this.loadingMargin = 1000,
-    this.footer,
+    this.lastItem,
   });
   final double loadingMargin;
   final Future<List<T>> Function(int start, T? lastItem) loader;
   final Widget Function(BuildContext context, T item) itemBuilder;
   final Widget Function(BuildContext context, int index)? separatorBuilder;
-  final Widget? footer;
+  final Widget? lastItem;
 
   @override
   State<ScrollBuilder2> createState() => _ScrollBuilder2State<T>();
@@ -243,7 +243,7 @@ class _ScrollBuilder2State<T> extends State<ScrollBuilder2<T>> {
             );
           }
           if (finished) {
-            return widget.footer ?? Container();
+            return widget.lastItem ?? Container();
           }
           return FutureBuilder(
               future: fetchData(),

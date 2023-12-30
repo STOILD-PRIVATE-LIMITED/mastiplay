@@ -94,7 +94,7 @@ Future<List<Post>> getHotPosts(int limit, int startPostId) async {
   }
 }
 
-Future<List<Post>> getRecentPost(int limit, int? startPostId) async {
+Future<List<Post>> getRecentPost(int limit, int startPostId) async {
   final response = await http.get(
     Uri.parse('$momentsServer/api/recent?limit=$limit&start=$startPostId'),
     headers: <String, String>{
@@ -139,6 +139,24 @@ Future<void> sharePost(String postId) async {
     }
   } catch (e) {
     log("Failed to share post: $e");
+  }
+}
+
+Future<List<Post>> searchPost(
+    String? userId, List<String> tags, int limit, int start) async {
+  final response = await http.post(
+    Uri.parse('$momentsServer/api/search-with-tags'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(
+        {"userId": userId, "tags": tags, "limit": limit, "start": start}),
+  );
+  if (response.statusCode == 200) {
+    final List<dynamic> posts = json.decode(response.body);
+    return posts.map((e) => Post.fromJson(e)).toList();
+  } else {
+    throw Exception('Failed to load posts');
   }
 }
 

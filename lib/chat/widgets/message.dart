@@ -144,7 +144,7 @@ class Message extends StatelessWidget {
                                 if (href != null) launchUrl(Uri.parse(href));
                               },
                               imageBuilder: (uri, title, alt) =>
-                                  imageBuilder(uri, msg.id),
+                                  ImageBuilder(uri: uri, id: msg.id),
                             )
                           else
                             Row(
@@ -224,7 +224,7 @@ class Message extends StatelessWidget {
       navigatorPush(
         context,
         ImagePreview(
-            image: imageBuilder(Uri.parse(url), msg.id),
+            image: ImageBuilder(uri: Uri.parse(url), id: msg.id),
             delete: (msg.from == auth.currentUser!.email) ? delMsg : null,
             copy: copyMsg,
             info: (context) => showInfo(context, msg)),
@@ -246,8 +246,8 @@ class Message extends StatelessWidget {
               children: [
                 MarkdownBody(
                   data: msg.txt,
-                  imageBuilder: (uri, title, alt) =>
-                      imageBuilder(uri, msg.id, title: title, alt: alt),
+                  imageBuilder: (uri, title, alt) => ImageBuilder(
+                      uri: uri, id: msg.id, title: title, alt: alt),
                 ),
                 const Divider(),
                 Align(
@@ -418,37 +418,6 @@ class Message extends StatelessWidget {
     );
   }
 
-  Widget imageBuilder(Uri uri, String id, {String? title, String? alt}) {
-    return Hero(
-      tag: id,
-      child: CachedNetworkImage(
-        fadeInCurve: Curves.decelerate,
-        fadeOutDuration: const Duration(milliseconds: 0),
-        imageUrl: uri.toString(),
-        progressIndicatorBuilder: (context, url, progress) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  value: progress.progress,
-                ),
-              ),
-            ),
-          );
-        },
-        errorWidget: (context, url, error) {
-          return const Icon(
-            Icons.image_not_supported_rounded,
-            color: Colors.red,
-          );
-        },
-      ),
-    );
-  }
-
   Future<void> delMsg(BuildContext context) async {
     final String? res = await askUser(
       context,
@@ -508,5 +477,51 @@ class Message extends StatelessWidget {
       Navigator.of(context).pop();
       showMsg(context, "Copied");
     }
+  }
+}
+
+class ImageBuilder extends StatelessWidget {
+  final Uri uri;
+  final String id;
+  final String? title;
+  final String? alt;
+  const ImageBuilder({
+    super.key,
+    required this.uri,
+    required this.id,
+    this.title,
+    this.alt,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Hero(
+      tag: id,
+      child: CachedNetworkImage(
+        fadeInCurve: Curves.decelerate,
+        fadeOutDuration: const Duration(milliseconds: 0),
+        imageUrl: uri.toString(),
+        progressIndicatorBuilder: (context, url, progress) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  value: progress.progress,
+                ),
+              ),
+            ),
+          );
+        },
+        errorWidget: (context, url, error) {
+          return const Icon(
+            Icons.image_not_supported_rounded,
+            color: Colors.red,
+          );
+        },
+      ),
+    );
   }
 }

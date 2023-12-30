@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_octicons/flutter_octicons.dart';
+import 'package:spinner_try/chat/screens/image_preview.dart';
+import 'package:spinner_try/chat/widgets/message.dart';
+import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/momets/post.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/loading_icon_button.dart';
 import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'package:spinner_try/user_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PostWidget extends StatelessWidget {
   final Post post;
@@ -25,16 +30,15 @@ class PostWidget extends StatelessWidget {
                   Expanded(
                     child: Row(
                       children: [
-                        SizedBox(
-                          height: 56,
-                          width: 56,
-                          child: (snapshot.connectionState ==
-                                  ConnectionState.waiting)
-                              ? const CircularProgressIndicatorRainbow()
-                              : snapshot.hasError || !snapshot.hasData
-                                  ? const Icon(Icons.error, color: Colors.red)
-                                  : ProfileImage(user: snapshot.data!),
-                        ),
+                        (snapshot.connectionState == ConnectionState.waiting)
+                            ? const CircularProgressIndicatorRainbow()
+                            : SizedBox(
+                                height: 56,
+                                width: 56,
+                                child: snapshot.hasError || !snapshot.hasData
+                                    ? const Icon(Icons.error, color: Colors.red)
+                                    : ProfileImage(user: snapshot.data!),
+                              ),
                         SizedBox(
                           width: width / 30,
                         ),
@@ -44,7 +48,9 @@ class PostWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                post.title,
+                                post.title.isNotEmpty
+                                    ? post.title
+                                    : (user?.name ?? "Error"),
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontSize: height / 45, color: Colors.black),
@@ -63,7 +69,7 @@ class PostWidget extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (user != null)
+                      if (user != null && user.id! != currentUser.id)
                         OutlinedButton.icon(
                           onPressed: () async {
                             await followUser(user.id!);
@@ -122,26 +128,50 @@ class PostWidget extends StatelessWidget {
             // ),
             ),
         if (post.imgUrl != null)
-          Container(
-            height: height / 2.8,
-            width: width,
-            // alignment: Alignment.center,
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: const Color(0xFFE2FBF5),
-            ),
-            child: Image.network(
-              post.imgUrl!,
-              fit: BoxFit.cover,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ImagePreview(
+                    image: Hero(
+                      tag: post.postId.toString(),
+                      child: Image.network(
+                        post.imgUrl!,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+            child: Container(
+              height: height / 2.8,
+              width: width,
+              // alignment: Alignment.center,
+              clipBehavior: Clip.hardEdge,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: const Color(0xFFE2FBF5),
+              ),
+              child: Hero(
+                tag: post.postId.toString(),
+                child: Image.network(
+                  post.imgUrl!,
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
           ),
-        SizedBox(
-          height: height / 40,
-        ),
-        Text(post.description),
-        SizedBox(
-          height: height / 40,
+        const SizedBox(height: 15),
+        MarkdownBody(
+          fitContent: true,
+          data: post.description,
+          selectable: true,
+          onTapLink: (text, href, title) {
+            if (href != null) launchUrl(Uri.parse(href));
+          },
+          imageBuilder: (uri, title, alt) =>
+              ImageBuilder(uri: uri, id: post.postId),
         ),
         // Align(
         //   alignment: Alignment.centerLeft,
@@ -172,9 +202,9 @@ class PostWidget extends StatelessWidget {
         //     ),
         //   ),
         // ),
-        SizedBox(
-          height: height / 40,
-        ),
+        // SizedBox(
+        //   height: height / 40,
+        // ),
         Row(
           children: [
             TextButton.icon(

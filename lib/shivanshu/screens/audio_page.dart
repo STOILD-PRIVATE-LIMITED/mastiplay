@@ -3,15 +3,17 @@
 // import 'package:emoji_keyboard_flutter/emoji_keyboard_flutter.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 // import 'package:flutter/foundation.dart' as foundation;
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/shivanshu/utils/loading_icon_button.dart';
 import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/audio_room.dart';
 import 'package:spinner_try/webRTC/live_chat_widget.dart';
 import 'package:video_player/video_player.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 class AudioPage extends StatefulWidget {
   final Room room;
@@ -174,6 +176,19 @@ class _AudioPageState extends State<AudioPage> {
                 ),
               ),
               actions: [
+                if (currentUser.id == widget.room.admin)
+                  LoadingIconButton(
+                    onPressed: () async {
+                      final announcement = await promptUser(context,
+                          question: "What to announce?",
+                          defaultAns: widget.room.announcement);
+                      if (announcement != null) {
+                        widget.room.announcement = announcement;
+                        await widget.room.update();
+                      }
+                    },
+                    icon: const Icon(Icons.announcement_rounded),
+                  ),
                 IconButton(
                   onPressed: () {
                     showAlertDialog(context);

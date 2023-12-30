@@ -16,6 +16,7 @@ class Moments extends StatefulWidget {
 }
 
 class _MomentsState extends State<Moments> {
+  bool recent = false;
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -120,21 +121,29 @@ class _MomentsState extends State<Moments> {
                 Container(
                   height: height / 20,
                   width: width / 3,
+                  clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
-                    color: const Color(0xFFE05DD3),
+                    color: Color(recent ? 0xFFE7E4E0 : 0xFFE05DD3),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '🔥Hot',
-                        style: TextStyle(
-                            fontSize: height / 45,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                      ),
-                    ],
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        recent = false;
+                      });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '🔥Hot',
+                          style: TextStyle(
+                              fontSize: height / 45,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -143,21 +152,29 @@ class _MomentsState extends State<Moments> {
                 Container(
                   height: height / 20,
                   width: width / 3,
+                  clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
-                    color: const Color(0xFFE7E4E0),
+                    color: Color(!recent ? 0xFFE7E4E0 : 0xFFE05DD3),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '⌛Recent',
-                        style: TextStyle(
-                            fontSize: height / 45,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                      ),
-                    ],
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        recent = true;
+                      });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '⌛Recent',
+                          style: TextStyle(
+                              fontSize: height / 45,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -167,7 +184,8 @@ class _MomentsState extends State<Moments> {
             ),
             Expanded(
               child: ScrollBuilder2<Post>(
-                footer: Text(
+                key: ValueKey("ScrollBuilder2$recent"),
+                lastItem: Text(
                   'No More Posts Left for You 😢',
                   style: TextStyle(
                       fontSize: height / 40,
@@ -176,7 +194,14 @@ class _MomentsState extends State<Moments> {
                 ),
                 loader: (start, lastPost) async {
                   log("$start");
-                  return await getHotPosts(20, start);
+                  if (recent) {
+                    return await getRecentPost(20, start);
+                  } else {
+                    return await getHotPosts(20, start);
+                  }
+                },
+                separatorBuilder: (context, index) {
+                  return const Divider();
                 },
                 itemBuilder: (context, item) {
                   // return Text(item.title);
