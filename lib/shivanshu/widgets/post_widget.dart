@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:flutter_octicons/flutter_octicons.dart';
 import 'package:spinner_try/chat/screens/image_preview.dart';
 import 'package:spinner_try/chat/widgets/message.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/momets/post.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/shivanshu/utils/loading_elevated_button.dart';
 import 'package:spinner_try/shivanshu/utils/loading_icon_button.dart';
 import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'package:spinner_try/user_model.dart';
@@ -207,24 +207,50 @@ class PostWidget extends StatelessWidget {
         // ),
         Row(
           children: [
-            TextButton.icon(
-              icon: const Icon(OctIcons.thumbsup_16),
-              label: const Text("1.5k"),
-              onPressed: () {},
+            LoadingElevatedButton(
+              style: TextButton.styleFrom(
+                elevation: 0,
+              ),
+              icon: const Icon(Icons.comment),
+              label: Text(post.commentsCount.toString()),
+              onPressed: () async {
+                final comment = await promptUser(
+                  context,
+                  question: "Comment",
+                );
+                if (comment != null) {
+                  await commentPost(post, comment);
+                  post.commentsCount++;
+                }
+              },
             ),
+            // TextButton.icon(
+            //   icon: const Icon(OctIcons.thumbsup_16),
+            //   label: Text(post.likesCount.toString()),
+            //   onPressed: () {},
+            // ),
             SizedBox(
               width: width / 40,
             ),
             const SizedBox(
               width: 10,
             ),
-            TextButton.icon(
+            LoadingElevatedButton(
+              style: TextButton.styleFrom(
+                elevation: 0,
+              ),
               icon: const Icon(Icons.comment),
-              label: const Text("1.5k"),
-              onPressed: () {},
-            ),
-            SizedBox(
-              width: width / 40,
+              label: Text(post.commentsCount.toString()),
+              onPressed: () async {
+                final comment = await promptUser(
+                  context,
+                  question: "Comment",
+                );
+                if (comment != null) {
+                  await commentPost(post, comment);
+                  post.commentsCount++;
+                }
+              },
             ),
             SizedBox(
               width: width / 40,
