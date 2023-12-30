@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
+import 'package:spinner_try/shivanshu/models/globals.dart';
 
 const String momentsServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
 
@@ -13,6 +14,8 @@ class Post {
   String? imgUrl;
   List<String> tags = [];
   int sharedCount = 0;
+  int commentsCount = 0;
+  int likesCount = 0;
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
   Post({
@@ -23,6 +26,8 @@ class Post {
     this.imgUrl,
     this.tags = const [],
     this.sharedCount = 0,
+    this.commentsCount = 0,
+    this.likesCount = 0,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -42,7 +47,9 @@ class Post {
       postedBy: json['postedBy'] as String,
       imgUrl: json['imgUrl'] as String?,
       tags: (json['tags'] as List<dynamic>).cast(),
-      sharedCount: json['sharedCount'] as int,
+      sharedCount: json['sharedCount'] ?? 0,
+      commentsCount: json['commentsCount'] ?? 0,
+      likesCount: json['likesCount'] ?? 0,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
@@ -56,7 +63,6 @@ class Post {
       'postedBy': postedBy,
       'imgUrl': imgUrl,
       'tags': tags,
-      'sharedCount': sharedCount,
     };
   }
 
@@ -157,6 +163,27 @@ Future<List<Post>> searchPost(
     return posts.map((e) => Post.fromJson(e)).toList();
   } else {
     throw Exception('Failed to load posts');
+  }
+}
+
+Future<void> commentPost(Post post, String comment) async {
+  try {
+    final response = await http.put(
+      Uri.parse('$momentsServer/api/comment'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        "postId": post.postId,
+        "comment": comment,
+        'userId': currentUser.id,
+      }),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to comment post');
+    }
+  } catch (e) {
+    log("Failed to comment post: $e");
   }
 }
 

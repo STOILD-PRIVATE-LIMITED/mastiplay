@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/wallet/agent_screen.dart';
 import 'package:spinner_try/shivanshu/wallet/beans_history_screen.dart';
@@ -69,7 +70,7 @@ class WalletScreen extends StatelessWidget {
                           trailing:
                               const Icon(Icons.keyboard_arrow_right_rounded),
                           title: const Text('Diamonds'),
-                          subtitle: const Text("8000"),
+                          subtitle: Text(currentUser.diamonds.toString()),
                           leading: Image.asset(
                             'assets/diamond.png',
                             height: 14,
@@ -102,7 +103,7 @@ class WalletScreen extends StatelessWidget {
                               fit: BoxFit.scaleDown,
                               alignment: Alignment.centerLeft,
                               child: Text('Beans')),
-                          subtitle: const Text("8000"),
+                          subtitle: Text(currentUser.beans.toString()),
                           leading: Image.asset(
                             'assets/bean.png',
                             height: 20,
@@ -154,7 +155,7 @@ class WalletScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: DiamondText(
-                          txt: '8000',
+                          txt: currentUser.diamonds.toString(),
                           size: 37,
                           textStyle: textTheme(context).titleLarge!.copyWith(
                                 fontSize: 37,

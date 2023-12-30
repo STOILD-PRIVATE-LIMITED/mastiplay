@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     final snapshot =
         await db.collection("users").where("email", isEqualTo: email).get();
     users =
-        snapshot.docs.map<UserModel>((e) => UserModel.fromSnapahot(e)).toList();
+        snapshot.docs.map<UserModel>((e) => UserModel.fromSnapshot(e)).toList();
     name = users[0].name;
     nameController.text = name;
     userGender = users[0].gender;

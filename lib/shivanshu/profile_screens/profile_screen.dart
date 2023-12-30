@@ -73,16 +73,16 @@ class ProfileScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       InkWell(
-                        child: const MyColumn(
+                        child: MyColumn(
                           children: [
                             Text(
-                              '9889',
-                              style: TextStyle(
+                              currentUser.followers.toString(),
+                              style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Text(
+                            const Text(
                               'Followers',
                               style: TextStyle(
                                 fontSize: 12,
@@ -96,16 +96,16 @@ class ProfileScreen extends StatelessWidget {
                         },
                       ),
                       InkWell(
-                        child: const MyColumn(
+                        child: MyColumn(
                           children: [
                             Text(
-                              '9889',
-                              style: TextStyle(
+                              currentUser.following.toString(),
+                              style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Text(
+                            const Text(
                               'Following',
                               style: TextStyle(
                                 fontSize: 12,
@@ -119,16 +119,16 @@ class ProfileScreen extends StatelessWidget {
                         },
                       ),
                       InkWell(
-                        child: const MyColumn(
+                        child: MyColumn(
                           children: [
                             Text(
-                              '7',
-                              style: TextStyle(
+                              currentUser.friends.toString(),
+                              style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Text(
+                            const Text(
                               'Friends',
                               style: TextStyle(
                                 fontSize: 12,
@@ -141,29 +141,29 @@ class ProfileScreen extends StatelessWidget {
                           showMsg(context, "Hehe");
                         },
                       ),
-                      InkWell(
-                        child: const MyColumn(
-                          children: [
-                            Text(
-                              '9889',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'Channel',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black26,
-                              ),
-                            ),
-                          ],
-                        ),
-                        onTap: () {
-                          showMsg(context, "Hehe");
-                        },
-                      ),
+                      // InkWell(
+                      //   child: const MyColumn(
+                      //     children: [
+                      //       Text(
+                      //         '9889',
+                      //         style: TextStyle(
+                      //           fontSize: 12,
+                      //           fontWeight: FontWeight.bold,
+                      //         ),
+                      //       ),
+                      //       Text(
+                      //         'Channel',
+                      //         style: TextStyle(
+                      //           fontSize: 12,
+                      //           color: Colors.black26,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      //   onTap: () {
+                      //     showMsg(context, "Hehe");
+                      //   },
+                      // ),
                     ],
                   ),
                 ],
