@@ -3,6 +3,8 @@
 // import 'package:emoji_keyboard_flutter/emoji_keyboard_flutter.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 // import 'package:flutter/foundation.dart' as foundation;
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
@@ -176,18 +178,23 @@ class _AudioPageState extends State<AudioPage> {
                 ),
               ),
               actions: [
-                if (currentUser.id == widget.room.admin)
+                if (currentUser.email == widget.room.admin)
                   LoadingIconButton(
                     onPressed: () async {
                       final announcement = await promptUser(context,
                           question: "What to announce?",
                           defaultAns: widget.room.announcement);
-                      if (announcement != null) {
+                      if (announcement != widget.room.announcement) {
                         widget.room.announcement = announcement;
                         await widget.room.update();
+                      } else {
+                        log("Nothing Changed");
                       }
                     },
-                    icon: const Icon(Icons.announcement_rounded),
+                    icon: const Icon(
+                      Icons.announcement_rounded,
+                      color: Colors.white,
+                    ),
                   ),
                 IconButton(
                   onPressed: () {

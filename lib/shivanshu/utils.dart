@@ -179,7 +179,7 @@ class MyColumn extends StatelessWidget {
 
 Future<String?> promptUser(BuildContext context,
     {String? question, String? defaultAns, String? description}) async {
-  String? ans;
+  String? ans = defaultAns;
   List<Widget> buttons = [
     TextButton.icon(
       label: const Text("Submit"),
