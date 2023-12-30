@@ -143,7 +143,7 @@ Future<void> sharePost(String postId) async {
 }
 
 Future<List<Post>> searchPost(
-    String? userId, List<String> tags, int limit, int start) async {
+    String? userId, List<String>? tags, int limit, int start) async {
   final response = await http.post(
     Uri.parse('$momentsServer/api/search-with-tags'),
     headers: <String, String>{

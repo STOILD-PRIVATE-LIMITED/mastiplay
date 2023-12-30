@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:spinner_try/screen/about.dart';
-import 'package:spinner_try/screen/acc_info.dart';
 import 'package:spinner_try/screen/agency_center.dart';
 import 'package:spinner_try/screen/agent.dart';
 import 'package:spinner_try/screen/creator_page.dart';
 import 'package:spinner_try/screen/help_form.dart';
 import 'package:spinner_try/screen/inv_friends.dart';
 import 'package:spinner_try/screen/nobel_center.dart';
+import 'package:spinner_try/screen/profile_edit.dart';
 import 'package:spinner_try/screen/setting.dart';
 import 'package:spinner_try/screen/store.dart';
+import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/profile_screens/family_screen.dart';
-import 'package:spinner_try/shivanshu/screens/moments.dart';
+import 'package:spinner_try/shivanshu/screens/my_posts.dart';
 import 'package:spinner_try/shivanshu/screens/wallet_screen.dart';
 import 'package:spinner_try/shivanshu/user_level/user_level_page.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -28,26 +30,28 @@ class ProfileScreen extends StatelessWidget {
               MyColumn(
                 children: [
                   ListTile(
+                    contentPadding:
+                        const EdgeInsets.only(top: 10, left: 10, right: 10),
                     leading: Container(
                       width: 50.sp,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                       ),
                       clipBehavior: Clip.hardEdge,
-                      child: Image.asset('assets/dummy_person.png'),
+                      child: ProfileImage(user: currentUser),
                     ),
-                    title: const Text(
-                      '🔥nikku jaaf...',
-                      style: TextStyle(
+                    title: Text(
+                      currentUser.name,
+                      style: const TextStyle(
                         fontSize: 20,
                         // color: Colors.black26,
                       ),
                     ),
                     subtitle: MyRow(
                       children: [
-                        const Text(
-                          'ID 1222333454345',
-                          style: TextStyle(
+                        Text(
+                          'ID ${currentUser.id}',
+                          style: const TextStyle(
                             fontSize: 12,
                             color: Colors.black26,
                           ),
@@ -55,14 +59,14 @@ class ProfileScreen extends StatelessWidget {
                         InkWell(
                           child: const Icon(Icons.share_rounded, size: 10),
                           onTap: () {
-                            showMsg(context, 'Share');
+                            shareLink("mastiplay.com/users/${currentUser.id}");
                           },
                         ),
                       ],
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_rounded),
                     onTap: () {
-                      showMsg(context, "Hehe");
+                      navigatorPush(context, const ProfileEdit());
                     },
                   ),
                   Row(
@@ -289,7 +293,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      navigatorPush(context, const Moments());
+                      navigatorPush(context, const MyPosts());
                     },
                     child: MyColumn(
                       children: [
@@ -300,7 +304,8 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      navigatorPush(context, const AccountInformation());
+                      // navigatorPush(context, const AccountInformation());
+                      navigatorPush(context, const ProfileEdit());
                     },
                     child: const MyColumn(
                       children: [
@@ -313,9 +318,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap: () {
-                      // navigatorPush(context, );
-                    },
+                    onTap: () {},
                     child: MyColumn(
                       children: [
                         Image.asset("assets/star.png"),
