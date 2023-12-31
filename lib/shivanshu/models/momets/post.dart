@@ -160,15 +160,18 @@ Future<void> sharePost(String postId) async {
   }
 }
 
-Future<List<Post>> searchPost(
-    String? userId, List<String>? tags, int limit, int start) async {
+Future<List<Post>> searchPost(List<String>? tags, int limit, int start) async {
   final response = await http.post(
-    Uri.parse('$momentsServer/api/search-with-tags'),
+    Uri.parse('$momentsServer/api/search-with-tags?userId=${currentUser.id}'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(
-        {"userId": userId, "tags": tags, "limit": limit, "start": start}),
+    body: jsonEncode({
+      "userId": currentUser.id,
+      "tags": tags,
+      "limit": limit,
+      "start": start
+    }),
   );
   if (response.statusCode == 200) {
     final List<dynamic> posts = json.decode(response.body);

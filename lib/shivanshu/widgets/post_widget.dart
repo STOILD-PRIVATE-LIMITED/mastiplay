@@ -272,6 +272,7 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               label: Text(widget.post.commentsCount.toString()),
               onPressed: () async {
+                if (widget.post.hasCommented) return;
                 final comment = await promptUser(
                   context,
                   question: "Comment",
@@ -279,6 +280,7 @@ class _PostWidgetState extends State<PostWidget> {
                 if (comment != null) {
                   await commentPost(widget.post, comment);
                   setState(() {
+                    widget.post.hasCommented = true;
                     widget.post.commentsCount++;
                   });
                 }

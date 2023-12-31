@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/momets/post.dart';
 import 'package:spinner_try/shivanshu/screens/family_room_page.dart';
 import 'package:spinner_try/shivanshu/widgets/post_widget.dart';
@@ -19,7 +18,7 @@ class SearchedPosts extends StatelessWidget {
         padding: const EdgeInsets.all(15.0),
         child: ScrollBuilder2(
           loader: (start, lastItem) async {
-            return await searchPost(currentUser.id, chosenTags, 20, start);
+            return await searchPost(chosenTags, 20, start);
           },
           itemBuilder: (context, post) {
             return PostWidget(

@@ -16,6 +16,7 @@ import 'package:spinner_try/shivanshu/screens/wallet_screen.dart';
 import 'package:spinner_try/shivanshu/user_level/user_level_page.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/profile_image.dart';
+import 'package:spinner_try/user_model.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -29,46 +30,54 @@ class ProfileScreen extends StatelessWidget {
             children: [
               MyColumn(
                 children: [
-                  ListTile(
-                    contentPadding:
-                        const EdgeInsets.only(top: 10, left: 10, right: 10),
-                    leading: Container(
-                      width: 50.sp,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      clipBehavior: Clip.hardEdge,
-                      child: ProfileImage(user: currentUser),
-                    ),
-                    title: Text(
-                      currentUser.name,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        // color: Colors.black26,
-                      ),
-                    ),
-                    subtitle: MyRow(
-                      children: [
-                        Text(
-                          'ID ${currentUser.id}',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.black26,
+                  FutureBuilder(
+                      future: fetchUserWithId(currentUser.id!),
+                      builder: (context, snapshot) {
+                        currentUser = snapshot.data ?? currentUser;
+                        return ListTile(
+                          contentPadding: const EdgeInsets.only(
+                              top: 10, left: 10, right: 10),
+                          leading: Container(
+                            width: 50.sp,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            clipBehavior: Clip.hardEdge,
+                            child: ProfileImage(user: currentUser),
                           ),
-                        ),
-                        InkWell(
-                          child: const Icon(Icons.share_rounded, size: 10),
+                          title: Text(
+                            currentUser.name,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              // color: Colors.black26,
+                            ),
+                          ),
+                          subtitle: MyRow(
+                            children: [
+                              Text(
+                                'ID ${currentUser.id}',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black26,
+                                ),
+                              ),
+                              InkWell(
+                                child:
+                                    const Icon(Icons.share_rounded, size: 10),
+                                onTap: () {
+                                  shareLink(
+                                      "mastiplay.com/users/${currentUser.id}");
+                                },
+                              ),
+                            ],
+                          ),
+                          trailing:
+                              const Icon(Icons.keyboard_arrow_right_rounded),
                           onTap: () {
-                            shareLink("mastiplay.com/users/${currentUser.id}");
+                            navigatorPush(context, const ProfileEdit());
                           },
-                        ),
-                      ],
-                    ),
-                    trailing: const Icon(Icons.keyboard_arrow_right_rounded),
-                    onTap: () {
-                      navigatorPush(context, const ProfileEdit());
-                    },
-                  ),
+                        );
+                      }),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
