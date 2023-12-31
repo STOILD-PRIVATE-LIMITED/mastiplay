@@ -4,7 +4,6 @@
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 // import 'package:flutter/foundation.dart' as foundation;
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
@@ -35,6 +34,9 @@ class _AudioPageState extends State<AudioPage> {
   }
 
   late VideoPlayerController _controllerr;
+
+  final controllerr = PageController(initialPage: 0);
+
   List<Widget> items = [];
   itemss() {
     items = [
@@ -48,15 +50,13 @@ class _AudioPageState extends State<AudioPage> {
   @override
   void initState() {
     super.initState();
+    itemss();
+    autoScroll(2000);
     _controllerr = VideoPlayerController.asset('assets/videoo.mp4')
       ..initialize().then((_) {
         setState(() {});
       });
-
-    //  autoScroll(2000);
   }
-
-  final controllerr = PageController();
 
   // final WebRtcController controller = WebRtcController(
   //   audio: true,
@@ -324,47 +324,47 @@ class _AudioPageState extends State<AudioPage> {
                 ),
               ),
             ),
-            // floatingActionButton: Container(
-            //   height: 125.sp,
-            //   width: 125.sp,
-            //   decoration: BoxDecoration(
-            //     color: Colors.green[100],
-            //     border: Border.all(
-            //       color: Colors.green,
-            //       width: 2,
-            //     ),
-            //     borderRadius: BorderRadius.circular(10),
-            //   ),
-            //   child: Stack(
-            //     alignment: Alignment.bottomCenter,
-            //     children: [
-            //       PageView(
-            //         controller: controllerr,
-            //         children: items,
-            //       ),
-            //       Positioned(
-            //         bottom: 10,
-            //         child: SmoothPageIndicator(
-            //           controller: controllerr,
-            //           count: items.length,
-            //           effect: const ExpandingDotsEffect(
-            //             dotHeight: 10,
-            //             dotWidth: 10,
-            //             dotColor: Colors.grey,
-            //             activeDotColor: Colors.white,
-            //           ),
-            //           onDotClicked: (index) {
-            //             controllerr.animateToPage(
-            //               index,
-            //               duration: const Duration(milliseconds: 800),
-            //               curve: Curves.fastOutSlowIn,
-            //             );
-            //           },
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
+            floatingActionButton: Container(
+              height: 125.sp,
+              width: 125.sp,
+              decoration: BoxDecoration(
+                color: Colors.green[100],
+                border: Border.all(
+                  color: Colors.green,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  PageView(
+                    controller: controllerr,
+                    children: items,
+                  ),
+                  Positioned(
+                    bottom: 10,
+                    child: SmoothPageIndicator(
+                      controller: controllerr,
+                      count: items.length,
+                      effect: const ExpandingDotsEffect(
+                        dotHeight: 10,
+                        dotWidth: 10,
+                        dotColor: Colors.grey,
+                        activeDotColor: Colors.white,
+                      ),
+                      onDotClicked: (index) {
+                        controllerr.animateToPage(
+                          index,
+                          duration: const Duration(milliseconds: 800),
+                          curve: Curves.fastOutSlowIn,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
             bottomNavigationBar: Card(
               color: Colors.black26,
               child: Row(
@@ -508,6 +508,18 @@ class _AudioPageState extends State<AudioPage> {
       ),
     );
   }
+
+  void autoScroll([int delayMilliseconds = 2000]) {
+    Future.delayed(Duration(milliseconds: delayMilliseconds)).then((value) {
+      int nextPage = ((controllerr.page!.round() + 1) % items.length).toInt();
+      controllerr.animateToPage(
+        nextPage,
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.fastOutSlowIn,
+      );
+      autoScroll(delayMilliseconds);
+    });
+  }
 }
 
 class AudioUserTile extends StatefulWidget {
@@ -602,17 +614,6 @@ void showAlertDialog(BuildContext context) {
       );
     },
   );
-  // void autoScroll([int delayMilliseconds = 2000]) {
-  //   Future.delayed(Duration(milliseconds: delayMilliseconds)).then((value) {
-  //     int nextPage = ((controller.page!.round() + 1) % items.length).toInt();
-  //     controller.animateToPage(
-  //       nextPage,
-  //       duration: const Duration(milliseconds: 800),
-  //       curve: Curves.fastOutSlowIn,
-  //     );
-  //     autoScroll(delayMilliseconds);
-  //   });
-  // }
 }
   // CircleAvatar(
                 //   radius: 15,
