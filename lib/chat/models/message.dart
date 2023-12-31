@@ -131,7 +131,7 @@ Future<void> deleteMessage(ChatData chat, MessageData msg) async {
 }
 
 Future<List<MessageData>> fetchMessages(
-    String chatID, String? start, int limit) async {
+    String chatID, String? start, int? limit) async {
   final response = await http.get(Uri.parse(
       '$chatServer/messages/$chatID?${start != null ? "start=$start&" : ""}limit=$limit'));
   if (response.statusCode == 200) {

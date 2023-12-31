@@ -57,7 +57,7 @@ class _MessageListState extends State<MessageList> {
           ? () async {
               return widget.chat.messages;
             }()
-          : fetchMessages(widget.chat.id, null, 10),
+          : fetchMessages(widget.chat.id, null, null),
       builder: (context, snapshot) {
         log("Message list was rebuilt");
         if (snapshot.connectionState == ConnectionState.waiting) {
