@@ -1,6 +1,6 @@
 # spinner_try
 
-A new Flutter project.
+A new Flutter project. Mastiplay
 
 ## Getting Started
 
