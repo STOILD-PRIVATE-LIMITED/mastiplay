@@ -4,7 +4,8 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:spinner_try/shivanshu/models/globals.dart';
 
-const String momentsServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
+// const String momentsServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
+const String momentsServer = "https://ba18-103-137-198-238.ngrok-free.app";
 
 class Post {
   String postId = "";
@@ -96,7 +97,8 @@ Future<void> postPost(Post post) async {
 
 Future<List<Post>> getHotPosts(int limit, int startPostId) async {
   final response = await http.get(
-    Uri.parse('$momentsServer/api/hot?limit=$limit&start=$startPostId'),
+    Uri.parse(
+        '$momentsServer/api/hot?limit=$limit&start=$startPostId&userId=${currentUser.id}'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -111,7 +113,8 @@ Future<List<Post>> getHotPosts(int limit, int startPostId) async {
 
 Future<List<Post>> getRecentPost(int limit, int startPostId) async {
   final response = await http.get(
-    Uri.parse('$momentsServer/api/recent?limit=$limit&start=$startPostId'),
+    Uri.parse(
+        '$momentsServer/api/recent?limit=$limit&start=$startPostId&userId=${currentUser.id}'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

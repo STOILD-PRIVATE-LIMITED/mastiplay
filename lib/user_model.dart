@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -108,17 +107,17 @@ Future<UserModel> fetchUserWithId(String id) async {
           .single;
 
   final user = UserModel.fromJson(doc.data());
-  try {
-    final response = await http.get(
-      Uri.parse('$momentsServer/api/users'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
-    user.load(json.decode(response.body));
-  } catch (e) {
-    log("Failed to load user: $e");
-  }
+  // try {
+  //   final response = await http.get(
+  //     Uri.parse('$momentsServer/api/users'),
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json; charset=UTF-8',
+  //     },
+  //   );
+  //   user.load(json.decode(response.body));
+  // } catch (e) {
+  //   log("Failed to load user: $e");
+  // }
   return user;
 }
 
