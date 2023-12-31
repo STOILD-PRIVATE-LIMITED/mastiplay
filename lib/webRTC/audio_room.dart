@@ -56,9 +56,6 @@ class _AudioRoomState extends State<AudioRoom> {
           padding: const EdgeInsets.all(8.0),
           child: GridView.count(
             shrinkWrap: true,
-            // physics: const NeverScrollableScrollPhysics(),
-            // physics: const BouncingScrollPhysics(),
-            // physics: const AlwaysScrollableScrollPhysics(),
             crossAxisCount: widget.maxParticipants ~/ 2,
             childAspectRatio: 1 / 1.3,
             children: [
