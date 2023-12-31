@@ -5,9 +5,7 @@
 // import 'package:flutter/foundation.dart' as foundation;
 import 'dart:developer';
 
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
@@ -183,82 +181,26 @@ class _AudioPageState extends State<AudioPage> {
                 ),
               ),
               actions: [
-                Container(
-                  width: 31,
-                  height: 31,
-                  decoration: const ShapeDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage("https://via.placeholder.com/31x31"),
-                      fit: BoxFit.cover,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
-                        bottomLeft: Radius.circular(15),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Container(
-                  width: 40.sp,
-                  height: 22,
-                  alignment: Alignment.center,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: ShapeDecoration(
-                    color: const Color(0xFFDFDFDF),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(37),
+                if (currentUser.email == widget.room.admin)
+                  LoadingIconButton(
+                    onPressed: () async {
+                      final announcement = await promptUser(context,
+                          question: "What to announce?",
+                          defaultAns: widget.room.announcement);
+                      if (announcement != widget.room.announcement) {
+                        setState(() {
+                          widget.room.announcement = announcement;
+                        });
+                        await widget.room.update();
+                      } else {
+                        log("Nothing Changed");
+                      }
+                    },
+                    icon: const Icon(
+                      Icons.announcement_rounded,
+                      color: Colors.white,
                     ),
                   ),
-                  child: const Text(
-                    '250',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 10,
-                      fontFamily: 'Sofia Pro',
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                      letterSpacing: 0.50,
-                    ),
-                  ),
-                )
-                // if (currentUser.email == widget.room.admin)
-                //   SizedBox(
-                //     height: 45.sp,
-                //     width: 45.sp,
-                //     child: LoadingIconButton(
-                //       onPressed: () async {
-                //         final announcement = await promptUser(context,
-                //             question: "What to announce?",
-                //             defaultAns: widget.room.announcement);
-                //         if (announcement != widget.room.announcement) {
-                //           widget.room.announcement = announcement;
-                //           await widget.room.update();
-                //         } else {
-                //           log("Nothing Changed");
-                //         }
-                //       },
-                //       icon: const Icon(
-                //         Icons.announcement_rounded,
-                //         color: Colors.white,
-                //       ),
-                //     ),
-                //   ),
-                // SizedBox(
-                //   height: 45.sp,
-                //   width: 45.sp,
-                //   child: IconButton(
-                //     onPressed: () {},
-                //     icon: const Icon(
-                //       Icons.share,
-                //       color: Colors.white,
-                //     ),
-                //   ),
-                // ),
-
-                ,
                 IconButton(
                   onPressed: () {
                     showAlertDialog(context);
@@ -269,347 +211,6 @@ class _AudioPageState extends State<AudioPage> {
                   ),
                 )
               ],
-
-              bottom: PreferredSize(
-                preferredSize: Size(width, 40),
-                child: Row(
-                  children: [
-                    // Image.asset(
-                    //   'assets/Group 18118.png',
-                    //   height: 25,
-                    // ),
-                    Container(
-                      decoration: const ShapeDecoration(
-                        color: Color(0xFFDFDFDF),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(8),
-                            bottomRight: Radius.circular(8),
-                          ),
-                        ),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 8.sp,
-                        vertical: 2.sp,
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 2.sp,
-                              vertical: 1.sp,
-                            ),
-                            decoration: const ShapeDecoration(
-                              color: Colors.pink,
-                              shape: StarBorder.polygon(
-                                sides: 5,
-                              ),
-                            ),
-                            child: Text("10",
-                                style: TextStyle(
-                                    fontSize: 8.sp, color: Colors.white)),
-                          ),
-                          const Text(
-                            'No. 10',
-                            style: TextStyle(
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 10.sp),
-                    Container(
-                      padding: const EdgeInsets.only(
-                          top: 7, left: 23, right: 4, bottom: 5),
-                      clipBehavior: Clip.antiAlias,
-                      decoration: const ShapeDecoration(
-                        color: Color(0xFFDFDFDF),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(8),
-                            bottomRight: Radius.circular(8),
-                          ),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'No. 2 Bronze',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 11.sp,
-                              fontWeight: FontWeight.w400,
-                              height: 0,
-                              letterSpacing: 0.55,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 10.sp),
-                    if (currentUser.email == widget.room.admin)
-                      SizedBox(
-                        height: 45.sp,
-                        width: 45.sp,
-                        child: LoadingIconButton(
-                          onPressed: () async {
-                            final announcement = await promptUser(context,
-                                question: "What to announce?",
-                                defaultAns: widget.room.announcement);
-                            if (announcement != widget.room.announcement) {
-                              widget.room.announcement = announcement;
-                              await widget.room.update();
-                            } else {
-                              log("Nothing Changed");
-                            }
-                          },
-                          icon: const Icon(
-                            Icons.announcement_rounded,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    SizedBox(
-                      height: 45.sp,
-                      width: 45.sp,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.share,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    // SizedBox(width: 10.sp),
-                    // Stack(
-                    //   alignment: Alignment.center,
-                    //   children: [
-                    //     Image.asset(
-                    //       'assets/family_bg.png',
-                    //       // width: width / 7,
-                    //     ),
-                    //     const Text(
-                    //       "Family",
-                    //       style: TextStyle(
-                    //         fontSize: 8,
-                    //         fontWeight: FontWeight.bold,
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                    Container(
-                      width: 84,
-                      height: 22,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFFDFDFDF),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(37),
-                        ),
-                      ),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            left: 1,
-                            top: 4.25,
-                            child: SizedBox(
-                              width: 14.77,
-                              height: 14.77,
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    left: 0,
-                                    top: 0,
-                                    child: Container(
-                                      width: 14.77,
-                                      height: 14.77,
-                                      decoration: const ShapeDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              "https://via.placeholder.com/15x15"),
-                                          fit: BoxFit.cover,
-                                        ),
-                                        shape: OvalBorder(),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            left: 12.53,
-                            top: 4.25,
-                            child: SizedBox(
-                              width: 14.77,
-                              height: 14.77,
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    left: 0,
-                                    top: 0,
-                                    child: Container(
-                                      width: 14.77,
-                                      height: 14.77,
-                                      decoration: const ShapeDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              "https://via.placeholder.com/15x15"),
-                                          fit: BoxFit.cover,
-                                        ),
-                                        shape: OvalBorder(),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            left: 21.81,
-                            top: 2.84,
-                            child: SizedBox(
-                              width: 17.23,
-                              height: 17.23,
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    left: 0,
-                                    top: 0,
-                                    child: Container(
-                                      width: 17.23,
-                                      height: 17.23,
-                                      decoration: const ShapeDecoration(
-                                        color: Colors.white,
-                                        shape: OvalBorder(
-                                          side: BorderSide(
-                                              width: 2,
-                                              color: Color(0xFFF27121)),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    left: 1.23,
-                                    top: 1.23,
-                                    child: Container(
-                                      width: 14.77,
-                                      height: 14.77,
-                                      decoration: ShapeDecoration(
-                                        image: const DecorationImage(
-                                          image: NetworkImage(
-                                              "https://via.placeholder.com/15x15"),
-                                          fit: BoxFit.cover,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            left: 31.65,
-                            top: 3.97,
-                            child: SizedBox(
-                              width: 14.77,
-                              height: 14.77,
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    left: 0,
-                                    top: 0,
-                                    child: Container(
-                                      width: 14.77,
-                                      height: 14.77,
-                                      decoration: const ShapeDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              "https://via.placeholder.com/15x15"),
-                                          fit: BoxFit.cover,
-                                        ),
-                                        shape: OvalBorder(),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            left: 41.77,
-                            top: 2,
-                            child: SizedBox(
-                              width: 17.23,
-                              height: 17.23,
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    left: 0,
-                                    top: 0,
-                                    child: Container(
-                                      width: 17.23,
-                                      height: 17.23,
-                                      decoration: const ShapeDecoration(
-                                        color: Colors.white,
-                                        shape: OvalBorder(
-                                          side: BorderSide(
-                                              width: 2,
-                                              color: Color(0xFFF27121)),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    left: 1.23,
-                                    top: 1.23,
-                                    child: Container(
-                                      width: 14.77,
-                                      height: 14.77,
-                                      decoration: const ShapeDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              "https://via.placeholder.com/15x15"),
-                                          fit: BoxFit.cover,
-                                        ),
-                                        shape: OvalBorder(),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const Positioned(
-                            left: 60,
-                            top: 6,
-                            child: Text(
-                              '250',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 10,
-                                fontFamily: 'Sofia Pro',
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                                letterSpacing: 0.50,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
             ),
             body: SingleChildScrollView(
               child: Padding(
@@ -634,8 +235,35 @@ class _AudioPageState extends State<AudioPage> {
                               separatorBuilder: (ctx, index) =>
                                   const SizedBox(height: 3),
                               reverse: true,
-                              itemCount: messages.length,
+                              itemCount: messages.length +
+                                  (widget.room.announcement == null ||
+                                          widget.room.announcement!.isEmpty
+                                      ? 0
+                                      : 1),
                               itemBuilder: (ctx, index) {
+                                if (index == 0 &&
+                                    widget.room.announcement != null &&
+                                    widget.room.announcement!.isNotEmpty) {
+                                  return Card(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Text(
+                                            "Announcement",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(widget.room.announcement!),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  index++;
+                                }
                                 final String message =
                                     messages[index]['message'] ?? "Error";
                                 final userData = messages[index]['userData'];

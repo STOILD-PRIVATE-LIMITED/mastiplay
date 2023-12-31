@@ -189,7 +189,7 @@ Future<String?> promptUser(BuildContext context,
       icon: const Icon(Icons.check_rounded),
     ),
   ];
-  return await Navigator.push(
+  ans = await Navigator.push(
     context,
     DialogRoute(
       context: context,
@@ -206,7 +206,7 @@ Future<String?> promptUser(BuildContext context,
           ],
         ),
         content: TextFormField(
-          initialValue: defaultAns,
+          initialValue: ans,
           onChanged: (value) => ans = value,
           decoration: InputDecoration(
             hintText: 'Enter your input here',
@@ -224,6 +224,8 @@ Future<String?> promptUser(BuildContext context,
       ),
     ),
   );
+  ans ??= defaultAns;
+  return ans;
 }
 
 Future<String?> askUser(
