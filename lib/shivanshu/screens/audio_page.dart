@@ -6,9 +6,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:path/path.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
@@ -21,7 +19,6 @@ import 'package:spinner_try/webRTC/audio_room.dart';
 import 'package:spinner_try/webRTC/live_chat_widget.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../chat/models/chat.dart';
 
 class AudioPage extends StatefulWidget {
   final Room room;

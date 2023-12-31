@@ -75,7 +75,7 @@ class MessageScreen extends StatelessWidget {
                     future: fetchUserWithId(chatData.participants[0]),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicatorRainbow();
+                        return const CircularProgressIndicatorRainbow();
                       } else if (snapshot.hasError) {
                         return const Icon(Icons.error_outline_rounded);
                       }
