@@ -713,8 +713,8 @@ class _AudioPageState extends State<AudioPage> {
               ),
             ),
             floatingActionButton: Container(
-              height: 125.sp,
-              width: 125.sp,
+              height: 100.sp,
+              width: 100.sp,
               decoration: BoxDecoration(
                 color: Colors.green[100],
                 border: Border.all(
