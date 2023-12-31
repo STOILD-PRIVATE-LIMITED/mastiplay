@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/momets/post.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/widgets/post_widget.dart';
@@ -23,7 +22,7 @@ class MyPosts extends StatelessWidget {
                 color: Colors.black),
           ),
           loader: (start, lastPost) async {
-            return await searchPost(currentUser.id, null, 20, start);
+            return await searchPost(null, 20, start);
           },
           separatorBuilder: (context, index) {
             return const Divider();

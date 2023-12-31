@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/wallet/agent_screen.dart';
-import 'package:spinner_try/shivanshu/wallet/beans_history_screen.dart';
 import 'package:spinner_try/shivanshu/wallet/diamond_history_screen.dart';
 import 'package:spinner_try/shivanshu/wallet/exchange_screen.dart';
 import 'package:spinner_try/shivanshu/wallet/options.dart';
@@ -63,10 +62,7 @@ class WalletScreen extends StatelessWidget {
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 4,
                           ),
-                          onTap: () {
-                            navigatorPush(
-                                context, const DiamondHistoryScreen());
-                          },
+                          onTap: () {},
                           trailing:
                               const Icon(Icons.keyboard_arrow_right_rounded),
                           title: const Text('Diamonds'),
@@ -134,7 +130,7 @@ class WalletScreen extends StatelessWidget {
                             InkWell(
                               onTap: () {
                                 navigatorPush(
-                                    context, const BeanHistoryScreen());
+                                    context, const DiamondHistoryScreen());
                               },
                               child: const MyRow(
                                 // crossAxisAlignment: CrossAxisAlignment.end,

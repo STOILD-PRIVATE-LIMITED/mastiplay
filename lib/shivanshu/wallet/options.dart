@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/screens/main_wallet_page.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/wallet/agency_screen.dart';
+import 'package:spinner_try/shivanshu/wallet/beans_history_screen.dart';
 import 'package:spinner_try/shivanshu/wallet/cashout_widget.dart';
 import 'package:spinner_try/shivanshu/wallet/exchange_screen.dart';
 
@@ -64,7 +65,7 @@ class _WalletOptionsScreenState extends State<WalletOptionsScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              showMsg(context, "History");
+              navigatorPush(context, const BeanHistoryScreen());
             },
             child: Text(
               'History',

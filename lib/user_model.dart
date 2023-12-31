@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +11,7 @@ import 'package:spinner_try/shivanshu/utils.dart';
 
 class UserModel {
   String? id = "-1";
+  String? agentId;
   String name = "";
   String email = "";
   String photo = "";
@@ -28,6 +30,7 @@ class UserModel {
     this.dob,
     this.phoneNumber,
     this.id,
+    this.agentId,
     this.name = "",
     this.photo = "",
     this.gender = -1,
@@ -49,20 +52,23 @@ class UserModel {
 
   void load(Map<String, dynamic> data) {
     id = data['id'] ?? id;
+    agentId = data['agentId'] ?? agentId;
     photo = data["photo"] ?? photo;
     name = data["name"] ?? name;
     phoneNumber = data["phoneNumber"] ?? phoneNumber;
     email = data["email"] ?? email;
     dob = data['dob'] == null
         ? dob
-        : DateTime.fromMillisecondsSinceEpoch(data['dob'] * 1000);
+        : data['dob'] is String
+            ? DateTime.parse(data['dob'])
+            : DateTime.fromMillisecondsSinceEpoch(data['dob'] * 1000);
     gender = data['gender'] ?? gender;
     country = data['country'] ?? "";
     frame = data['frame'] ?? frame;
-    followers = data['followers'] ?? followers;
-    following = data['following'] ?? following;
-    diamonds = data['diamonds'] ?? diamonds;
-    beans = data['beans'] ?? beans;
+    followers = data['followersCount'] ?? followers;
+    following = data['followingCount'] ?? following;
+    diamonds = data['diamondsCount'] ?? diamonds;
+    beans = data['beansCount'] ?? beans;
     friends = data['friends'] ?? friends;
   }
 
@@ -73,6 +79,7 @@ class UserModel {
   Map<String, dynamic> toJson() {
     return {
       "id": id,
+      "agentId": agentId,
       "name": name,
       "email": email,
       "photo": photo,
@@ -81,11 +88,11 @@ class UserModel {
       'gender': gender,
       'country': country,
       'frame': frame,
-      'diamonds': diamonds,
-      'beans': beans,
-      'followers': followers,
-      'following': following,
-      'friends': friends,
+      // 'diamondsCount': diamonds,
+      // 'beansCount': beans,
+      // 'followersCount': followers,
+      // 'followingCount': following,
+      // 'friends': friends,
     };
   }
 }
@@ -107,17 +114,17 @@ Future<UserModel> fetchUserWithId(String id) async {
           .single;
 
   final user = UserModel.fromJson(doc.data());
-  // try {
-  //   final response = await http.get(
-  //     Uri.parse('$momentsServer/api/users'),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //     },
-  //   );
-  //   user.load(json.decode(response.body));
-  // } catch (e) {
-  //   log("Failed to load user: $e");
-  // }
+  try {
+    final response = await http.get(
+      Uri.parse('$momentsServer/api/users?userId=$id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    user.load(json.decode(response.body));
+  } catch (e) {
+    log("Failed to load user: $e");
+  }
   return user;
 }
 
@@ -136,8 +143,8 @@ Future<void> followUser(String userId) async {
   try {
     final response =
         await http.post(Uri.parse("$momentsServer/api/follow"), body: {
-      "followerId": userId,
-      "followingId": currentUser.id!,
+      "followerId": currentUser.id!,
+      "followingId": userId,
     });
     if (response.statusCode != 200) {
       throw Exception('Failed to follow: ${response.body}');
