@@ -4,7 +4,12 @@
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 // import 'package:flutter/foundation.dart' as foundation;
 import 'dart:developer';
+import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:path/path.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
@@ -57,6 +62,44 @@ class _AudioPageState extends State<AudioPage> {
       ..initialize().then((_) {
         setState(() {});
       });
+  }
+
+  String filePath = '';
+
+  // _playMusic(String filePath) async {
+  //   int result = await _audioPlayer.play(filePath);
+
+  //   if (result == 1) {
+  //     print('Music started playing');
+  //   } else {
+  //     print('Error playing music');
+  //   }
+  // }\
+  AudioPlayer audioPlayer = AudioPlayer();
+  Future<void> playAudio() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['mp3'],
+      allowCompression: false,
+    );
+    if (result != null) {
+      final file = File(result.files.single.path!);
+      await audioPlayer.play(DeviceFileSource(file.path));
+    }
+  }
+
+  Future<void> pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['mp3'],
+      allowCompression: false,
+    );
+
+    if (result != null) {
+      setState(() {
+        filePath = result.files.first.path ?? '';
+      });
+    }
   }
 
   // final WebRtcController controller = WebRtcController(
@@ -600,125 +643,124 @@ class _AudioPageState extends State<AudioPage> {
                 ),
               ),
             ),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 10.0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AudioRoom(
-                      room: widget.room,
-                    ),
-                    SizedBox(
-                      height: 410.sp,
-                      child: LiveChatBuilder(
-                        builder: (ctx, messages) {
-                          messages = messages.reversed.toList();
-                          return SizedBox(
-                            height: 410.sp,
-                            width: 300.sp,
-                            child: ListView.separated(
-                              separatorBuilder: (ctx, index) =>
-                                  const SizedBox(height: 3),
-                              reverse: true,
-                              itemCount: messages.length +
-                                  (widget.room.announcement == null ||
-                                          widget.room.announcement!.isEmpty
-                                      ? 0
-                                      : 1),
-                              itemBuilder: (ctx, index) {
-                                if (index == 0 &&
-                                    widget.room.announcement != null &&
-                                    widget.room.announcement!.isNotEmpty) {
-                                  return Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Text(
-                                            "Announcement",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+            body: Padding(
+              padding: const EdgeInsets.only(
+                top: 10.0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AudioRoom(
+                    room: widget.room,
+                  ),
+                  Expanded(
+                    // height: 350.sp,
+                    child: LiveChatBuilder(
+                      builder: (ctx, messages) {
+                        messages = messages.reversed.toList();
+                        return SizedBox(
+                          height: 410.sp,
+                          width: 300.sp,
+                          child: ListView.separated(
+                            separatorBuilder: (ctx, index) =>
+                                const SizedBox(height: 3),
+                            reverse: true,
+                            itemCount: messages.length +
+                                (widget.room.announcement == null ||
+                                        widget.room.announcement!.isEmpty
+                                    ? 0
+                                    : 1),
+                            itemBuilder: (ctx, index) {
+                              if (index == 0 &&
+                                  widget.room.announcement != null &&
+                                  widget.room.announcement!.isNotEmpty) {
+                                return Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Text(
+                                          "Announcement",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Text(widget.room.announcement!),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                } else {
-                                  index++;
-                                }
-                                final String message =
-                                    messages[index]['message'] ?? "Error";
-                                final userData = messages[index]['userData'];
-                                final photo = userData['photo'];
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 0,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                    color: Colors.black38,
-                                  ),
-                                  child: ListTile(
-                                    dense: true,
-                                    contentPadding: EdgeInsets.zero,
-                                    leading: CircleAvatar(
-                                      backgroundImage: photo.isEmpty
-                                          ? null
-                                          : NetworkImage(photo),
-                                      radius: 14,
-                                      child: photo.isNotEmpty
-                                          ? null
-                                          : const Icon(
-                                              Icons.person_rounded,
-                                              size: 15,
-                                            ),
-                                    ),
-                                    title: RichText(
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: "${userData['name']}: ",
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: message,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                        Text(widget.room.announcement!),
+                                      ],
                                     ),
                                   ),
                                 );
-                              },
-                            ),
-                          );
-                        },
-                      ),
+                              } else {
+                                index++;
+                              }
+                              final String message =
+                                  messages[index]['message'] ?? "Error";
+                              final userData = messages[index]['userData'];
+                              final photo = userData['photo'];
+                              return Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 0,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Colors.black38,
+                                ),
+                                child: ListTile(
+                                  dense: true,
+                                  contentPadding: EdgeInsets.zero,
+                                  leading: CircleAvatar(
+                                    backgroundImage: photo.isEmpty
+                                        ? null
+                                        : NetworkImage(photo),
+                                    radius: 14,
+                                    child: photo.isNotEmpty
+                                        ? null
+                                        : const Icon(
+                                            Icons.person_rounded,
+                                            size: 15,
+                                          ),
+                                  ),
+                                  title: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: "${userData['name']}: ",
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: message,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             floatingActionButton: Container(
               height: 100.sp,
               width: 100.sp,
               decoration: BoxDecoration(
-                color: Colors.green[100],
+                // color: Colors.green[100],
+                color: Colors.transparent,
                 border: Border.all(
-                  color: Colors.green,
+                  color: Colors.transparent,
                   width: 2,
                 ),
                 borderRadius: BorderRadius.circular(10),
@@ -838,14 +880,18 @@ class _AudioPageState extends State<AudioPage> {
                       ),
                     ),
                   ),
-                  IconButton(
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.black12,
-                    ),
-                    onPressed: () {
-                      shareRoomLink(widget.room.id);
+                  GestureDetector(
+                    onTap: () {
+                      // shareRoomLink(widget.room.id);
+                      playAudio();
                     },
-                    icon: Image.asset(
+                    onDoubleTap: () async {
+                      await audioPlayer.pause();
+                    },
+                    onLongPress: () async {
+                      await audioPlayer.stop();
+                    },
+                    child: Image.asset(
                       'assets/Send1.png',
                       height: 20.sp,
                     ),
@@ -854,7 +900,7 @@ class _AudioPageState extends State<AudioPage> {
                     style: IconButton.styleFrom(
                       backgroundColor: Colors.black12,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       showMsg(context, "In Developement");
                     },
                     icon: Image.asset('assets/PK.png'),
