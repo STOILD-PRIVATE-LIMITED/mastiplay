@@ -52,9 +52,7 @@ Future<void> setupFCMTokenMangement() async {
 
   final fcmToken = await FirebaseMessaging.instance.getToken();
   log("This device fcm token: $fcmToken");
-  if (fcmToken != null &&
-      currentUser.id != null &&
-      PrefStorage.fcmToken != fcmToken) {
+  if (fcmToken != null && currentUser.id != null) {
     await sendFCMToken(fcmToken);
   }
   log("Setting up listeners for fcm");
