@@ -186,6 +186,48 @@ class _AudioPageState extends State<AudioPage> {
                 ),
               ),
               actions: [
+                Container(
+                  width: 31,
+                  height: 31,
+                  decoration: const ShapeDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage("https://via.placeholder.com/31x31"),
+                      fit: BoxFit.cover,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Container(
+                  width: 40.sp,
+                  height: 22,
+                  alignment: Alignment.center,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: ShapeDecoration(
+                    color: const Color(0xFFDFDFDF),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(37),
+                    ),
+                  ),
+                  child: const Text(
+                    '250',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 10,
+                      fontFamily: 'Sofia Pro',
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                      letterSpacing: 0.50,
+                    ),
+                  ),
+                )
+
                 // if (currentUser.email == widget.room.admin)
                 //   LoadingIconButton(
                 //     onPressed: () async {
@@ -206,9 +248,7 @@ class _AudioPageState extends State<AudioPage> {
                 //       color: Colors.white,
                 //     ),
                 //   ),
-                Container(
-                  
-                ),
+                ,
                 IconButton(
                   onPressed: () {
                     showAlertDialog(context);
