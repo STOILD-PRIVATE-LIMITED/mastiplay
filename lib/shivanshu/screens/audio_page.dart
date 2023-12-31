@@ -78,7 +78,11 @@ class _AudioPageState extends State<AudioPage> {
                       aspectRatio: _controllerr.value.aspectRatio,
                       child: VideoPlayer(_controllerr),
                     )
-                  : const CircularProgressIndicator(), // Show a loading indicator while the video is being loaded
+                  // : const CircularProgressIndicator(),
+                  : Image.asset(
+                      'assets/1.png',
+                      fit: BoxFit.cover,
+                    ),
             ),
           ),
           Scaffold(
