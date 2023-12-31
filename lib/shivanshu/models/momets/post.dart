@@ -18,6 +18,9 @@ class Post {
   int likesCount = 0;
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
+  bool hasLiked = false;
+  bool hasCommented = false;
+  bool doesFollow = false;
   Post({
     this.postId = "",
     this.title = "",
@@ -28,6 +31,9 @@ class Post {
     this.sharedCount = 0,
     this.commentsCount = 0,
     this.likesCount = 0,
+    this.hasLiked = false,
+    this.hasCommented = false,
+    this.doesFollow = false,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -50,6 +56,9 @@ class Post {
       sharedCount: json['sharedCount'] ?? 0,
       commentsCount: json['commentsCount'] ?? 0,
       likesCount: json['likesCount'] ?? 0,
+      hasLiked: json['hasLiked'] ?? false,
+      hasCommented: json['hasCommented'] ?? false,
+      doesFollow: json['doesFollow'] ?? false,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
@@ -115,10 +124,10 @@ Future<List<Post>> getRecentPost(int limit, int startPostId) async {
   }
 }
 
-Future<List<Post>> getFollowingPost(int userId, int limit, int start) async {
+Future<List<Post>> getFollowingPost(int limit, int start) async {
   final response = await http.get(
     Uri.parse(
-        '$momentsServer/api/following?userId=$userId&limit=$limit&start=$start'),
+        '$momentsServer/api/following?userId=${currentUser.id}&limit=$limit&start=$start'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -168,7 +177,7 @@ Future<List<Post>> searchPost(
 
 Future<void> commentPost(Post post, String comment) async {
   try {
-    final response = await http.put(
+    final response = await http.post(
       Uri.parse('$momentsServer/api/comment'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -181,6 +190,26 @@ Future<void> commentPost(Post post, String comment) async {
     );
     if (response.statusCode != 200) {
       throw Exception('Failed to comment post');
+    }
+  } catch (e) {
+    log("Failed to comment post: $e");
+  }
+}
+
+Future<void> likePost(Post post) async {
+  try {
+    final response = await http.post(
+      Uri.parse('$momentsServer/api/like'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        "postId": post.postId,
+        'userId': currentUser.id,
+      }),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to like a post');
     }
   } catch (e) {
     log("Failed to comment post: $e");

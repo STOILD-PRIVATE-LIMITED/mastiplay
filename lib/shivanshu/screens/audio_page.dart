@@ -185,7 +185,9 @@ class _AudioPageState extends State<AudioPage> {
                           question: "What to announce?",
                           defaultAns: widget.room.announcement);
                       if (announcement != widget.room.announcement) {
-                        widget.room.announcement = announcement;
+                        setState(() {
+                          widget.room.announcement = announcement;
+                        });
                         await widget.room.update();
                       } else {
                         log("Nothing Changed");
@@ -230,8 +232,35 @@ class _AudioPageState extends State<AudioPage> {
                               separatorBuilder: (ctx, index) =>
                                   const SizedBox(height: 3),
                               reverse: true,
-                              itemCount: messages.length,
+                              itemCount: messages.length +
+                                  (widget.room.announcement == null ||
+                                          widget.room.announcement!.isEmpty
+                                      ? 0
+                                      : 1),
                               itemBuilder: (ctx, index) {
+                                if (index == 0 &&
+                                    widget.room.announcement != null &&
+                                    widget.room.announcement!.isNotEmpty) {
+                                  return Card(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Text(
+                                            "Announcement",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(widget.room.announcement!),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  index++;
+                                }
                                 final String message =
                                     messages[index]['message'] ?? "Error";
                                 final userData = messages[index]['userData'];

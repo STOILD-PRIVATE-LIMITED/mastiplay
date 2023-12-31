@@ -197,7 +197,10 @@ class _ScrollBuilder2State<T> extends State<ScrollBuilder2<T>> {
   //   }
   // }
 
+  bool fetching = false;
   Future<void> fetchData() async {
+    if (fetching) return;
+    fetching = true;
     try {
       err = null;
       final List<T> fetchedItems =
@@ -217,6 +220,7 @@ class _ScrollBuilder2State<T> extends State<ScrollBuilder2<T>> {
         err = e.toString();
       });
     }
+    fetching = false;
   }
 
   @override

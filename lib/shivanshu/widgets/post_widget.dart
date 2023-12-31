@@ -11,17 +11,23 @@ import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'package:spinner_try/user_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class PostWidget extends StatelessWidget {
+class PostWidget extends StatefulWidget {
   final Post post;
-  const PostWidget({super.key, required this.post});
+  final bool showTags;
+  const PostWidget({super.key, required this.post, this.showTags = false});
 
+  @override
+  State<PostWidget> createState() => _PostWidgetState();
+}
+
+class _PostWidgetState extends State<PostWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         FutureBuilder(
-            future: fetchUserWithId(post.postedBy),
+            future: fetchUserWithId(widget.post.postedBy),
             builder: (context, snapshot) {
               final UserModel? user = snapshot.data;
               return Row(
@@ -48,15 +54,15 @@ class PostWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                post.title.isNotEmpty
-                                    ? post.title
+                                widget.post.title.isNotEmpty
+                                    ? widget.post.title
                                     : (user?.name ?? "Error"),
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontSize: height / 45, color: Colors.black),
                               ),
                               Text(
-                                ddmmyyyy(post.updatedAt.toLocal()),
+                                ddmmyyyy(widget.post.updatedAt.toLocal()),
                                 style: TextStyle(
                                     fontSize: height / 55, color: Colors.grey),
                               ),
@@ -70,12 +76,26 @@ class PostWidget extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (user != null && user.id! != currentUser.id)
-                        OutlinedButton.icon(
+                        LoadingElevatedButton(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: widget.post.doesFollow
+                                ? Colors.white
+                                : colorScheme(context).primary,
+                            backgroundColor: widget.post.doesFollow
+                                ? colorScheme(context).primary
+                                : Colors.white,
+                          ),
                           onPressed: () async {
                             await followUser(user.id!);
+                            setState(() {
+                              widget.post.doesFollow = !widget.post.doesFollow;
+                            });
                           },
-                          icon: const Icon(Icons.person_add_rounded),
-                          label: const Text('Follow'),
+                          icon: Icon(widget.post.doesFollow
+                              ? Icons.person_remove_rounded
+                              : Icons.person_add_rounded),
+                          label: Text(
+                              widget.post.doesFollow ? "UnFollow" : 'Follow'),
                         ),
                       // Container(
                       //   height: height / 20,
@@ -127,7 +147,7 @@ class PostWidget extends StatelessWidget {
             //       : null,
             // ),
             ),
-        if (post.imgUrl != null)
+        if (widget.post.imgUrl != null)
           GestureDetector(
             onTap: () {
               Navigator.push(
@@ -135,9 +155,9 @@ class PostWidget extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => ImagePreview(
                     image: Hero(
-                      tag: post.postId.toString(),
+                      tag: widget.post.postId.toString(),
                       child: Image.network(
-                        post.imgUrl!,
+                        widget.post.imgUrl!,
                       ),
                     ),
                   ),
@@ -154,9 +174,9 @@ class PostWidget extends StatelessWidget {
                 color: const Color(0xFFE2FBF5),
               ),
               child: Hero(
-                tag: post.postId.toString(),
+                tag: widget.post.postId.toString(),
                 child: Image.network(
-                  post.imgUrl!,
+                  widget.post.imgUrl!,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -165,13 +185,13 @@ class PostWidget extends StatelessWidget {
         const SizedBox(height: 15),
         MarkdownBody(
           fitContent: true,
-          data: post.description,
+          data: widget.post.description,
           selectable: true,
           onTapLink: (text, href, title) {
             if (href != null) launchUrl(Uri.parse(href));
           },
           imageBuilder: (uri, title, alt) =>
-              ImageBuilder(uri: uri, id: post.postId),
+              ImageBuilder(uri: uri, id: widget.post.postId),
         ),
         // Align(
         //   alignment: Alignment.centerLeft,
@@ -207,20 +227,60 @@ class PostWidget extends StatelessWidget {
         // ),
         Row(
           children: [
+            const SizedBox(
+              width: 10,
+            ),
             LoadingElevatedButton(
               style: TextButton.styleFrom(
                 elevation: 0,
               ),
-              icon: const Icon(Icons.comment),
-              label: Text(post.commentsCount.toString()),
+              icon: Icon(
+                widget.post.hasLiked
+                    ? Icons.thumb_up
+                    : Icons.thumb_up_alt_outlined,
+                color: widget.post.hasLiked
+                    ? Colors.blue
+                    : colorScheme(context).primary,
+              ),
+              label: Text(widget.post.likesCount.toString()),
+              onPressed: () async {
+                await likePost(widget.post);
+                setState(() {
+                  widget.post.hasLiked = !widget.post.hasLiked;
+                  if (widget.post.hasLiked) {
+                    widget.post.likesCount++;
+                  } else {
+                    widget.post.likesCount--;
+                  }
+                });
+              },
+            ),
+            SizedBox(
+              width: width / 40,
+            ),
+            LoadingElevatedButton(
+              style: TextButton.styleFrom(
+                elevation: 0,
+              ),
+              icon: Icon(
+                widget.post.hasCommented
+                    ? Icons.comment
+                    : Icons.comment_outlined,
+                color: widget.post.hasCommented
+                    ? Colors.blue
+                    : colorScheme(context).primary,
+              ),
+              label: Text(widget.post.commentsCount.toString()),
               onPressed: () async {
                 final comment = await promptUser(
                   context,
                   question: "Comment",
                 );
                 if (comment != null) {
-                  await commentPost(post, comment);
-                  post.commentsCount++;
+                  await commentPost(widget.post, comment);
+                  setState(() {
+                    widget.post.commentsCount++;
+                  });
                 }
               },
             ),
@@ -232,40 +292,25 @@ class PostWidget extends StatelessWidget {
             SizedBox(
               width: width / 40,
             ),
-            const SizedBox(
-              width: 10,
-            ),
-            LoadingElevatedButton(
-              style: TextButton.styleFrom(
-                elevation: 0,
-              ),
-              icon: const Icon(Icons.comment),
-              label: Text(post.commentsCount.toString()),
-              onPressed: () async {
-                final comment = await promptUser(
-                  context,
-                  question: "Comment",
-                );
-                if (comment != null) {
-                  await commentPost(post, comment);
-                  post.commentsCount++;
-                }
-              },
-            ),
-            SizedBox(
-              width: width / 40,
-            ),
             LoadingIconButton(
               icon: const Icon(Icons.share),
               onPressed: () async {
                 await shareLink(
-                    "https://mastiplay.com/posts/${post.postId.toString()}",
+                    "https://mastiplay.com/posts/${widget.post.postId.toString()}",
                     "See my wonderful post 👇");
-                await sharePost(post.postId);
+                await sharePost(widget.post.postId);
               },
             ),
           ],
-        )
+        ),
+        if (widget.showTags)
+          Wrap(
+            children: widget.post.tags
+                .map(
+                  (e) => Chip(label: Text(e)),
+                )
+                .toList(),
+          ),
       ],
     );
   }
