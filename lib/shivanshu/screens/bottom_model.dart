@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:spinner_try/shivanshu/screens/moments.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/user_model.dart';
 
@@ -133,11 +134,24 @@ class _BottomModelState extends State<BottomModel> {
               ),
               SizedBox(height: 10.sp),
               ElevatedButton(
-                  onPressed: () async {
-                    print(widget.user.id!);
-                    showChatWithUserId(widget.user.id!, context);
-                  },
-                  child: const Text("Chat"))
+                onPressed: () async {
+                  print(widget.user.id!);
+                  showChatWithUserId(widget.user.id!, context);
+                },
+                child: const Text("Chat"),
+              ),
+              SizedBox(height: 10.sp),
+              ElevatedButton(
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Moments(),
+                    ),
+                  );
+                },
+                child: const Text("Moments"),
+              ),
             ],
           ),
         ),
