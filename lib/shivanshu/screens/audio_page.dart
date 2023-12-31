@@ -66,9 +66,6 @@ class _AudioPageState extends State<AudioPage> {
       });
   }
 
-  
-
-
   String filePath = '';
 
   // _playMusic(String filePath) async {
@@ -214,19 +211,28 @@ class _AudioPageState extends State<AudioPage> {
                         ],
                       ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 8.sp,
-                        vertical: 2.sp,
-                      ),
-                      child: const Text(
-                        'Follow',
-                        style: TextStyle(
-                          fontSize: 12,
+                    GestureDetector(
+                      onTap: () {
+                        if (widget.room.admin != currentUser.email) {
+                          followUser(widget.room.admin!);
+                        } else {
+                          showMsg(context, "You can't follow yourself");
+                        }
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8.sp,
+                          vertical: 2.sp,
+                        ),
+                        child: const Text(
+                          'Follow',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     ),
