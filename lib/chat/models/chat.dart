@@ -6,6 +6,8 @@ import 'package:spinner_try/chat/models/message.dart';
 import 'package:spinner_try/chat/screens/chat_screen.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 
+import '../../shivanshu/models/globals.dart';
+
 String chatServer = "https://v9nm4hsv-3000.asse.devtunnels.ms";
 // keep this without trailing slash
 
@@ -143,4 +145,21 @@ Future<List<ChatData>> fetchAllChats(String userID) async {
   } else {
     throw Exception('Failed to load chats: ${response.body}');
   }
+}
+
+showChatWithUserId(String userId, BuildContext context) async {
+  final chatData = await createChat(ChatData(
+              id: "-1",
+              admins: [currentUser.id!, userId],
+              participants: [currentUser.id!, userId],
+              title: "New Chat",
+            ));
+            if (context.mounted) {
+              navigatorPush(
+                context,
+                ChatScreen(
+                  chat: chatData,
+                ),
+              );
+            }
 }

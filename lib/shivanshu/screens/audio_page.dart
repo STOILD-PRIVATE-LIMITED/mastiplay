@@ -21,6 +21,8 @@ import 'package:spinner_try/webRTC/audio_room.dart';
 import 'package:spinner_try/webRTC/live_chat_widget.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../chat/models/chat.dart';
+
 class AudioPage extends StatefulWidget {
   final Room room;
   const AudioPage({super.key, required this.room});
@@ -63,6 +65,9 @@ class _AudioPageState extends State<AudioPage> {
         setState(() {});
       });
   }
+
+  
+
 
   String filePath = '';
 
@@ -891,9 +896,12 @@ class _AudioPageState extends State<AudioPage> {
                     onLongPress: () async {
                       await audioPlayer.stop();
                     },
-                    child: Image.asset(
-                      'assets/Send1.png',
-                      height: 20.sp,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 8.0.sp),
+                      child: Image.asset(
+                        'assets/Discovery1.png',
+                        height: 24.sp,
+                      ),
                     ),
                   ),
                   IconButton(

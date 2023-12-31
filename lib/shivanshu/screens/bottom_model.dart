@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
-import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'package:spinner_try/user_model.dart';
+
+import '../../chat/models/chat.dart';
 
 class BottomModel extends StatefulWidget {
   final UserModel user;
@@ -22,16 +23,51 @@ class _BottomModelState extends State<BottomModel> {
       alignment: Alignment.center,
       children: [
         Positioned(
-            top: -30,
+            top: -60.sp,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
-                  height: 90,
-                  width: 90,
-                  child: ProfileImage(user: widget.user),
-                ),
-                const SizedBox(height: 5),
+                    height: 140.sp,
+                    width: 140.sp,
+                    // child: ProfileImage(user: widget.user),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Stack(
+                          fit: StackFit.passthrough,
+                          alignment: Alignment.center,
+                          children: [
+                            Positioned(
+                              top: 220 / 1080 * constraints.maxHeight,
+                              bottom: 220 / 1080 * constraints.maxHeight,
+                              child: Container(
+                                height: 500 / 1080 * constraints.maxHeight,
+                                decoration:
+                                    const BoxDecoration(shape: BoxShape.circle),
+                                clipBehavior: Clip.hardEdge,
+                                child: widget.user.photo.isNotEmpty
+                                    ? Image.network(
+                                        widget.user.photo,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.asset(
+                                        'assets/${widget.user.gender == 0 ? 'male' : 'female'}.jpg',
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                            ),
+                            Positioned.fill(
+                              child: Image.asset(
+                                'assets/Frame ${widget.user.frame}.png',
+                                fit: BoxFit.cover,
+                                height: constraints.maxHeight,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    )),
+                SizedBox(height: 5.sp),
                 Text(
                   widget.user.name.isEmpty ? "Name is empty" : widget.user.name,
                   overflow: TextOverflow.ellipsis,
@@ -44,7 +80,7 @@ class _BottomModelState extends State<BottomModel> {
             )),
         Padding(
           padding: EdgeInsets.only(
-            top: 90.0.sp,
+            top: 120.0.sp,
           ),
           child: Column(
             children: [
@@ -95,6 +131,13 @@ class _BottomModelState extends State<BottomModel> {
                   )
                 ],
               ),
+              SizedBox(height: 10.sp),
+              ElevatedButton(
+                  onPressed: () async {
+                    print(widget.user.id!);
+                    showChatWithUserId(widget.user.id!, context);
+                  },
+                  child: const Text("Chat"))
             ],
           ),
         ),
