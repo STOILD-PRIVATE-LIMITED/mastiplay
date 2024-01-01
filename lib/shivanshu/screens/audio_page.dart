@@ -1,7 +1,6 @@
 // import 'dart:developer';
-// import 'package:animated_icon/animated_icon.dart';
 // import 'package:emoji_keyboard_flutter/emoji_keyboard_flutter.dart';
-// import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 // import 'package:flutter/foundation.dart' as foundation;
 import 'dart:developer';
 import 'dart:io';
@@ -19,7 +18,6 @@ import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/audio_room.dart';
 import 'package:spinner_try/webRTC/live_chat_widget.dart';
 import 'package:video_player/video_player.dart';
-import 'package:flutter/foundation.dart' as foundation;
 
 class AudioPage extends StatefulWidget {
   final Room room;
@@ -933,25 +931,26 @@ class _AudioPageState extends State<AudioPage> {
                     },
                     icon: Image.asset('assets/gift.png'),
                   ),
-                  // Offstage(
-                  //   offstage: !emojiShowing,
-                  //   child: SizedBox(
-                  //       height: 250,
-                  //       child: EmojiPicker(
-                  //         onEmojiSelected: (category, emoji) {
-                  //           _controller.text += emoji.emoji;
-                  //         },
-                  //         onBackspacePressed: () {
-                  //           _controller.text = _controller.text
-                  //               .substring(0, _controller.text.length - 1);
-                  //         },
-                  //         config: const Config(
-                  //           columns: 7,
-                  //           initCategory: Category.SMILEYS,
-                  //           // bgColor: Color(0xFF21242D),
-                  //         ),
-                  //       )),
-                  // ),
+                  Offstage(
+                    offstage: !emojiShowing,
+                    child: SizedBox(
+                      height: 250,
+                      child: EmojiPicker(
+                        onEmojiSelected: (category, emoji) {
+                          _controller.text += emoji.emoji;
+                        },
+                        onBackspacePressed: () {
+                          _controller.text = _controller.text
+                              .substring(0, _controller.text.length - 1);
+                        },
+                        config: const Config(
+                          columns: 7,
+                          initCategory: Category.SMILEYS,
+                          // bgColor: Color(0xFF21242D),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

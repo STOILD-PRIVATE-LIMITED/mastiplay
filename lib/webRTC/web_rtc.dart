@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-// import 'package:wakelock/wakelock.dart';
+import 'package:wakelock/wakelock.dart';
 
 // import 'package:spinner_try/android_wakelock.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
@@ -106,7 +106,7 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
     socket!.onConnect((data) {
       log("Socket connected !!");
       _localRTCVideoRenderer.initialize().then((value) => initLocalStream());
-      // Wakelock.enable();
+      Wakelock.enable();
       // AndroidWakeLock.acquireWakeLock();
     });
 
@@ -200,7 +200,7 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
             'yes') {
           return true;
         }
-        // Wakelock.disable();
+        Wakelock.disable();
         // await AndroidWakeLock.releaseWakeLock();
         await widget.onExit?.call();
         if (socket != null) {
@@ -536,7 +536,7 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
   }
 
   void disconnect() async {
-    // Wakelock.disable();
+    Wakelock.disable();
 
     // await AndroidWakeLock.releaseWakeLock();
     log("Disconnected from signaling server");
