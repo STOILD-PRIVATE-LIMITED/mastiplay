@@ -6,9 +6,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:path/path.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
@@ -21,7 +19,6 @@ import 'package:spinner_try/webRTC/audio_room.dart';
 import 'package:spinner_try/webRTC/live_chat_widget.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../chat/models/chat.dart';
 
 class AudioPage extends StatefulWidget {
   final Room room;
@@ -65,9 +62,6 @@ class _AudioPageState extends State<AudioPage> {
         setState(() {});
       });
   }
-
-  
-
 
   String filePath = '';
 
@@ -214,19 +208,28 @@ class _AudioPageState extends State<AudioPage> {
                         ],
                       ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 8.sp,
-                        vertical: 2.sp,
-                      ),
-                      child: const Text(
-                        'Follow',
-                        style: TextStyle(
-                          fontSize: 12,
+                    GestureDetector(
+                      onTap: () {
+                        if (widget.room.admin != currentUser.email) {
+                          followUser(widget.room.admin!);
+                        } else {
+                          showMsg(context, "You can't follow yourself");
+                        }
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8.sp,
+                          vertical: 2.sp,
+                        ),
+                        child: const Text(
+                          'Follow',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     ),

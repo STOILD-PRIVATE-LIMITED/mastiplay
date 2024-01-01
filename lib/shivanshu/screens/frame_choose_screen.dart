@@ -121,28 +121,28 @@ class _FrameChooseScreenState extends State<FrameChooseScreen> {
                 children: [
                   Container(
                     width: width,
-                    height: 130,
-                    // clipBehavior: Clip.hardEdge,
-                    decoration: const BoxDecoration(
-                        // shape: BoxShape.circle,
-                        ),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Positioned(
-                          left: 0,
-                          right: 0,
-                          top: 30,
-                          bottom: 10,
-                          child: Container(
-                            clipBehavior: Clip.hardEdge,
-                            decoration:
-                                const BoxDecoration(shape: BoxShape.circle),
-                            child: Hero(
-                              tag: widget.gender,
+                    height: 150,
+                    clipBehavior: Clip.hardEdge,
+                    decoration: const BoxDecoration(),
+                    child: LayoutBuilder(builder: (((context, constraints) {
+                      return Stack(
+                        fit: StackFit.passthrough,
+                        alignment: Alignment.center,
+                        children: [
+                          Positioned(
+                            top: 250 / 1080 * constraints.maxHeight,
+                            bottom: 200 / 1080 * constraints.maxHeight,
+                            child: Container(
+                              height: 600 / 1080 * constraints.maxHeight,
+                              decoration:
+                                  const BoxDecoration(shape: BoxShape.circle),
+                              clipBehavior: Clip.hardEdge,
+                              // child: ,
                               child: widget.imgUrl != null
-                                  ? Image.network(widget.imgUrl!,
-                                      fit: BoxFit.cover)
+                                  ? Image.network(
+                                      widget.imgUrl!,
+                                      fit: BoxFit.cover,
+                                    )
                                   : Image.asset(
                                       widget.gender == 'Male'
                                           ? 'assets/male.jpg'
@@ -152,16 +152,15 @@ class _FrameChooseScreenState extends State<FrameChooseScreen> {
                                     ),
                             ),
                           ),
-                        ),
-                        if (selectedIndex != null)
-                          Image.asset(
-                            "assets/Frame ${selectedIndex! + 1}.png",
-                            // width: 150,
-                            height: 220,
-                            fit: BoxFit.fitHeight,
-                          ),
-                      ],
-                    ),
+                          if (selectedIndex != null)
+                            Image.asset(
+                              "assets/Frame ${selectedIndex! + 1}.png",
+                              height: 220,
+                              fit: BoxFit.fitHeight,
+                            )
+                        ],
+                      );
+                    }))),
                   ),
                   Text(
                     'Choose a frame for your profile picture',

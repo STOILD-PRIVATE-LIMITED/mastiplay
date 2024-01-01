@@ -45,7 +45,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     if (img == null &&
         await askUser(
               context,
-              'Do you really want to continue without a profile picture?',
+              'Please choose your picture?',
               yes: true,
               no: true,
             ) !=
