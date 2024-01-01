@@ -88,6 +88,7 @@ class Room {
       if (response.statusCode != 200) {
         throw Exception(response.body);
       }
+      loadFromJson(json.decode(response.body));
     } else {
       loadFromJson(myRoom.toJson());
       id = myRoom.id;
@@ -95,11 +96,10 @@ class Room {
     }
   }
 
-  Future<void> update() {
-    assert(id.isNotEmpty,
-        "Id shouldn't be empty when updating data on firestore, instead use Room.create() to create a new room!");
-    return http.put(
-      Uri.parse('$websocketUrl/api/rooms'),
+  Future<void> update() async {
+    assert(id.isNotEmpty, "Id shouldn't be empty when updating a room");
+    final response = await http.post(
+      Uri.parse('$websocketUrl/api/update-room'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -107,6 +107,9 @@ class Room {
         toJson(),
       ),
     );
+    if (response.statusCode != 200) {
+      throw Exception(response.body);
+    }
   }
 }
 

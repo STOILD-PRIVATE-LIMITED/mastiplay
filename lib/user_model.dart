@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:spinner_try/chat/widgets/profile_preview.dart';
+import 'package:spinner_try/shivanshu/models/agent/agent.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/momets/post.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
@@ -25,6 +26,7 @@ class UserModel {
   int friends = 0;
   int diamonds = 0;
   int beans = 0;
+  AgentData? agentData;
 
   UserModel({
     this.dob,
@@ -42,6 +44,7 @@ class UserModel {
     this.friends = 0,
     this.diamonds = 0,
     this.beans = 0,
+    this.agentData,
   });
 
   factory UserModel.fromSnapshot(
@@ -70,6 +73,9 @@ class UserModel {
     diamonds = data['diamondsCount'] ?? diamonds;
     beans = data['beansCount'] ?? beans;
     friends = data['friends'] ?? friends;
+    agentData = data['agentData'] == null
+        ? agentData
+        : AgentData.fromJson(data['agentData']);
   }
 
   factory UserModel.fromJson(Map<String, dynamic> data) {
@@ -88,6 +94,7 @@ class UserModel {
       'gender': gender,
       'country': country,
       'frame': frame,
+      'agentData': agentData?.toJson(),
       // 'diamondsCount': diamonds,
       // 'beansCount': beans,
       // 'followersCount': followers,
