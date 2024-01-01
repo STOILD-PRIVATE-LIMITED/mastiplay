@@ -104,7 +104,19 @@ Future<UserModel> fetchUserWithEmail(String email) async {
           .get())
       .docs
       .single;
-  return UserModel.fromJson(doc.data());
+  final user = UserModel.fromJson(doc.data());
+  try {
+    final response = await http.get(
+      Uri.parse('$momentsServer/api/users?userId=${user.id}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    user.load(json.decode(response.body));
+  } catch (e) {
+    log("Failed to load user: $e");
+  }
+  return user;
 }
 
 Future<UserModel> fetchUserWithId(String id) async {
@@ -112,7 +124,6 @@ Future<UserModel> fetchUserWithId(String id) async {
       (await firestore.collection('users').where('id', isEqualTo: id).get())
           .docs
           .single;
-
   final user = UserModel.fromJson(doc.data());
   try {
     final response = await http.get(
