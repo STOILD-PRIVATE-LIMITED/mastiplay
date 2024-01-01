@@ -1,34 +1,48 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:spinner_try/shivanshu/models/firestore/firestore_document.dart';
+import 'package:http/http.dart' as http;
 import 'package:spinner_try/shivanshu/models/globals.dart';
+import 'package:spinner_try/webRTC/web_rtc.dart';
 
 enum RoomType {
   audio,
   video,
 }
 
-class Room extends FirestoreDocument {
-  static const firestorePath = 'rooms/';
+class Room {
+  String id;
   String? admin; // userId of admin
   bool askBeforeJoining = false; // default is a public room
   late RoomType roomType;
   String name = "";
   String? imgUrl;
   String? announcement;
+  DateTime updatedAt = DateTime.now();
+  DateTime createdAt = DateTime.now();
 
   Room({
+    this.id = "",
     this.admin,
     this.announcement,
     this.name = "",
     required this.roomType,
     this.imgUrl,
     this.askBeforeJoining = false,
-  }) : super(path: Room.firestorePath);
+    DateTime? updatedAt,
+    DateTime? createdAt,
+  }) {
+    this.updatedAt = updatedAt ?? this.updatedAt;
+    this.createdAt = createdAt ?? this.createdAt;
+  }
 
-  @override
   void loadFromJson(Map<String, dynamic> data) {
-    super.loadFromJson(data);
+    updatedAt = data['updatedAt'] == null
+        ? updatedAt
+        : DateTime.parse(data['updatedAt']);
+    createdAt = data['createdAt'] == null
+        ? createdAt
+        : DateTime.parse(data['createdAt']);
     id = data['id'] ?? id;
     name = data['name'] ?? name;
     imgUrl = data['imgUrl'] ?? imgUrl;
@@ -38,33 +52,42 @@ class Room extends FirestoreDocument {
     askBeforeJoining = data['askBeforeJoining'] ?? askBeforeJoining;
   }
 
-  @override
   Map<String, dynamic> toJson() {
-    return super.toJson()
-      ..addAll({
-        "admin": admin,
-        "name": name,
-        "imgUrl": imgUrl,
-        "askBeforeJoining": askBeforeJoining,
-        "announcement": announcement,
-        "roomType": roomType.index,
-      });
+    return {
+      'updatedAt': updatedAt.toIso8601String(),
+      "admin": admin,
+      "name": name,
+      "imgUrl": imgUrl,
+      "askBeforeJoining": askBeforeJoining,
+      "announcement": announcement,
+      "roomType": roomType.index,
+    };
   }
 
-  @override
-  Future<FirestoreDocument> fetch() async {
-    await super.fetch();
-    loadFromJson(super.data);
+  Future<Room> fetch() async {
+    final response =
+        await http.get(Uri.parse('$websocketUrl/api/rooms?id=$id'));
+    if (response.statusCode != 200) {
+      throw Exception(response.body);
+    }
+    loadFromJson(json.decode(response.body));
     return this;
   }
 
   Future<void> create() async {
-    admin = FirebaseAuth.instance.currentUser!.email!;
+    admin = currentUser.id;
     Room? myRoom = await getMyRoom();
     if (myRoom == null) {
-      super.data = toJson();
-      id = await randomSet(this);
-      // await add();
+      final response = await http.post(
+        Uri.parse('$websocketUrl/api/rooms'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(toJson()),
+      );
+      if (response.statusCode != 200) {
+        throw Exception(response.body);
+      }
     } else {
       loadFromJson(myRoom.toJson());
       id = myRoom.id;
@@ -72,28 +95,52 @@ class Room extends FirestoreDocument {
     }
   }
 
-  @override
   Future<void> update() {
     assert(id.isNotEmpty,
         "Id shouldn't be empty when updating data on firestore, instead use Room.create() to create a new room!");
-    super.data = toJson();
-    return super.update();
+    return http.put(
+      Uri.parse('$websocketUrl/api/rooms'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        toJson(),
+      ),
+    );
   }
 }
 
 // Fetches a room where you're the admin
 Future<Room?> getMyRoom() async {
-  final room = Room(roomType: RoomType.audio);
-  final snapshot = await firestore
-      .collection(Room.firestorePath)
-      .where('admin', isEqualTo: auth.currentUser!.email!)
-      .get();
-  if (snapshot.docs.isEmpty) {
+  final response = await http.get(
+    Uri.parse('$websocketUrl/api/rooms?userId=${currentUser.id}'),
+  );
+  if (response.statusCode == 404) {
     return null;
+  } else if (response.statusCode != 200) {
+    throw Exception(response.body);
   }
-  room.loadFromJson(snapshot.docs.first.data());
-  room.id = snapshot.docs.first.id;
-  return room;
+  return Room(
+    id: "",
+    roomType: RoomType.audio,
+  )..loadFromJson(json.decode(response.body));
+}
+
+Future<List<Room>> getAllRooms(int limit, int start) async {
+  final response = await http.get(
+    Uri.parse('$websocketUrl/api/rooms/all?limit=$limit&start=$start'),
+  );
+  if (response.statusCode != 200) {
+    throw Exception(response.body);
+  }
+  List<Room> rooms = [];
+  for (var room in json.decode(response.body)) {
+    rooms.add(Room(
+      id: "",
+      roomType: RoomType.audio,
+    )..loadFromJson(room));
+  }
+  return rooms;
 }
 
 class Timer extends StatefulWidget {
