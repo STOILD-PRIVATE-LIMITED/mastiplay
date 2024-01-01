@@ -19,6 +19,7 @@ import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/audio_room.dart';
 import 'package:spinner_try/webRTC/live_chat_widget.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 class AudioPage extends StatefulWidget {
   final Room room;
@@ -65,15 +66,7 @@ class _AudioPageState extends State<AudioPage> {
 
   String filePath = '';
 
-  // _playMusic(String filePath) async {
-  //   int result = await _audioPlayer.play(filePath);
-
-  //   if (result == 1) {
-  //     print('Music started playing');
-  //   } else {
-  //     print('Error playing music');
-  //   }
-  // }\
+  bool emojiShowing = false;
   AudioPlayer audioPlayer = AudioPlayer();
   Future<void> playAudio() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -880,7 +873,13 @@ class _AudioPageState extends State<AudioPage> {
                           fontSize: height / 50,
                           color: Colors.black45,
                         ),
-                        suffixIcon: Image.asset('assets/smile.png'),
+                        suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                emojiShowing = !emojiShowing;
+                              });
+                            },
+                            child: Image.asset('assets/smile.png')),
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: width / 30,
                           vertical: height / 100,
@@ -937,13 +936,21 @@ class _AudioPageState extends State<AudioPage> {
                   // Offstage(
                   //   offstage: !emojiShowing,
                   //   child: SizedBox(
-                  //     height: 250,
-                  //     child: EmojiKeyboard(
-                  //       emotionController: _controller,
-                  //       showEmojiKeyboard: emojiShowing,
-                  //       darkMode: true,
-                  //     )
-                  //   ),
+                  //       height: 250,
+                  //       child: EmojiPicker(
+                  //         onEmojiSelected: (category, emoji) {
+                  //           _controller.text += emoji.emoji;
+                  //         },
+                  //         onBackspacePressed: () {
+                  //           _controller.text = _controller.text
+                  //               .substring(0, _controller.text.length - 1);
+                  //         },
+                  //         config: const Config(
+                  //           columns: 7,
+                  //           initCategory: Category.SMILEYS,
+                  //           // bgColor: Color(0xFF21242D),
+                  //         ),
+                  //       )),
                   // ),
                 ],
               ),
