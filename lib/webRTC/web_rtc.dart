@@ -3,16 +3,17 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:spinner_try/shivanshu/utils.dart';
 // import 'package:wakelock/wakelock.dart';
 
-import 'package:spinner_try/android_wakelock.dart';
+// import 'package:spinner_try/android_wakelock.dart';
+import 'package:spinner_try/shivanshu/utils.dart';
 // import 'wakelock/android_wake_lock.dart';
 
 // TODO: set this to some global server
 // The below represents the server address of the server running the socket.io server
-const String websocketUrl = "https://3.7.66.245:8080";
+// const String websocketUrl = "https://3.7.66.245:8080";
 // const String websocketUrl = "https://192.168.9.64:8080";
+const String websocketUrl = "http://v9nm4hsv-8080.asse.devtunnels.ms";
 Socket? socket;
 
 class WebRtcController {
@@ -106,7 +107,7 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
       log("Socket connected !!");
       _localRTCVideoRenderer.initialize().then((value) => initLocalStream());
       // Wakelock.enable();
-      AndroidWakeLock.acquireWakeLock();
+      // AndroidWakeLock.acquireWakeLock();
     });
 
     socket!.on('disconnect', (data) => disconnect());
@@ -200,7 +201,7 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
           return false;
         }
         // Wakelock.disable();
-        await AndroidWakeLock.releaseWakeLock();
+        // await AndroidWakeLock.releaseWakeLock();
         await widget.onExit?.call();
         if (socket != null) {
           socket!.disconnect();
@@ -537,7 +538,7 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
   void disconnect() async {
     // Wakelock.disable();
 
-    await AndroidWakeLock.releaseWakeLock();
+    // await AndroidWakeLock.releaseWakeLock();
     log("Disconnected from signaling server");
     for (final peerId in peers.entries) {
       peers[peerId.key]!.close();

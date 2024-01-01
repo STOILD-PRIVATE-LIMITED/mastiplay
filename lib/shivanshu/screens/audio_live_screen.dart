@@ -1,9 +1,4 @@
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:spinner_try/shivanshu/models/firestore/firestore_document.dart';
-import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/screens/audio_page.dart';
 import 'package:spinner_try/shivanshu/screens/home_page.dart';
@@ -48,40 +43,14 @@ class _AudioLiveState extends State<AudioLive> {
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: ScrollBuilder(
+          child: ScrollBuilder2<List<Room>>(
             key: ValueKey("audioLive$refreshCount"),
-            interval: 4,
-            automaticLoading: true,
-            loader: (context, start, interval) async {
-              Query<Map<String, dynamic>> query =
-                  firestore.collection("rooms/");
-              query = query.orderBy('updatedAt', descending: true);
-              query = query.where('roomType', isEqualTo: RoomType.audio.index);
-              if (lastUpdatedAt != null) {
-                query = query.startAfter([lastUpdatedAt]);
-              }
-              query = query.limit(4);
-              final value = await query.get();
-              final docs = value.docs
-                  .map((e) => FirestoreDocument(
-                      id: e.id,
-                      data: e.data(),
-                      path: "rooms/${e.id}",
-                      updatedAt: DateTime.tryParse(
-                        e.data()['updatedAt'],
-                      )))
-                  .toList();
-              log("lastUpdatedAt=$lastUpdatedAt");
-              final List<Room> rooms = docs
-                  .map((e) => Room(roomType: RoomType.audio)
-                    ..loadFromJson(e.data..addAll({'id': e.id.toString()})))
-                  .toList();
-              if (docs.isNotEmpty) {
-                lastUpdatedAt = rooms.last.updatedAt.toIso8601String();
-              } else {
-                lastUpdatedAt = null;
-              }
-              return [
+            loader: (start, lastRoom) async {
+              final rooms = await getAllRooms(4, start);
+              return rooms.isEmpty ? [] : [rooms];
+            },
+            itemBuilder: (context, rooms) {
+              return Column(mainAxisSize: MainAxisSize.min, children: [
                 InkWell(
                   onTap: () {
                     showMsg(context, 'Hehe');
@@ -238,8 +207,7 @@ class _AudioLiveState extends State<AudioLive> {
                       );
                     },
                   ),
-                const SizedBox(height: 10),
-              ];
+              ]);
             },
           ),
         ),
