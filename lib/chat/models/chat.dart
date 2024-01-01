@@ -8,7 +8,8 @@ import 'package:spinner_try/shivanshu/utils.dart';
 
 import '../../shivanshu/models/globals.dart';
 
-String chatServer = "https://v9nm4hsv-3000.asse.devtunnels.ms";
+// String chatServer = "https://v9nm4hsv-3000.asse.devtunnels.ms";
+String chatServer = "https://3.7.66.245:3000";
 // keep this without trailing slash
 
 class ChatData {
@@ -149,17 +150,17 @@ Future<List<ChatData>> fetchAllChats(String userID) async {
 
 showChatWithUserId(String userId, BuildContext context) async {
   final chatData = await createChat(ChatData(
-              id: "-1",
-              admins: [currentUser.id!, userId],
-              participants: [currentUser.id!, userId],
-              title: "New Chat",
-            ));
-            if (context.mounted) {
-              navigatorPush(
-                context,
-                ChatScreen(
-                  chat: chatData,
-                ),
-              );
-            }
+    id: "-1",
+    admins: [currentUser.id!, userId],
+    participants: [currentUser.id!, userId],
+    title: "New Chat",
+  ));
+  if (context.mounted) {
+    navigatorPush(
+      context,
+      ChatScreen(
+        chat: chatData,
+      ),
+    );
+  }
 }
