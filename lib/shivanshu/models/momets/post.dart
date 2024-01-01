@@ -4,8 +4,9 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:spinner_try/shivanshu/models/globals.dart';
 
-const String momentsServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
-// const String momentsServer = "https://ba18-103-137-198-238.ngrok-free.app";
+// const String momentsServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
+// const String momentsServer = "https://e247-103-137-198-236.ngrok-free.app";
+const String momentsServer = "https://3.7.66.245:3007";
 
 class Post {
   String postId = "";
