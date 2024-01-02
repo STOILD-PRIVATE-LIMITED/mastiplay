@@ -5,15 +5,17 @@ import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/momets/post.dart';
 
 class AgencyData {
-  String id;
+  String? id;
   String name;
   double diamonds = 0;
   double beans = 0;
+  String owner;
   AgencyData({
-    this.id = "",
+    this.id,
     this.diamonds = 0,
     this.beans = 0,
     this.name = "",
+    this.owner = "",
   });
 
   factory AgencyData.fromJson(Map<String, dynamic> json) {
@@ -22,6 +24,7 @@ class AgencyData {
       diamonds: json['diamonds'],
       beans: json['beans'],
       name: json['name'] ?? '',
+      owner: json['name'] ?? '',
     );
   }
 
@@ -30,6 +33,7 @@ class AgencyData {
         'diamonds': diamonds,
         'beans': beans,
         'name': name,
+        'owner': owner,
       };
 }
 
@@ -55,11 +59,16 @@ Future<AgencyData> getAgencyData(String id) async {
   return AgencyData.fromJson(json.decode(response.body));
 }
 
-Future<AgencyData> makeAgencyOwner(String? agencyId, String userId) async {
+Future<AgencyData> makeAgencyOwner(
+    AgencyData? agencyData, String userId) async {
   final response = await http.post(
     Uri.parse('$momentsServer/api/make-agency-owner'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
     body: jsonEncode({
-      'agencyId': agencyId,
+      'agencyId': agencyData?.id,
+      'name': agencyData?.name,
       'userId': userId,
     }),
   );
@@ -72,6 +81,9 @@ Future<AgencyData> makeAgencyOwner(String? agencyId, String userId) async {
 Future<void> changeRole(String userId, String role) async {
   final response = await http.post(
     Uri.parse('$momentsServer/api/change-role'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
     body: {
       'userId': userId,
       'role': role,
@@ -85,6 +97,9 @@ Future<void> changeRole(String userId, String role) async {
 Future<void> addDiamonds(String userId, double diamonds) async {
   final response = await http.post(
     Uri.parse('$momentsServer/api/add-diamonds'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
     body: {
       'userId': userId,
       'diamonds': diamonds,
@@ -98,6 +113,9 @@ Future<void> addDiamonds(String userId, double diamonds) async {
 Future<void> addBeans(String userId, double beans) async {
   final response = await http.post(
     Uri.parse('$momentsServer/api/add-beans'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
     body: {
       'userId': userId,
       'beans': beans,

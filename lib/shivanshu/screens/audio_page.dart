@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:gif/gif.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
+import 'package:spinner_try/shivanshu/screens/bottom_model.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/loading_icon_button.dart';
 import 'package:spinner_try/shivanshu/utils/profile_image.dart';
@@ -20,6 +21,36 @@ import 'package:spinner_try/webRTC/live_chat_widget.dart';
 import 'package:spinner_try/webRTC/web_rtc.dart';
 import 'package:video_player/video_player.dart';
 // import 'package:flutter_web_rtc/flutter_web_rtc.dart';
+
+List<String> gifList = [
+  "assets/gif/155.gif",
+  "assets/gif/232.gif",
+  "assets/gif/512 (1).gif",
+  "assets/gif/512 (2).gif",
+  "assets/gif/512 (3).gif",
+  "assets/gif/512 (4).gif",
+  "assets/gif/512 (5).gif",
+  "assets/gif/512 (6).gif",
+  "assets/gif/512 (7).gif",
+  "assets/gif/512 (8).gif",
+  "assets/gif/5656 (1).gif",
+  "assets/gif/5656 (2).gif",
+  "assets/gif/ad (1).gif",
+  "assets/gif/ad (2).gif",
+  "assets/gif/ad (3).gif",
+  "assets/gif/ad (4).gif",
+  "assets/gif/ad (6).gif",
+  "assets/gif/ad (7).gif",
+  "assets/gif/asd (1).gif",
+  "assets/gif/asd (2).gif",
+  "assets/gif/asd (3).gif",
+  "assets/gif/asd (4).gif",
+  "assets/gif/asd (5).gif",
+  "assets/gif/asd (6).gif",
+  "assets/gif/asd (8).gif",
+  "assets/gif/asd (9).gif",
+  "assets/gif/asd (10).gif",
+];
 
 class AudioPage extends StatefulWidget {
   final Room room;
@@ -50,6 +81,7 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
     final gifIndex = txt.split('_').last;
     log("userId = $userId");
     log("gifIndex = $gifIndex");
+    showGif(userId, gifIndex);
   }
 
   late VideoPlayerController _controllerr;
@@ -65,36 +97,6 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
       const Icon(Icons.thumb_down),
     ];
   }
-
-  List<String> gifList = [
-    "assets/gif/155.gif",
-    "assets/gif/232.gif",
-    "assets/gif/512 (1).gif",
-    "assets/gif/512 (2).gif",
-    "assets/gif/512 (3).gif",
-    "assets/gif/512 (4).gif",
-    "assets/gif/512 (5).gif",
-    "assets/gif/512 (6).gif",
-    "assets/gif/512 (7).gif",
-    "assets/gif/512 (8).gif",
-    "assets/gif/5656 (1).gif",
-    "assets/gif/5656 (2).gif",
-    "assets/gif/ad (1).gif",
-    "assets/gif/ad (2).gif",
-    "assets/gif/ad (3).gif",
-    "assets/gif/ad (4).gif",
-    "assets/gif/ad (6).gif",
-    "assets/gif/ad (7).gif",
-    "assets/gif/asd (1).gif",
-    "assets/gif/asd (2).gif",
-    "assets/gif/asd (3).gif",
-    "assets/gif/asd (4).gif",
-    "assets/gif/asd (5).gif",
-    "assets/gif/asd (6).gif",
-    "assets/gif/asd (8).gif",
-    "assets/gif/asd (9).gif",
-    "assets/gif/asd (10).gif",
-  ];
 
   @override
   void initState() {
@@ -681,8 +683,135 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AudioRoom(
-                    room: widget.room,
+                  WebRTCWidget(
+                    onExit: () async {
+                      if (widget.room.admin == auth.currentUser!.email) {
+                        // if (await askUser(context, 'Do you want to delete the room as well?',
+                        //         no: true,
+                        //         custom: {
+                        //           "delete": const Icon(
+                        //             Icons.delete_forever_rounded,
+                        //             color: Colors.red,
+                        //           )
+                        //         }) ==
+                        //     'delete') {
+                        //   await widget.room.delete();
+                        // }
+                      }
+                    },
+                    controller: controller,
+                    userData: currentUser.toJson(),
+                    roomId: widget.room.id,
+                    builder: (context, roomId, usersData, videoViews,
+                        myUserData, myVideoView, controls) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GridView.count(
+                          shrinkWrap: true,
+                          crossAxisCount: 8 ~/ 2,
+                          childAspectRatio: 1 / 1.3,
+                          children: [
+                            AudioUserTile(
+                              gifWidget: gifUserId !=
+                                          UserModel.fromJson(myUserData).id &&
+                                      gifIndex != null
+                                  ? Gif(
+                                      controller: GifController(
+                                        vsync: this,
+                                      ),
+                                      repeat: ImageRepeat.repeat,
+                                      autostart: Autostart.loop,
+                                      image: AssetImage(
+                                        gifList[int.tryParse(gifIndex!) ?? 0],
+                                      ),
+                                    )
+                                  : null,
+                              user: UserModel.fromJson(myUserData),
+                              onTap: () {
+                                showModalBottomSheet(
+                                  backgroundColor: const Color(0xFF011a51),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20),
+                                    ),
+                                  ),
+                                  context: context,
+                                  builder: ((context) {
+                                    return BottomModel(
+                                      user: UserModel.fromJson(myUserData),
+                                      roomId: myUserData["id"],
+                                    );
+                                  }),
+                                );
+                              },
+                            ),
+                            for (int i = 0; i < usersData.length; ++i)
+                              AudioUserTile(
+                                gifWidget: gifUserId !=
+                                            UserModel.fromJson(usersData[i])
+                                                .id &&
+                                        gifIndex != null
+                                    ? Gif(
+                                        controller: GifController(
+                                          vsync: this,
+                                        ),
+                                        repeat: ImageRepeat.repeat,
+                                        autostart: Autostart.loop,
+                                        image: AssetImage(
+                                          gifList[int.tryParse(gifIndex!) ?? 0],
+                                        ),
+                                      )
+                                    : null,
+                                user: UserModel.fromJson(usersData[i]),
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    backgroundColor: const Color(0xFF011a51),
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20),
+                                      ),
+                                    ),
+                                    context: context,
+                                    builder: ((context) {
+                                      return BottomModel(
+                                        user: UserModel.fromJson(usersData[i]),
+                                        roomId: usersData[i]["id"],
+                                      );
+                                    }),
+                                  );
+                                },
+                              ),
+                            for (int i = usersData.length + 1; i < 8; ++i)
+                              AudioUserTile(
+                                user: UserModel(),
+                                index: i + 1,
+                              ),
+                          ],
+                        ),
+                      );
+                    },
+                    // meBuilder: (context,
+                    //     {required roomId, required userData, required videoView}) {
+                    //   return AudioUserTile(
+                    //     name: userData == null
+                    //         ? "You"
+                    //         : userData['name'] ?? userData['email'] ?? "Anonymous",
+                    //     onTap: () {
+                    //       controller.audio = !controller.audio;
+                    //       showMsg(context,
+                    //           controller.audio ? "You're unmuted" : 'You\'re now muted');
+                    //     },
+                    //   );
+                    // },
+                    // userTileBuilder: (context,
+                    //     {required roomId, required userData, required videoView}) {
+                    //   return AudioUserTile(
+                    //       name: userData == null
+                    //           ? "Error"
+                    //           : userData['name'] ?? userData['email'] ?? "Anonymous");
+                    // },
                   ),
                   Expanded(
                     // height: 350.sp,
@@ -1073,21 +1202,34 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
       autoScroll(delayMilliseconds);
     });
   }
+
+  String? gifUserId;
+  String? gifIndex;
+
+  void showGif(String userId, String index) async {
+    setState(() {
+      gifUserId = userId;
+      gifIndex = index;
+    });
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      gifUserId = null;
+      gifIndex = null;
+    });
+  }
 }
 
 class AudioUserTile extends StatefulWidget {
   final UserModel user;
   final void Function()? onTap;
   final int? index;
-  final bool? showEmojiOnProfile;
-  final String? gifAssestFile;
+  final Widget? gifWidget;
   const AudioUserTile({
     super.key,
     required this.user,
     this.index,
     this.onTap,
-    this.gifAssestFile,
-    this.showEmojiOnProfile,
+    this.gifWidget,
   });
 
   @override
@@ -1133,15 +1275,8 @@ class _AudioUserTileState extends State<AudioUserTile> {
                           ),
                         )
                       : ProfileImage(user: widget.user),
-                  if (widget.showEmojiOnProfile == true)
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Gif(
-                        autostart: Autostart.once,
-                        image: AssetImage(widget.gifAssestFile!),
-                      ),
-                    ),
+                  if (widget.gifWidget != null)
+                    Positioned(bottom: 0, right: 0, child: widget.gifWidget!),
                 ],
               )),
         ),
