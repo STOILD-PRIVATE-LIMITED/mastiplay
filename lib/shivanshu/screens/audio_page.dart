@@ -69,25 +69,11 @@ class _AudioPageState extends State<AudioPage> {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['mp3'],
-      allowCompression: false,
+      allowCompression: true,
     );
     if (result != null) {
       final file = File(result.files.single.path!);
       await audioPlayer.play(DeviceFileSource(file.path));
-    }
-  }
-
-  Future<void> pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['mp3'],
-      allowCompression: false,
-    );
-
-    if (result != null) {
-      setState(() {
-        filePath = result.files.first.path ?? '';
-      });
     }
   }
 
