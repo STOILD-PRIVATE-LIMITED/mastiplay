@@ -7,7 +7,6 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:file_picker/file_picker.dart';
-
 import 'package:flutter/material.dart';
 import 'package:gif/gif.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
@@ -18,6 +17,7 @@ import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/audio_room.dart';
 import 'package:spinner_try/webRTC/live_chat_widget.dart';
+import 'package:spinner_try/webRTC/web_rtc.dart';
 import 'package:video_player/video_player.dart';
 // import 'package:flutter_web_rtc/flutter_web_rtc.dart';
 
@@ -36,7 +36,19 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
   void dispose() {
     _controller.dispose();
     _controllerr.dispose();
+    socket?.off('broadcastMsg', gifReceive);
     super.dispose();
+  }
+
+  void gifReceive(dynamic data) {
+    log("Received a broadcast msg: $data");
+    Map<String, dynamic> gifData = data;
+    final String? gif = gifData['gif'];
+    if (gif == null) {
+      return; // normal text msg was sent, so do nothing
+    }
+    final String userId = gifData['userId'];
+    // your logic goes here
   }
 
   late VideoPlayerController _controllerr;
@@ -82,6 +94,7 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
     "assets/gif/asd (9).gif",
     "assets/gif/asd (10).gif",
   ];
+
   @override
   void initState() {
     super.initState();
@@ -91,6 +104,7 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
       ..initialize().then((_) {
         setState(() {});
       });
+    log("Setting up socket listeners for chat");
   }
 
   String filePath = '';
@@ -672,6 +686,7 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                   Expanded(
                     // height: 350.sp,
                     child: LiveChatBuilder(
+                      onReceiveMsg: gifReceive,
                       builder: (ctx, messages) {
                         messages = messages.reversed.toList();
                         return SizedBox(
@@ -961,7 +976,11 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                                               int index) {
                                             return GestureDetector(
                                               onTap: () {
-                                                  
+                                                sendMessage(
+                                                  currentUser.id.toString(),
+                                                  widget.room.id,
+                                                  gif: index.toString(),
+                                                );
                                               },
                                               child: Gif(
                                                 controller: GifController(

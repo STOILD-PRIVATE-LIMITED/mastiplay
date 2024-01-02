@@ -3,20 +3,21 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/webRTC/web_rtc.dart';
 
-void sendMessage(String msg, String roomId,{String? gif}) {
+void sendMessage(String msg, String roomId, {String? gif}) {
   log("Sending msg: $msg with roomID: $roomId");
   assert(socket != null, "Socket is not yet initialized!");
   socket!.emit('message', {
     'channel': roomId,
     'message': msg,
-    'gif':gif,
+    'gif': gif,
   });
 }
 
 class LiveChatBuilder extends StatefulWidget {
   final Widget Function(
       BuildContext context, List<Map<String, dynamic>> messages) builder;
-  const LiveChatBuilder({super.key, required this.builder});
+  final void Function(dynamic data)? onReceiveMsg;
+  const LiveChatBuilder({super.key, required this.builder, this.onReceiveMsg});
 
   @override
   State<LiveChatBuilder> createState() => _LiveChatBuilderState();
@@ -25,6 +26,7 @@ class LiveChatBuilder extends StatefulWidget {
 class _LiveChatBuilderState extends State<LiveChatBuilder> {
   void broadCastMsg(data) {
     log("Received a broadcast msg: $data");
+    widget.onReceiveMsg?.call(data);
     if (context.mounted) {
       setState(() {
         messages.add(data);
