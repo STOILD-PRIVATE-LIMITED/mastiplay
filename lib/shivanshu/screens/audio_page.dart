@@ -3,11 +3,14 @@
 // import 'package:flutter/foundation.dart' as foundation;
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:gif/gif.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
@@ -108,7 +111,6 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
   }
 
   String filePath = '';
-
   bool emojiShowing = false;
   AudioPlayer audioPlayer = AudioPlayer();
   Future<void> playAudio() async {
@@ -119,6 +121,12 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
     );
     if (result != null) {
       final file = File(result.files.single.path!);
+      Uint8List mp3Data = await file.readAsBytes();
+      MediaStream mediaStream = await navigator.mediaDevices.getUserMedia({
+        'audio': {
+          'audioData': mp3Data,
+        },
+      });
       await audioPlayer.play(DeviceFileSource(file.path));
     }
   }
