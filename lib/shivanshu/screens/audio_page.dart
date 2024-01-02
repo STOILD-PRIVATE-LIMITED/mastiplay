@@ -976,7 +976,11 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                                               int index) {
                                             return GestureDetector(
                                               onTap: () {
-                                                print(gifList[index]);
+                                                sendMessage(
+                                                  currentUser.id.toString(),
+                                                  widget.room.id,
+                                                  gif: index.toString(),
+                                                );
                                               },
                                               child: Gif(
                                                 controller: GifController(
