@@ -3,12 +3,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/webRTC/web_rtc.dart';
 
-void sendMessage(String msg, String roomId) {
+void sendMessage(String msg, String roomId,{String? gif}) {
   log("Sending msg: $msg with roomID: $roomId");
   assert(socket != null, "Socket is not yet initialized!");
   socket!.emit('message', {
     'channel': roomId,
     'message': msg,
+    'gif':gif,
   });
 }
 

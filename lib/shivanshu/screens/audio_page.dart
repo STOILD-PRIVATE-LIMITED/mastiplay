@@ -775,8 +775,6 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                           _controller.text += emoji.emoji;
                         },
                         onBackspacePressed: () {
-                          // _controller.text = _controller.text
-                          //     .substring(0, _controller.text.length - 1);
                           // Close the emojiPicker on backspace press
                           setState(() {
                             emojiShowing = false;
@@ -961,8 +959,10 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                                               .length, // Replace with your item count
                                           itemBuilder: (BuildContext context,
                                               int index) {
-                                            return SizedBox(
-                                              height: 10,
+                                            return GestureDetector(
+                                              onTap: () {
+                                                  
+                                              },
                                               child: Gif(
                                                 controller: GifController(
                                                   vsync: this,
@@ -1060,11 +1060,15 @@ class AudioUserTile extends StatefulWidget {
   final UserModel user;
   final void Function()? onTap;
   final int? index;
+  final bool? showEmojiOnProfile;
+  final String? gifAssestFile;
   const AudioUserTile({
     super.key,
     required this.user,
     this.index,
     this.onTap,
+    this.gifAssestFile,
+    this.showEmojiOnProfile,
   });
 
   @override
@@ -1091,23 +1095,36 @@ class _AudioUserTileState extends State<AudioUserTile> {
                   // });
                 }
               },
-              child: widget.user.photo.isEmpty
-                  ? Container(
-                      height: 60.sp,
-                      width: 60.sp,
-                      decoration: const BoxDecoration(
-                        color: Colors.black45,
-                        shape: BoxShape.circle,
+              child: Stack(
+                children: [
+                  widget.user.photo.isEmpty
+                      ? Container(
+                          height: 60.sp,
+                          width: 60.sp,
+                          decoration: const BoxDecoration(
+                            color: Colors.black45,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            (isMuted
+                                ? Icons.mic_off_outlined
+                                : Icons.mic_none_outlined),
+                            size: 40,
+                            color: colorScheme(context).primary,
+                          ),
+                        )
+                      : ProfileImage(user: widget.user),
+                  if (widget.showEmojiOnProfile == true)
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Gif(
+                        autostart: Autostart.once,
+                        image: AssetImage(widget.gifAssestFile!),
                       ),
-                      child: Icon(
-                        (isMuted
-                            ? Icons.mic_off_outlined
-                            : Icons.mic_none_outlined),
-                        size: 40,
-                        color: colorScheme(context).primary,
-                      ),
-                    )
-                  : ProfileImage(user: widget.user)),
+                    ),
+                ],
+              )),
         ),
         Text(
           widget.user.name.isEmpty ? "No. ${widget.index}" : widget.user.name,
