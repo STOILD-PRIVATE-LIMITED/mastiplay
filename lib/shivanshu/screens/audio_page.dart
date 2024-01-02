@@ -7,8 +7,9 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:file_picker/file_picker.dart';
+
 import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:gif/gif.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
@@ -18,6 +19,7 @@ import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/audio_room.dart';
 import 'package:spinner_try/webRTC/live_chat_widget.dart';
 import 'package:video_player/video_player.dart';
+// import 'package:flutter_web_rtc/flutter_web_rtc.dart';
 
 class AudioPage extends StatefulWidget {
   final Room room;
@@ -27,7 +29,7 @@ class AudioPage extends StatefulWidget {
   State<AudioPage> createState() => _AudioPageState();
 }
 
-class _AudioPageState extends State<AudioPage> {
+class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -51,6 +53,35 @@ class _AudioPageState extends State<AudioPage> {
     ];
   }
 
+  List<String> gifList = [
+    "assets/gif/155.gif",
+    "assets/gif/232.gif",
+    "assets/gif/512 (1).gif",
+    "assets/gif/512 (2).gif",
+    "assets/gif/512 (3).gif",
+    "assets/gif/512 (4).gif",
+    "assets/gif/512 (5).gif",
+    "assets/gif/512 (6).gif",
+    "assets/gif/512 (7).gif",
+    "assets/gif/512 (8).gif",
+    "assets/gif/5656 (1).gif",
+    "assets/gif/5656 (2).gif",
+    "assets/gif/ad (1).gif",
+    "assets/gif/ad (2).gif",
+    "assets/gif/ad (3).gif",
+    "assets/gif/ad (4).gif",
+    "assets/gif/ad (6).gif",
+    "assets/gif/ad (7).gif",
+    "assets/gif/asd (1).gif",
+    "assets/gif/asd (2).gif",
+    "assets/gif/asd (3).gif",
+    "assets/gif/asd (4).gif",
+    "assets/gif/asd (5).gif",
+    "assets/gif/asd (6).gif",
+    "assets/gif/asd (8).gif",
+    "assets/gif/asd (9).gif",
+    "assets/gif/asd (10).gif",
+  ];
   @override
   void initState() {
     super.initState();
@@ -735,51 +766,75 @@ class _AudioPageState extends State<AudioPage> {
                       },
                     ),
                   ),
-                ],
-              ),
-            ),
-            floatingActionButton: Container(
-              height: 100.sp,
-              width: 100.sp,
-              decoration: BoxDecoration(
-                // color: Colors.green[100],
-                color: Colors.transparent,
-                border: Border.all(
-                  color: Colors.transparent,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  PageView(
-                    controller: controllerr,
-                    children: items,
-                  ),
-                  Positioned(
-                    bottom: 10,
-                    child: SmoothPageIndicator(
-                      controller: controllerr,
-                      count: items.length,
-                      effect: const ExpandingDotsEffect(
-                        dotHeight: 10,
-                        dotWidth: 10,
-                        dotColor: Colors.grey,
-                        activeDotColor: Colors.white,
+                  Offstage(
+                    offstage: !emojiShowing,
+                    child: SizedBox(
+                      height: 250,
+                      child: EmojiPicker(
+                        onEmojiSelected: (category, emoji) {
+                          _controller.text += emoji.emoji;
+                        },
+                        onBackspacePressed: () {
+                          // _controller.text = _controller.text
+                          //     .substring(0, _controller.text.length - 1);
+                          // Close the emojiPicker on backspace press
+                          setState(() {
+                            emojiShowing = false;
+                          });
+                        },
+                        config: const Config(
+                          columns: 7,
+                          initCategory: Category.SMILEYS,
+                          // bgColor: Color(0xFF21242D),
+                        ),
                       ),
-                      onDotClicked: (index) {
-                        controllerr.animateToPage(
-                          index,
-                          duration: const Duration(milliseconds: 800),
-                          curve: Curves.fastOutSlowIn,
-                        );
-                      },
                     ),
                   ),
                 ],
               ),
             ),
+            // floatingActionButton: Container(
+            //   height: 100.sp,
+            //   width: 100.sp,
+            //   decoration: BoxDecoration(
+            //     // color: Colors.green[100],
+            //     color: Colors.transparent,
+            //     border: Border.all(
+            //       color: Colors.transparent,
+            //       width: 2,
+            //     ),
+            //     borderRadius: BorderRadius.circular(10),
+            //   ),
+            //   child: Stack(
+            //     alignment: Alignment.center,
+            //     children: [
+            //       PageView(
+            //         controller: controllerr,
+            //         children: items,
+            //       ),
+            //       Positioned(
+            //         bottom: 10,
+            //         child: SmoothPageIndicator(
+            //           controller: controllerr,
+            //           count: items.length,
+            //           effect: const ExpandingDotsEffect(
+            //             dotHeight: 10,
+            //             dotWidth: 10,
+            //             dotColor: Colors.grey,
+            //             activeDotColor: Colors.white,
+            //           ),
+            //           onDotClicked: (index) {
+            //             controllerr.animateToPage(
+            //               index,
+            //               duration: const Duration(milliseconds: 800),
+            //               curve: Curves.fastOutSlowIn,
+            //             );
+            //           },
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             bottomNavigationBar: Card(
               color: Colors.black26,
               child: Row(
@@ -859,9 +914,71 @@ class _AudioPageState extends State<AudioPage> {
                         ),
                         suffixIcon: GestureDetector(
                             onTap: () {
-                              setState(() {
-                                emojiShowing = !emojiShowing;
-                              });
+                              showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) {
+                                    return Scaffold(
+                                      bottomNavigationBar: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  Navigator.pop(context);
+                                                  emojiShowing = !emojiShowing;
+                                                });
+                                              },
+                                              child: const Icon(Icons.add)),
+                                          const Icon(Icons.add),
+                                          const Icon(Icons.add),
+                                          const Icon(Icons.add),
+                                          const Icon(Icons.add),
+                                          const Icon(Icons.add),
+                                        ],
+                                      ),
+                                      appBar: AppBar(
+                                        title: const Text(
+                                          'Choose an option:',
+                                          style: TextStyle(
+                                              fontSize: 18.0,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      body: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: GridView.builder(
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          gridDelegate:
+                                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 4,
+                                            crossAxisSpacing: 8.0,
+                                            mainAxisSpacing: 8.0,
+                                          ),
+                                          itemCount: gifList
+                                              .length, // Replace with your item count
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return SizedBox(
+                                              height: 10,
+                                              child: Gif(
+                                                controller: GifController(
+                                                  vsync: this,
+                                                ),
+                                                repeat: ImageRepeat.repeat,
+                                                autostart: Autostart.loop,
+                                                image: AssetImage(
+                                                  gifList[index],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  });
                             },
                             child: Image.asset('assets/smile.png')),
                         contentPadding: EdgeInsets.symmetric(
@@ -916,26 +1033,6 @@ class _AudioPageState extends State<AudioPage> {
                       showMsg(context, "In Developement");
                     },
                     icon: Image.asset('assets/gift.png'),
-                  ),
-                  Offstage(
-                    offstage: !emojiShowing,
-                    child: SizedBox(
-                      height: 250,
-                      child: EmojiPicker(
-                        onEmojiSelected: (category, emoji) {
-                          _controller.text += emoji.emoji;
-                        },
-                        onBackspacePressed: () {
-                          _controller.text = _controller.text
-                              .substring(0, _controller.text.length - 1);
-                        },
-                        config: const Config(
-                          columns: 7,
-                          initCategory: Category.SMILEYS,
-                          // bgColor: Color(0xFF21242D),
-                        ),
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -1052,6 +1149,27 @@ void showAlertDialog(BuildContext context) {
     },
   );
 }
+// Widget _buildGridView() {
+//   return GridView.builder(
+//     shrinkWrap: true,
+//     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+//       crossAxisCount: 3,
+//       crossAxisSpacing: 8.0,
+//       mainAxisSpacing: 8.0,
+//     ),
+//     itemCount: , // Replace with your item count
+//     itemBuilder: (BuildContext context, int index) {
+//       return Container(
+//         color: Colors.blue,
+//         child: Center(
+//           child: Text('Item $index'),
+//         ),
+//       );
+//     },
+//   );
+// }
+
+
   // CircleAvatar(
                 //   radius: 15,
                 //   backgroundImage: currentUser.photo.isNotEmpty
