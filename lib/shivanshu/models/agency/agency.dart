@@ -21,7 +21,7 @@ class AgencyData {
       id: json['id'],
       diamonds: json['diamonds'],
       beans: json['beans'],
-      name: json['name'],
+      name: json['name'] ?? '',
     );
   }
 
@@ -64,7 +64,7 @@ Future<AgencyData> makeAgencyOwner(String? agencyId, String userId) async {
     }),
   );
   if (response.statusCode != 200) {
-    throw Exception('Failed to make agency owner');
+    throw Exception('Failed to make agency owner: ${response.body}');
   }
   return AgencyData.fromJson(json.decode(response.body));
 }
