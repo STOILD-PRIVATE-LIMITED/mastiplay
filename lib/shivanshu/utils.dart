@@ -251,18 +251,18 @@ Future<String?> askUser(
       TextButton.icon(
         label: const Text("Yes"),
         onPressed: () {
-          Navigator.of(context).pop("no");
+          Navigator.of(context).pop("yes");
         },
         icon: const Icon(Icons.check_rounded),
       ),
-    // if (no == true)
-    //   TextButton.icon(
-    //     label: const Text(""),
-    //     onPressed: () {
-    //       Navigator.of(context).pop("no");
-    //     },
-    //     icon: const Icon(Icons.close_rounded),
-    //   ),
+    if (no == true)
+      TextButton.icon(
+        label: const Text("No"),
+        onPressed: () {
+          Navigator.of(context).pop("no");
+        },
+        icon: const Icon(Icons.close_rounded),
+      ),
     if (cancel == true)
       TextButton.icon(
         label: const Text("Cancel"),

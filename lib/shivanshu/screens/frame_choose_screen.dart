@@ -53,6 +53,7 @@ class _FrameChooseScreenState extends State<FrameChooseScreen> {
       country: widget.country,
       frame: (selectedIndex! + 1).toString(),
     );
+    await createUser(currentUser);
     final id = await randomSet(
       FirestoreDocument(
         id: widget.email,

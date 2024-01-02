@@ -103,7 +103,7 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
     socket!.onConnect((data) {
       log("Socket connected !!");
       _localRTCVideoRenderer.initialize().then((value) => initLocalStream());
-      Wakelock.enable();
+      WakelockPlus.enable();
       // AndroidWakeLock.acquireWakeLock();
     });
 
@@ -197,7 +197,7 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
             'yes') {
           return true;
         }
-        Wakelock.disable();
+        WakelockPlus.disable();
         // await AndroidWakeLock.releaseWakeLock();
         await widget.onExit?.call();
         if (socket != null) {
@@ -533,7 +533,7 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
   }
 
   void disconnect() async {
-    Wakelock.disable();
+    WakelockPlus.disable();
 
     log("Disconnected from signaling server");
     for (final peerId in peers.entries) {

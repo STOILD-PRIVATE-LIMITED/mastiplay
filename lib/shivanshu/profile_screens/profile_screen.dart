@@ -9,8 +9,10 @@ import 'package:spinner_try/screen/nobel_center.dart';
 import 'package:spinner_try/screen/profile_edit.dart';
 import 'package:spinner_try/screen/setting.dart';
 import 'package:spinner_try/screen/store.dart';
+import 'package:spinner_try/shivanshu/admin_panel/admin_panel.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/profile_screens/family_screen.dart';
+import 'package:spinner_try/shivanshu/screens/bind_agency.dart';
 import 'package:spinner_try/shivanshu/screens/my_posts.dart';
 import 'package:spinner_try/shivanshu/screens/wallet_screen.dart';
 import 'package:spinner_try/shivanshu/user_level/user_level_page.dart';
@@ -188,16 +190,17 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 title: const Text('Wallet'),
               ),
-              ListTile(
-                onTap: () {
-                  navigatorPush(context, const Agent());
-                },
-                leading: Image.asset(
-                  'assets/diamond.png',
-                  width: 20,
+              if (currentUser.agentData != null)
+                ListTile(
+                  onTap: () {
+                    navigatorPush(context, const Agent());
+                  },
+                  leading: Image.asset(
+                    'assets/diamond.png',
+                    width: 20,
+                  ),
+                  title: const Text('Agent'),
                 ),
-                title: const Text('Agent'),
-              ),
               ListTile(
                 onTap: () {
                   Navigator.push(
@@ -221,16 +224,17 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 title: const Text('Noble Center'),
               ),
-              ListTile(
-                onTap: () {
-                  navigatorPush(context, const AgencyCenter());
-                },
-                leading: Image.asset(
-                  'assets/diamond.png',
-                  width: 20,
+              if (currentUser.ownedAgencyData != null)
+                ListTile(
+                  onTap: () {
+                    navigatorPush(context, const AgencyCenter());
+                  },
+                  leading: Image.asset(
+                    'assets/diamond.png',
+                    width: 20,
+                  ),
+                  title: const Text('Agency Center'),
                 ),
-                title: const Text('Agency Center'),
-              ),
               ListTile(
                 onTap: () {
                   navigatorPush(context, const CreatorPage());
@@ -273,7 +277,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {
-                  showMsg(context, 'Show some screen here');
+                  navigatorPush(context, const BindAgency());
                 },
                 leading: Image.asset(
                   'assets/diamond.png',
@@ -363,6 +367,22 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+                  // if(currentUser.role!=null && currentUser.role!.contains('admin'))
+                  if (true)
+                    InkWell(
+                      onTap: () {
+                        navigatorPush(context, const AdminPanel());
+                      },
+                      child: const MyColumn(
+                        children: [
+                          Icon(
+                            Icons.admin_panel_settings_rounded,
+                            color: Colors.green,
+                          ),
+                          Text('Admin Panel'),
+                        ],
+                      ),
+                    ),
                   InkWell(
                     onTap: () {
                       navigatorPush(context, const About());

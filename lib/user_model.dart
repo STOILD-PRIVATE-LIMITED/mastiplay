@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:spinner_try/chat/widgets/profile_preview.dart';
+import 'package:spinner_try/shivanshu/models/agency/agency.dart';
 import 'package:spinner_try/shivanshu/models/agent/agent.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/momets/post.dart';
@@ -27,6 +28,9 @@ class UserModel {
   int diamonds = 0;
   int beans = 0;
   AgentData? agentData;
+  AgencyData? ownedAgencyData;
+  AgencyData? joinedAgencyData;
+  String? role;
 
   UserModel({
     this.dob,
@@ -45,6 +49,9 @@ class UserModel {
     this.diamonds = 0,
     this.beans = 0,
     this.agentData,
+    this.ownedAgencyData,
+    this.joinedAgencyData,
+    this.role,
   });
 
   factory UserModel.fromSnapshot(
@@ -76,6 +83,13 @@ class UserModel {
     agentData = data['agentData'] == null
         ? agentData
         : AgentData.fromJson(data['agentData']);
+    ownedAgencyData = data['ownedAgencyData'] == null
+        ? ownedAgencyData
+        : AgencyData.fromJson(data['ownedAgencyData']);
+    joinedAgencyData = data['joinedAgencyData'] == null
+        ? joinedAgencyData
+        : AgencyData.fromJson(data['joinedAgencyData']);
+    role = data['role'] ?? role;
   }
 
   factory UserModel.fromJson(Map<String, dynamic> data) {
@@ -94,7 +108,10 @@ class UserModel {
       'gender': gender,
       'country': country,
       'frame': frame,
-      'agentData': agentData?.toJson(),
+      // 'agentData': agentData?.toJson(),
+      // 'ownedAgencyData': ownedAgencyData?.toJson(),
+      // 'joinedAgencyData': joinedAgencyData?.toJson(),
+      // 'role': role,
       // 'diamondsCount': diamonds,
       // 'beansCount': beans,
       // 'followersCount': followers,
@@ -187,4 +204,21 @@ Future showUserPreview(BuildContext context, UserModel user) {
       ),
     ),
   );
+}
+
+Future<void> createUser(UserModel userData) async {
+  try {
+    final response = await http.post(
+      Uri.parse('$momentsServer/api/user'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(userData.toJson()),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to create user: ${response.body}');
+    }
+  } catch (e) {
+    log("Failed to create user: $e");
+  }
 }

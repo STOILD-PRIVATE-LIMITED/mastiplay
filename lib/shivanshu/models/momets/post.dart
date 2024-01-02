@@ -4,8 +4,8 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:spinner_try/shivanshu/models/globals.dart';
 
-const String momentsServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
-// const String momentsServer = "https://e247-103-137-198-236.ngrok-free.app";
+// const String momentsServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
+const String momentsServer = "https://bcb0-103-137-198-235.ngrok-free.app";
 // const String momentsServer = "https://3.7.66.245:3007";
 
 class Post {
@@ -140,6 +140,7 @@ Future<List<Post>> getFollowingPost(int limit, int start) async {
     final List<dynamic> posts = json.decode(response.body);
     return posts.map((e) => Post.fromJson(e)).toList();
   } else {
+    log("Failed to following load posts: ${response.body}");
     throw Exception('Failed to load posts');
   }
 }
