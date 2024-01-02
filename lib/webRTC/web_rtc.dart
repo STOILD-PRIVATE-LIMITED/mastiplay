@@ -104,7 +104,6 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
       log("Socket connected !!");
       _localRTCVideoRenderer.initialize().then((value) => initLocalStream());
       WakelockPlus.enable();
-      // AndroidWakeLock.acquireWakeLock();
     });
 
     socket!.on('disconnect', (data) => disconnect());

@@ -49,7 +49,10 @@ dependencies:
   file_picker: ^6.1.1
   emoji_picker_flutter: ^1.6.3
   wakelock_plus: ^1.1.4
+<<<<<<< HEAD
   # wakelock: ^0.4.0
+=======
+>>>>>>> dev
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +66,7 @@ flutter:
 
   assets:
     - assets/
+    - assets/gif/
   fonts:
     - family: Sofia Pro
       fonts:
