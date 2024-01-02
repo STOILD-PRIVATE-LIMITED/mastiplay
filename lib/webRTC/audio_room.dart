@@ -61,28 +61,26 @@ class _AudioRoomState extends State<AudioRoom> with TickerProviderStateMixin {
             crossAxisCount: widget.maxParticipants ~/ 2,
             childAspectRatio: 1 / 1.3,
             children: [
-              Container(
-                child: AudioUserTile(
-                  user: UserModel.fromJson(myUserData),
-                  onTap: () {
-                    showModalBottomSheet(
-                      backgroundColor: const Color(0xFF011a51),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
+              AudioUserTile(
+                user: UserModel.fromJson(myUserData),
+                onTap: () {
+                  showModalBottomSheet(
+                    backgroundColor: const Color(0xFF011a51),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
                       ),
-                      context: context,
-                      builder: ((context) {
-                        return BottomModel(
-                          user: UserModel.fromJson(myUserData),
-                          roomId: myUserData["id"],
-                        );
-                      }),
-                    );
-                  },
-                ),
+                    ),
+                    context: context,
+                    builder: ((context) {
+                      return BottomModel(
+                        user: UserModel.fromJson(myUserData),
+                        roomId: myUserData["id"],
+                      );
+                    }),
+                  );
+                },
               ),
               for (int i = 0; i < usersData.length; ++i)
                 AudioUserTile(
