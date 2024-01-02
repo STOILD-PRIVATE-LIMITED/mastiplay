@@ -94,12 +94,13 @@ class _BindAgencyState extends State<BindAgency> {
   }
 
   Future<void> _joinAgency() async {
+    assert(agencyData!.id != null);
     if (agencyData == null) {
       showMsg(context, "Agency Doesn't Exist");
       return;
     }
     try {
-      await joinAgency(agencyData!.id);
+      await joinAgency(agencyData!.id!);
       if (context.mounted) {
         showMsg(context, "Joined Agency");
         Navigator.of(context).pop();

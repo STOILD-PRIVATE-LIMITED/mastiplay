@@ -36,7 +36,7 @@ class _AgencyPanelState extends State<AgencyPanel> {
             children: [
               SizedBox(
                 width: 150,
-                height: 150,
+                height: 120,
                 child: GridTileLogo(
                   onTap: () {
                     Navigator.of(context).pop();
@@ -153,7 +153,11 @@ class _AgencyPanelState extends State<AgencyPanel> {
         return;
       }
     }
-    await makeAgencyOwner(agencyData?.id, _userIdController.text);
+    agencyData ??= AgencyData(
+        name:
+            (await promptUser(context, question: "Enter name of the agency")) ??
+                "New Agency");
+    await makeAgencyOwner(agencyData, _userIdController.text);
     if (context.mounted) {
       showMsg(context, "Agency Owner Changed");
       Navigator.of(context).pop();
