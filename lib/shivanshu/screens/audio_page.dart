@@ -43,12 +43,13 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
   void gifReceive(dynamic data) {
     log("Received a broadcast msg: $data");
     Map<String, dynamic> gifData = data;
-    final String? gif = gifData['gif'];
-    if (gif == null) {
-      return; // normal text msg was sent, so do nothing
-    }
-    final String userId = gifData['userId'];
-    // your logic goes here
+    final String msg = gifData['message'];
+    if (!msg.startsWith("\$#")) return;
+    String txt = msg.split('\$#').last;
+    final userId = txt.split('_').first;
+    final gifIndex = txt.split('_').last;
+    log("userId = $userId");
+    log("gifIndex = $gifIndex");
   }
 
   late VideoPlayerController _controllerr;
@@ -977,9 +978,8 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                                             return GestureDetector(
                                               onTap: () {
                                                 sendMessage(
-                                                  currentUser.id.toString(),
+                                                  "\$#${currentUser.id.toString()}_$index",
                                                   widget.room.id,
-                                                  gif: index.toString(),
                                                 );
                                               },
                                               child: Gif(
