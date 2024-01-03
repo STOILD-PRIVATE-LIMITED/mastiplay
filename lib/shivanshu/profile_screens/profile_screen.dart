@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/screen/about.dart';
 import 'package:spinner_try/screen/agency_center.dart';
@@ -367,8 +368,9 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // if(currentUser.role!=null && currentUser.role!.contains('admin'))
-                  if (true)
+                  if (kDebugMode ||
+                      (currentUser.role != null &&
+                          currentUser.role!.contains('admin')))
                     InkWell(
                       onTap: () {
                         navigatorPush(context, const AdminPanel());
