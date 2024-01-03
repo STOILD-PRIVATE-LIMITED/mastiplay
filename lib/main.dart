@@ -13,8 +13,6 @@ import 'package:spinner_try/chat/models/message.dart';
 import 'package:spinner_try/screen/login.dart';
 import 'package:spinner_try/shivanshu/models/firestore/fcm.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
-import 'package:spinner_try/shivanshu/models/room.dart';
-import 'package:spinner_try/shivanshu/models/webRTC/new_audio_room.dart';
 import 'package:spinner_try/shivanshu/screens/gender_screen.dart';
 import 'package:spinner_try/shivanshu/screens/home_live.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
@@ -67,31 +65,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           fontFamily: 'assets/fontsSofiaProRegular.ttf',
         ),
-        home: FutureBuilder(
-            future: getMyRoom(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Scaffold(
-                  body: Center(child: Text('Error: ${snapshot.error}')),
-                );
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Scaffold(
-                    body: Center(
-                  child: CircularProgressIndicatorRainbow(),
-                ));
-              }
-              final room = snapshot.data ??
-                  Room(
-                    roomType: RoomType.audio,
-                    id: '123',
-                    name: 'Test Room',
-                  );
-              return NewAudioRoom(
-                roomId: room.id,
-              );
-            })
-        // home: const NewAuth()
-        );
+        home: const NewAuth());
   }
 }
 
