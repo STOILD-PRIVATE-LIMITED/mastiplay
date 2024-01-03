@@ -734,7 +734,9 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                               //       )
                               //     : null,
                               // gifIndex: int.parse('$gifIndex'),
-                              gifIndex: gifIndex ==null ? null : int.parse('$gifIndex'),
+                              gifIndex: gifIndex == null
+                                  ? null
+                                  : int.parse('$gifIndex'),
                               user: UserModel.fromJson(myUserData),
                               onTap: () {
                                 showModalBottomSheet(
@@ -772,7 +774,9 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                                 //         ),
                                 //       )
                                 //     : null,
-                                gifIndex: gifIndex ==null ? null : int.parse('$gifIndex'),
+                                gifIndex: gifIndex == null
+                                    ? null
+                                    : int.parse('$gifIndex'),
                                 user: UserModel.fromJson(usersData[i]),
                                 onTap: () {
                                   showModalBottomSheet(
@@ -866,8 +870,8 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                                 index++;
                               }
                               final String message =
-                                  messages[index]['message'] ?? "Error";
-                              final userData = messages[index]['userData'];
+                                  messages[index - 1]['message'] ?? "Error";
+                              final userData = messages[index - 1]['userData'];
                               final photo = userData['photo'];
                               return Container(
                                 padding: const EdgeInsets.symmetric(
@@ -1350,6 +1354,12 @@ class _AudioUserTileState extends State<AudioUserTile>
     with TickerProviderStateMixin {
   bool isMuted = false;
 
+  @override
+  void initState() {
+    super.initState();
+    print(
+        '!!!!!!!!!!!!!!!!!!!!!!!!!!!! ${widget.gifIndex} !!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+  }
 
   @override
   Widget build(BuildContext context) {
