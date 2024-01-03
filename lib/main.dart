@@ -13,6 +13,8 @@ import 'package:spinner_try/chat/models/message.dart';
 import 'package:spinner_try/screen/login.dart';
 import 'package:spinner_try/shivanshu/models/firestore/fcm.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
+import 'package:spinner_try/shivanshu/models/room.dart';
+import 'package:spinner_try/shivanshu/models/webRTC/new_audio_room.dart';
 import 'package:spinner_try/shivanshu/screens/gender_screen.dart';
 import 'package:spinner_try/shivanshu/screens/home_live.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
@@ -42,17 +44,10 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   prefs = await SharedPreferences.getInstance();
-  prefs.clear();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  // final users = await firestore.collection('users').get();
-  // for (var element in users.docs) {
-  //   final user = UserModel.fromSnapshot(element);
-  //   log(user.toJson().toString());
-  //   await createUser(user);
-  // }
   runApp(const MyApp());
 }
 
@@ -72,17 +67,30 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           fontFamily: 'assets/fontsSofiaProRegular.ttf',
         ),
-        home: const NewAuth()
-        // home: const ProfileEdit(),
-        // home: HomeScreennn(),
-        // home: const HomeLive()
-        // home: VideoCallApp(),
-        // home: const NobelCenter(),
-        // home: const AnotherNodelCenter(),
-        // home: JackpotScreen(
-        //   items: animals.map((e) => Text(e),).toList(),
-        //   itemHeight: 30,
-        // ),
+        home: FutureBuilder(
+            future: getMyRoom(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Scaffold(
+                  body: Center(child: Text('Error: ${snapshot.error}')),
+                );
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Scaffold(
+                    body: Center(
+                  child: CircularProgressIndicatorRainbow(),
+                ));
+              }
+              final room = snapshot.data ??
+                  Room(
+                    roomType: RoomType.audio,
+                    id: '123',
+                    name: 'Test Room',
+                  );
+              return NewAudioRoom(
+                roomId: room.id,
+              );
+            })
+        // home: const NewAuth()
         );
   }
 }

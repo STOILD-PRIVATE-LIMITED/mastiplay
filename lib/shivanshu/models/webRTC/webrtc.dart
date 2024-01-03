@@ -31,7 +31,6 @@ class WebRTCRoom {
     List<RTCVideoView> videoViews,
     dynamic myUserData,
     RTCVideoView myVideoView,
-    Widget controls,
   ) builder;
 
   WebRTCRoom({
@@ -53,7 +52,7 @@ class WebRTCRoom {
   final Map<String, RTCVideoRenderer> _remoteRTCVideoRenderers = {};
   bool _isAudioOn = true, _isVideoOn = true, _isFrontCameraSelected = true;
 
-  Future<void> connectToServer() async {
+  void connectToServer() {
     log("Connecting to socket on $websocketUrl");
     socket = io(
         websocketUrl,
@@ -74,10 +73,11 @@ class WebRTCRoom {
     socket.connect();
   }
 
-  void _onConnect(data) {
+  void _onConnect(data) async {
     log("Socket connected | data: $data");
-    _localRTCVideoRenderer.initialize().then((value) => _initLocalStream());
-    onConnect?.call();
+    await _localRTCVideoRenderer.initialize();
+    await _initLocalStream();
+    await onConnect?.call();
   }
 
   Future<void> _initLocalStream() async {
@@ -150,7 +150,7 @@ class WebRTCRoom {
   Future<void> _join() async {
     log("Emiting Join room $roomId");
     socket.emit('join', {
-      'userdata': currentUser,
+      'userdata': currentUser.toJson(),
       'channel': roomId,
     });
   }
@@ -176,7 +176,7 @@ class WebRTCRoom {
     _peers.clear();
   }
 
-  Widget buildWidget(BuildContext context) {
+  Widget build(BuildContext context) {
     final List<dynamic> usersData = [];
     final List<RTCVideoView> videoViews = [];
     // [
@@ -212,53 +212,11 @@ class WebRTCRoom {
         roomId,
         usersData,
         videoViews,
-        currentUser,
+        currentUser.toJson(),
         RTCVideoView(
           _localRTCVideoRenderer,
           objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
           mirror: true,
-        ),
-        Wrap(
-          alignment: WrapAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: Icon(
-                _isVideoOn ? Icons.videocam : Icons.videocam_off,
-              ),
-              onPressed: () {
-                _isVideoOn = !_isVideoOn;
-                _toggleCamera(_isVideoOn);
-              },
-            ),
-            IconButton(
-              icon: Icon(
-                _isAudioOn ? Icons.mic : Icons.mic_off,
-              ),
-              onPressed: () {
-                _isAudioOn = !_isAudioOn;
-                _toggleMic(_isAudioOn);
-              },
-            ),
-            IconButton(
-              icon: Icon(
-                _isFrontCameraSelected ? Icons.camera_front : Icons.camera_rear,
-              ),
-              onPressed: () {
-                _isFrontCameraSelected = !_isFrontCameraSelected;
-                _switchCamera(_isFrontCameraSelected);
-              },
-            ),
-            IconButton(
-              onPressed: () {
-                socket.disconnect();
-                socket.close();
-                if (context.mounted) {
-                  Navigator.of(context).pop();
-                }
-              },
-              icon: const Icon(Icons.call_end_rounded),
-            ),
-          ],
         ),
       ),
     );
@@ -308,16 +266,24 @@ class WebRTCRoom {
     _peers[peerId]!.onTrack = (event) async {
       log("onTrack Called from peerId: $peerId");
       if (!_remoteRTCVideoRenderers.containsKey(peerId)) {
+        log("1");
         _remoteRTCVideoRenderers.addAll({
           peerId: RTCVideoRenderer(),
         });
-        await _remoteRTCVideoRenderers[peerId]!.initialize().then((value) {
-          _remoteRTCVideoRenderers[peerId]!.srcObject = event.streams[0];
-        });
-      } else {
+        log("2");
+        await _remoteRTCVideoRenderers[peerId]!.initialize();
+        log("3");
         _remoteRTCVideoRenderers[peerId]!.srcObject = event.streams[0];
+        log("4");
+      } else {
+        log("5");
+        await _remoteRTCVideoRenderers[peerId]!.initialize();
+        _remoteRTCVideoRenderers[peerId]!.srcObject = event.streams[0];
+        log("6");
       }
+      log("7-END");
       onRemoteStreamAdded?.call();
+      log("8-END");
     };
 
     _localStream!.getTracks().forEach((track) {
