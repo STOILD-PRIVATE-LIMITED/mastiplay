@@ -3,6 +3,7 @@
 // import 'package:flutter/foundation.dart' as foundation;
 import 'dart:developer';
 import 'dart:io';
+// import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -18,6 +19,7 @@ import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/loading_icon_button.dart';
 import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'package:spinner_try/user_model.dart';
+import 'package:spinner_try/wave/wave_painter.dart';
 import 'package:spinner_try/webRTC/audio_room.dart';
 import 'package:spinner_try/webRTC/live_chat_widget.dart';
 import 'package:spinner_try/webRTC/web_rtc.dart';
@@ -1354,12 +1356,7 @@ class _AudioUserTileState extends State<AudioUserTile>
     with TickerProviderStateMixin {
   bool isMuted = false;
 
-  @override
-  void initState() {
-    super.initState();
-    print(
-        '!!!!!!!!!!!!!!!!!!!!!!!!!!!! ${widget.gifIndex} !!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -1382,20 +1379,20 @@ class _AudioUserTileState extends State<AudioUserTile>
                 children: [
                   widget.user.photo.isEmpty
                       ? Container(
-                          height: 60.sp,
-                          width: 60.sp,
-                          decoration: const BoxDecoration(
-                            color: Colors.black45,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            (isMuted
-                                ? Icons.mic_off_outlined
-                                : Icons.mic_none_outlined),
-                            size: 40,
-                            color: colorScheme(context).primary,
-                          ),
-                        )
+                        height: 60.sp,
+                        width: 60.sp,
+                        decoration: const BoxDecoration(
+                          color: Colors.black45,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          (isMuted
+                              ? Icons.mic_off_outlined
+                              : Icons.mic_none_outlined),
+                          size: 40,
+                          color: colorScheme(context).primary,
+                        ),
+                      )
                       : ProfileImage(user: widget.user),
                   if (widget.gifIndex != null)
                     Positioned(
@@ -1428,6 +1425,7 @@ class _AudioUserTileState extends State<AudioUserTile>
       ],
     );
   }
+
 }
 
 void showAlertDialog(BuildContext context) {
