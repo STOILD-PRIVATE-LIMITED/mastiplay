@@ -719,20 +719,22 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                           childAspectRatio: 1 / 1.3,
                           children: [
                             AudioUserTile(
-                              gifWidget: gifUserId !=
-                                          UserModel.fromJson(myUserData).id &&
-                                      gifIndex != null
-                                  ? Gif(
-                                      controller: GifController(
-                                        vsync: this,
-                                      ),
-                                      repeat: ImageRepeat.repeat,
-                                      autostart: Autostart.loop,
-                                      image: AssetImage(
-                                        gifList[int.tryParse(gifIndex!) ?? 0],
-                                      ),
-                                    )
-                                  : null,
+                              // gifWidget: gifUserId !=
+                              //             UserModel.fromJson(myUserData).id &&
+                              //         gifIndex != null
+                              //     ? Gif(
+                              //         controller: GifController(
+                              //           vsync: this,
+                              //         ),
+                              //         repeat: ImageRepeat.repeat,
+                              //         autostart: Autostart.loop,
+                              //         image: AssetImage(
+                              //           gifList[int.tryParse(gifIndex!) ?? 0],
+                              //         ),
+                              //       )
+                              //     : null,
+                              // gifIndex: int.parse('$gifIndex'),
+                              gifIndex: gifIndex ==null ? null : int.parse('$gifIndex'),
                               user: UserModel.fromJson(myUserData),
                               onTap: () {
                                 showModalBottomSheet(
@@ -755,21 +757,22 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                             ),
                             for (int i = 0; i < usersData.length; ++i)
                               AudioUserTile(
-                                gifWidget: gifUserId !=
-                                            UserModel.fromJson(usersData[i])
-                                                .id &&
-                                        gifIndex != null
-                                    ? Gif(
-                                        controller: GifController(
-                                          vsync: this,
-                                        ),
-                                        repeat: ImageRepeat.repeat,
-                                        autostart: Autostart.loop,
-                                        image: AssetImage(
-                                          gifList[int.tryParse(gifIndex!) ?? 0],
-                                        ),
-                                      )
-                                    : null,
+                                // gifWidget: gifUserId !=
+                                //             UserModel.fromJson(usersData[i])
+                                //                 .id &&
+                                //         gifIndex != null
+                                //     ? Gif(
+                                //         controller: GifController(
+                                //           vsync: this,
+                                //         ),
+                                //         repeat: ImageRepeat.repeat,
+                                //         autostart: Autostart.loop,
+                                //         image: AssetImage(
+                                //           gifList[int.tryParse(gifIndex!) ?? 0],
+                                //         ),
+                                //       )
+                                //     : null,
+                                gifIndex: gifIndex ==null ? null : int.parse('$gifIndex'),
                                 user: UserModel.fromJson(usersData[i]),
                                 onTap: () {
                                   showModalBottomSheet(
@@ -1064,77 +1067,7 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                         ),
                         suffixIcon: GestureDetector(
                             onTap: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (context) {
-                                    return Scaffold(
-                                      bottomNavigationBar: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  Navigator.pop(context);
-                                                  emojiShowing = !emojiShowing;
-                                                });
-                                              },
-                                              child: const Icon(Icons.add)),
-                                          const Icon(Icons.add),
-                                          const Icon(Icons.add),
-                                          const Icon(Icons.add),
-                                          const Icon(Icons.add),
-                                          const Icon(Icons.add),
-                                        ],
-                                      ),
-                                      appBar: AppBar(
-                                        title: const Text(
-                                          'Choose an option:',
-                                          style: TextStyle(
-                                              fontSize: 18.0,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      body: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: GridView.builder(
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          gridDelegate:
-                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 4,
-                                            crossAxisSpacing: 8.0,
-                                            mainAxisSpacing: 8.0,
-                                          ),
-                                          itemCount: gifList
-                                              .length, // Replace with your item count
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            return GestureDetector(
-                                              onTap: () {
-                                                Navigator.of(context).pop();
-                                                sendMessage(
-                                                  "\$#${currentUser.id.toString()}_$index",
-                                                  widget.room.id,
-                                                );
-                                              },
-                                              child: Gif(
-                                                controller: GifController(
-                                                  vsync: this,
-                                                ),
-                                                repeat: ImageRepeat.repeat,
-                                                autostart: Autostart.loop,
-                                                image: AssetImage(
-                                                  gifList[index],
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    );
-                                  });
+                              gifBottom(context);
                             },
                             child: Image.asset('assets/smile.png')),
                         contentPadding: EdgeInsets.symmetric(
@@ -1199,6 +1132,175 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
     );
   }
 
+  // body: Padding(
+  //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+  //   child: GridView.builder(
+  //     scrollDirection: Axis.vertical,
+  //     shrinkWrap: true,
+  //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+  //       crossAxisCount: 4,
+  //       crossAxisSpacing: 8.0,
+  //       mainAxisSpacing: 8.0,
+  //     ),
+  //     itemCount: gifList.length, // Replace with your item count
+  //     itemBuilder: (BuildContext context, int index) {
+  //       return GestureDetector(
+  //         onTap: () {
+  //           Navigator.of(context).pop();
+  //           sendMessage(
+  //             "\$#${currentUser.id.toString()}_$index",
+  //             widget.room.id,
+  //           );
+  //         },
+  //         child: Gif(
+  //           controller: GifController(
+  //             vsync: this,
+  //           ),
+  //           repeat: ImageRepeat.repeat,
+  //           autostart: Autostart.loop,
+  //           image: AssetImage(
+  //             gifList[index],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   ),
+  // ),
+
+  gifBottom(BuildContext context) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          IconData selectedIcon = Icons.animation_rounded;
+          return Scaffold(
+              bottomNavigationBar: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          Navigator.pop(context);
+                          emojiShowing = !emojiShowing;
+                        });
+                      },
+                      child: const Icon(Icons.emoji_emotions)),
+                  GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedIcon = Icons.animation_rounded;
+                        });
+                      },
+                      child: const Icon(Icons.animation_rounded)),
+                  GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedIcon = Icons.gif;
+                        });
+                      },
+                      child: const Icon(Icons.gif)),
+                  GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedIcon = Icons.gif_box;
+                        });
+                      },
+                      child: const Icon(Icons.gif_box)),
+                  GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedIcon = Icons.gif_box_sharp;
+                        });
+                      },
+                      child: const Icon(Icons.gif_box_sharp)),
+                  GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedIcon = Icons.gif_outlined;
+                        });
+                      },
+                      child: const Icon(Icons.gif_outlined)),
+                ],
+              ),
+              appBar: AppBar(
+                title: const Text(
+                  'Choose an option:',
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                ),
+              ),
+              body: buildBody(selectedIcon));
+        });
+  }
+
+  buildBody(IconData selectedIcon) {
+    if (selectedIcon == Icons.gif) {
+      return const Center(
+        child: Text(
+          'Hello World for GIF',
+          style: TextStyle(fontSize: 20.0),
+        ),
+      );
+    } else if (selectedIcon == Icons.gif_box) {
+      return const Center(
+        child: Text(
+          'Hello World for GIF Box',
+          style: TextStyle(fontSize: 20.0),
+        ),
+      );
+    } else if (selectedIcon == Icons.gif_box_sharp) {
+      return const Center(
+        child: Text(
+          'Hello World for GIF Box Sharp',
+          style: TextStyle(fontSize: 20.0),
+        ),
+      );
+    } else if (selectedIcon == Icons.gif_outlined) {
+      return const Center(
+        child: Text(
+          'Hello World for GIF Outlined',
+          style: TextStyle(fontSize: 20.0),
+        ),
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: GridView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            crossAxisSpacing: 8.0,
+            mainAxisSpacing: 8.0,
+          ),
+          itemCount: gifList.length, // Replace with your item count
+          itemBuilder: (BuildContext context, int index) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+                sendMessage(
+                  // "\$#${currentUser.id.toString()}_$index",
+                  "\$#${currentUser.id.toString()}_$index",
+                  widget.room.id,
+                );
+                print(gifList[index]);
+                // gifReceive(gifList[index]);
+              },
+              child: Gif(
+                controller: GifController(
+                  vsync: this,
+                ),
+                repeat: ImageRepeat.repeat,
+                autostart: Autostart.loop,
+                image: AssetImage(
+                  gifList[index],
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    }
+  }
+
   void autoScroll([int delayMilliseconds = 2000]) {
     Future.delayed(Duration(milliseconds: delayMilliseconds)).then((value) {
       int nextPage = ((controllerr.page!.round() + 1) % items.length).toInt();
@@ -1231,21 +1333,23 @@ class AudioUserTile extends StatefulWidget {
   final UserModel user;
   final void Function()? onTap;
   final int? index;
-  final Widget? gifWidget;
+  final int? gifIndex;
   const AudioUserTile({
     super.key,
     required this.user,
     this.index,
     this.onTap,
-    this.gifWidget,
+    this.gifIndex,
   });
 
   @override
   State<AudioUserTile> createState() => _AudioUserTileState();
 }
 
-class _AudioUserTileState extends State<AudioUserTile> {
+class _AudioUserTileState extends State<AudioUserTile>
+    with TickerProviderStateMixin {
   bool isMuted = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -1283,8 +1387,22 @@ class _AudioUserTileState extends State<AudioUserTile> {
                           ),
                         )
                       : ProfileImage(user: widget.user),
-                  if (widget.gifWidget != null)
-                    Positioned(bottom: 0, right: 0, child: widget.gifWidget!),
+                  if (widget.gifIndex != null)
+                    Positioned(
+                        top: 18.sp,
+                        left: 14.sp,
+                        child: SizedBox(
+                          height: 55.sp,
+                          width: 55.sp,
+                          child: Gif(
+                            controller: GifController(
+                              vsync: this,
+                            ),
+                            // repeat: ImageRepeat.repeat,
+                            autostart: Autostart.once,
+                            image: AssetImage(gifList[widget.gifIndex!]),
+                          ),
+                        )),
                 ],
               )),
         ),
