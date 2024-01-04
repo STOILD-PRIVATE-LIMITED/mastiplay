@@ -14,36 +14,28 @@ import 'package:spinner_try/webRTC/web_rtc.dart';
 */
 
 class WebRTCRoom {
-  final String roomId;
+  String? roomId;
   late Socket socket;
-  final Function()? onConnect;
-  final Function()? onConnectError;
-  final Function()? onLocalStreamAdded;
-  final Function()? onRemoteStreamAdded;
-  final Function()? onRemoteRemoved;
-  final Function()? onDisconnect;
-  final Function()? onExit;
+  Function()? onConnect;
+  Function()? onConnectError;
+  Function()? onLocalStreamAdded;
+  Function()? onRemoteStreamAdded;
+  Function()? onRemoteRemoved;
+  Function()? onDisconnect;
+  Function()? onExit;
 
-  final Widget Function(
+  Widget Function(
     BuildContext context,
     String roomId,
     List<dynamic> usersData,
     List<RTCVideoView> videoViews,
     dynamic myUserData,
     RTCVideoView myVideoView,
-  ) builder;
+  )? builder;
 
-  WebRTCRoom({
-    required this.builder,
-    required this.roomId,
-    this.onConnect,
-    this.onDisconnect,
-    this.onConnectError,
-    this.onLocalStreamAdded,
-    this.onRemoteStreamAdded,
-    this.onRemoteRemoved,
-    this.onExit,
-  });
+  WebRTCRoom._();
+
+  static final instance = WebRTCRoom._();
 
   final Map<String, dynamic> _peersData = {};
   final _localRTCVideoRenderer = RTCVideoRenderer();
@@ -52,7 +44,10 @@ class WebRTCRoom {
   final Map<String, RTCVideoRenderer> _remoteRTCVideoRenderers = {};
   bool _isAudioOn = true, _isVideoOn = true, _isFrontCameraSelected = true;
 
-  void connectToServer() {
+  void connectToServer(
+    String roomId,
+  ) {
+    this.roomId = roomId;
     log("Connecting to socket on $websocketUrl");
     socket = io(
         websocketUrl,
@@ -155,28 +150,9 @@ class WebRTCRoom {
     });
   }
 
-  destroyRoom() {
-    for (final peerId in _peers.keys) {
-      socket.emit('part', {
-        "channel": roomId,
-        "peer_id": peerId,
-      });
-    }
-    disconnect();
-    socket.disconnect();
-    socket.close();
-    _localRTCVideoRenderer.dispose();
-    for (final peerId in _remoteRTCVideoRenderers.entries) {
-      _remoteRTCVideoRenderers[peerId.key]!.dispose();
-    }
-    _remoteRTCVideoRenderers.clear();
-    for (final peerId in _peers.entries) {
-      _peers[peerId.key]!.close();
-    }
-    _peers.clear();
-  }
-
   Widget build(BuildContext context) {
+    assert(roomId != null);
+    assert(builder != null);
     final List<dynamic> usersData = [];
     final List<RTCVideoView> videoViews = [];
     // [
@@ -200,16 +176,16 @@ class WebRTCRoom {
         if (await askUser(context, 'Do you really want to exit the room?',
                 yes: true, no: true) !=
             'yes') {
-          return true;
+          return false;
         }
         await onExit?.call();
         socket.disconnect();
         socket.close();
         return true;
       },
-      child: builder(
+      child: builder!.call(
         context,
-        roomId,
+        roomId!,
         usersData,
         videoViews,
         currentUser.toJson(),
@@ -266,20 +242,14 @@ class WebRTCRoom {
     _peers[peerId]!.onTrack = (event) async {
       log("onTrack Called from peerId: $peerId");
       if (!_remoteRTCVideoRenderers.containsKey(peerId)) {
-        log("1");
         _remoteRTCVideoRenderers.addAll({
           peerId: RTCVideoRenderer(),
         });
-        log("2");
         await _remoteRTCVideoRenderers[peerId]!.initialize();
-        log("3");
         _remoteRTCVideoRenderers[peerId]!.srcObject = event.streams[0];
-        log("4");
       } else {
-        log("5");
         await _remoteRTCVideoRenderers[peerId]!.initialize();
         _remoteRTCVideoRenderers[peerId]!.srcObject = event.streams[0];
-        log("6");
       }
       log("7-END");
       onRemoteStreamAdded?.call();
@@ -292,6 +262,7 @@ class WebRTCRoom {
 
     if (should_create_offer) {
       log("Creating RTC offer to $peerId");
+      await _peers[peerId]!.restartIce();
       RTCSessionDescription offer = await _peers[peerId]!.createOffer();
       log("Local offer description is: $offer");
       await _peers[peerId]!.setLocalDescription(offer);
@@ -348,6 +319,8 @@ class WebRTCRoom {
     }
     if (_peers.containsKey(peerId)) {
       _peers[peerId]!.close();
+      _peers[peerId]!.dispose();
+      _peers[peerId]!.restartIce();
       _peers.remove(peerId);
     }
     if (_peersData.containsKey(peerId)) {
@@ -357,7 +330,7 @@ class WebRTCRoom {
     log("Removing peer succeeded");
   }
 
-  _toggleMic(bool value) {
+  toggleMic(bool value) {
     _isAudioOn = value;
     log("Audio set to $value");
     _localStream?.getAudioTracks().forEach((track) {
@@ -365,14 +338,14 @@ class WebRTCRoom {
     });
   }
 
-  _toggleCamera(bool value) {
+  toggleCamera(bool value) {
     _isVideoOn = value;
     _localStream?.getVideoTracks().forEach((track) {
       track.enabled = _isVideoOn;
     });
   }
 
-  _switchCamera(bool value) {
+  switchCamera(bool value) {
     _isFrontCameraSelected = value;
     _localStream?.getVideoTracks().forEach((track) {
       track.switchCamera();
@@ -386,9 +359,29 @@ class WebRTCRoom {
     }
     _peers.clear();
     for (final peerId in _remoteRTCVideoRenderers.entries) {
-      _remoteRTCVideoRenderers[peerId.key]!.dispose();
+      // _remoteRTCVideoRenderers[peerId.key]!.dispose();
     }
     _remoteRTCVideoRenderers.clear();
+    roomId = null;
+    socket.close();
+    socket.onReconnect((data) {
+      log("Socket was reconnected!");
+    });
+    // _localRTCVideoRenderer.dispose();
+    // for (final peerId in _remoteRTCVideoRenderers.entries) {
+    // _remoteRTCVideoRenderers[peerId.key]!.dispose();
+    // }
+    _remoteRTCVideoRenderers.clear();
+    for (final peerId in _peers.entries) {
+      _peers[peerId.key]!.close();
+      _peers[peerId.key]!.dispose();
+      _peers[peerId.key]!.restartIce();
+      _peers.remove(peerId);
+      _remoteRTCVideoRenderers[peerId]?.dispose();
+      _remoteRTCVideoRenderers.remove(peerId);
+      _peersData.remove(peerId);
+    }
+    _peers.clear();
     onDisconnect?.call();
   }
 }

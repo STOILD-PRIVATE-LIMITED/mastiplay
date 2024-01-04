@@ -3,14 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 // import 'package:wakelock/wakelock.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-// The below represents the server address of the server running the socket.io server
-const String websocketUrl = "http://3.7.66.245:8080";
-// const String websocketUrl = "https://192.168.9.64:8080";
-// const String websocketUrl = "https://v9nm4hsv-8080.asse.devtunnels.ms";
 Socket? socket;
 
 class WebRtcController {

@@ -12,3 +12,17 @@ final storage = FirebaseStorage.instance;
 UserModel currentUser = UserModel(name: "", photo: "", email: "", country: "");
 
 late final SharedPreferences prefs;
+
+// Server Addresses
+String chatServer = "https://v9nm4hsv-3000.asse.devtunnels.ms";
+// String chatServer = "https://3.7.66.245:3000";
+// keep this without trailing slash
+
+const String momentsServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
+// const String momentsServer = "https://bcb0-103-137-198-235.ngrok-free.app";
+// const String momentsServer = "https://3.7.66.245:3007";
+
+// The below represents the server address of the server running the socket.io server
+// const String websocketUrl = "https://3.7.66.245:8080";
+// const String websocketUrl = "https://192.168.9.64:8080";
+const String websocketUrl = "https://v9nm4hsv-8080.asse.devtunnels.ms";

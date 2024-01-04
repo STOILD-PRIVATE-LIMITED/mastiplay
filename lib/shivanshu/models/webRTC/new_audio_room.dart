@@ -16,56 +16,90 @@ class NewAudioRoom extends StatefulWidget {
 }
 
 class _NewAudioRoomState extends State<NewAudioRoom> {
-  late WebRTCRoom webRTCRoom;
-
   bool connected = false;
 
   @override
   void initState() {
     super.initState();
-    webRTCRoom = WebRTCRoom(
-      roomId: widget.room.id,
-      onLocalStreamAdded: () => setState(() {
-        log("onLocalStreamAdded called!");
-      }),
-      onRemoteRemoved: () => setState(() {
-        log("onRemoteRemoved called!");
-      }),
-      onRemoteStreamAdded: () => setState(() {
-        log("onRemoteStreamAdded called!");
-      }),
-      onConnect: () => setState(() {
-        connected = true;
-      }),
-      onConnectError: () => showMsg(context, "Connect Error"),
-      onDisconnect: () => showMsg(context, "Disconnected"),
-      onExit: () => webRTCRoom.destroyRoom(),
-      builder:
-          (context, roomId, usersData, videoViews, myUserData, myVideoView) {
-        final user = UserModel.fromJson(myUserData);
-        final List<UserModel> remoteUsers =
-            usersData.map<UserModel>((e) => UserModel.fromJson(e)).toList();
-        return GridView.extent(
-          maxCrossAxisExtent: 100,
-          childAspectRatio: 1,
-          children: [
-            AudioUserTile(user: user),
-            ...remoteUsers.map((e) => AudioUserTile(user: e)),
-          ],
-        );
-      },
-    );
-    webRTCRoom.connectToServer();
+    log("Initializing WebRTCRoom. This Should be called only once");
+    WebRTCRoom.instance.roomId = widget.room.id;
+    WebRTCRoom.instance.onLocalStreamAdded = () {
+      log("SetState for function: onLocalStreamAdded");
+      if (context.mounted) {
+        setState(() {
+          log("onLocalStreamAdded called!");
+        });
+      }
+    };
+    WebRTCRoom.instance.onRemoteRemoved = () {
+      log("SetState for function: onRemoteRemoved");
+      if (context.mounted) {
+        setState(() {
+          log("onRemoteRemoved called!");
+        });
+      }
+    };
+    WebRTCRoom.instance.onRemoteStreamAdded = () {
+      log("SetState for function: onRemoteStreamAdded");
+      if (context.mounted) {
+        setState(() {
+          log("onRemoteStreamAdded called!");
+        });
+      }
+    };
+    WebRTCRoom.instance.onConnect = () {
+      log("SetState for function: onConnect");
+      if (context.mounted) {
+        setState(() {
+          connected = true;
+        });
+      }
+    };
+    WebRTCRoom.instance.onConnectError = () {
+      log("SetState for function: onConnectError");
+      showMsg(context, "Connect Error");
+      Navigator.of(context).pop();
+    };
+    WebRTCRoom.instance.onDisconnect = () {
+      log("SetState for function: onDisconnect");
+      if (context.mounted) {
+        showMsg(context, "Disconnected");
+        Navigator.of(context).pop();
+      }
+    };
+    // WebRTCRoom.instance.onExit = () => showMsg(context, "You exited!");
+    WebRTCRoom.instance.builder =
+        (context, roomId, usersData, videoViews, myUserData, myVideoView) {
+      final user = UserModel.fromJson(myUserData);
+      final List<UserModel> remoteUsers =
+          usersData.map<UserModel>((e) => UserModel.fromJson(e)).toList();
+      return GridView.extent(
+        maxCrossAxisExtent: 100,
+        childAspectRatio: 1,
+        children: [
+          AudioUserTile(user: user),
+          ...remoteUsers.map((e) => AudioUserTile(user: e)),
+        ],
+      );
+    };
+    WebRTCRoom.instance.connectToServer(widget.room.id);
+  }
+
+  @override
+  void dispose() {
+    WebRTCRoom.instance.disconnect();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Audio Room'),
+        automaticallyImplyLeading: false,
+        title: Text(widget.room.name),
       ),
       body: connected
-          ? webRTCRoom.build(context)
+          ? WebRTCRoom.instance.build(context)
           : const Center(
               child: MyColumn(
                 children: [

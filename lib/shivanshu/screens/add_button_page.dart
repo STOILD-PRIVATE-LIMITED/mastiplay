@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/models/settings.dart';
-import 'package:spinner_try/shivanshu/models/webRTC/new_audio_room.dart';
 import 'package:spinner_try/shivanshu/screens/audio_page.dart';
 import 'package:spinner_try/shivanshu/screens/live_video_room.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
@@ -184,13 +183,11 @@ class _AddButtonPageState extends State<AddButtonPage> {
         );
       } else {
         await navigatorPush(
-            context,
-            // NewAudioRoom(
-            //   room: room!,
-            // ),
-            AudioPage(
-              room: room!,
-            ));
+          context,
+          AudioPage(
+            room: room!,
+          ),
+        );
       }
     }
   }

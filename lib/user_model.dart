@@ -156,6 +156,10 @@ Future<UserModel> fetchUserWithId(String id) async {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
+    if (response.statusCode != 200) {
+      throw response.body;
+    }
+    log("response.body = ${response.body}");
     user.load(json.decode(response.body));
   } catch (e) {
     log("Failed to load user: $e");
