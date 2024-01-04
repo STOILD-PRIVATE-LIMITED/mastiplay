@@ -1216,34 +1216,34 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                         });
                       },
                       child: const Icon(Icons.animation_rounded)),
-                  GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedIcon = Icons.gif;
-                        });
-                      },
-                      child: const Icon(Icons.gif)),
-                  GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedIcon = Icons.gif_box;
-                        });
-                      },
-                      child: const Icon(Icons.gif_box)),
-                  GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedIcon = Icons.gif_box_sharp;
-                        });
-                      },
-                      child: const Icon(Icons.gif_box_sharp)),
-                  GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedIcon = Icons.gif_outlined;
-                        });
-                      },
-                      child: const Icon(Icons.gif_outlined)),
+                  // GestureDetector(
+                  //     onTap: () {
+                  //       setState(() {
+                  //         selectedIcon = Icons.gif;
+                  //       });
+                  //     },
+                  //     child: const Icon(Icons.gif)),
+                  // GestureDetector(
+                  //     onTap: () {
+                  //       setState(() {
+                  //         selectedIcon = Icons.gif_box;
+                  //       });
+                  //     },
+                  //     child: const Icon(Icons.gif_box)),
+                  // GestureDetector(
+                  //     onTap: () {
+                  //       setState(() {
+                  //         selectedIcon = Icons.gif_box_sharp;
+                  //       });
+                  //     },
+                  //     child: const Icon(Icons.gif_box_sharp)),
+                  // GestureDetector(
+                  //     onTap: () {
+                  //       setState(() {
+                  //         selectedIcon = Icons.gif_outlined;
+                  //       });
+                  //     },
+                  //     child: const Icon(Icons.gif_outlined)),
                 ],
               ),
               appBar: AppBar(
@@ -1257,73 +1257,74 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
   }
 
   buildBody(IconData selectedIcon) {
-    if (selectedIcon == Icons.gif) {
-      return const Center(
-        child: Text(
-          'Hello World for GIF',
-          style: TextStyle(fontSize: 20.0),
+    // if (selectedIcon == Icons.gif) {
+    //   return const Center(
+    //     child: Text(
+    //       'Hello World for GIF',
+    //       style: TextStyle(fontSize: 20.0),
+    //     ),
+    //   );
+    // } else if (selectedIcon == Icons.gif_box) {
+    //   return const Center(
+    //     child: Text(
+    //       'Hello World for GIF Box',
+    //       style: TextStyle(fontSize: 20.0),
+    //     ),
+    //   );
+    // } else if (selectedIcon == Icons.gif_box_sharp) {
+    //   return const Center(
+    //     child: Text(
+    //       'Hello World for GIF Box Sharp',
+    //       style: TextStyle(fontSize: 20.0),
+    //     ),
+    //   );
+    // } else if (selectedIcon == Icons.gif_outlined) {
+    //   return const Center(
+    //     child: Text(
+    //       'Hello World for GIF Outlined',
+    //       style: TextStyle(fontSize: 20.0),
+    //     ),
+    //   );
+    // } else {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: GridView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 4,
+          crossAxisSpacing: 8.0,
+          mainAxisSpacing: 8.0,
         ),
-      );
-    } else if (selectedIcon == Icons.gif_box) {
-      return const Center(
-        child: Text(
-          'Hello World for GIF Box',
-          style: TextStyle(fontSize: 20.0),
-        ),
-      );
-    } else if (selectedIcon == Icons.gif_box_sharp) {
-      return const Center(
-        child: Text(
-          'Hello World for GIF Box Sharp',
-          style: TextStyle(fontSize: 20.0),
-        ),
-      );
-    } else if (selectedIcon == Icons.gif_outlined) {
-      return const Center(
-        child: Text(
-          'Hello World for GIF Outlined',
-          style: TextStyle(fontSize: 20.0),
-        ),
-      );
-    } else {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: GridView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            crossAxisSpacing: 8.0,
-            mainAxisSpacing: 8.0,
-          ),
-          itemCount: gifList.length, // Replace with your item count
-          itemBuilder: (BuildContext context, int index) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-                sendMessage(
-                  // "\$#${currentUser.id.toString()}_$index",
-                  "\$#${currentUser.id.toString()}_$index",
-                  widget.room.id,
-                );
-                print(gifList[index]);
-                // gifReceive(gifList[index]);
-              },
-              child: Gif(
-                controller: GifController(
-                  vsync: this,
-                ),
-                repeat: ImageRepeat.repeat,
-                autostart: Autostart.loop,
-                image: AssetImage(
-                  gifList[index],
-                ),
+        itemCount: gifList.length, // Replace with your item count
+        itemBuilder: (BuildContext context, int index) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+              sendMessage(
+                // "\$#${currentUser.id.toString()}_$index",
+                "\$#${currentUser.id.toString()}_$index",
+                // "",
+                widget.room.id,
+              );
+              print(gifList[index]);
+              // gifReceive(gifList[index]);
+            },
+            child: Gif(
+              controller: GifController(
+                vsync: this,
               ),
-            );
-          },
-        ),
-      );
-    }
+              repeat: ImageRepeat.repeat,
+              autostart: Autostart.loop,
+              image: AssetImage(
+                gifList[index],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+    // }
   }
 
   void autoScroll([int delayMilliseconds = 2000]) {
