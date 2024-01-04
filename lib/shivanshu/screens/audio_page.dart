@@ -10,6 +10,7 @@ import 'package:audioplayers/audioplayers.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:gif/gif.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
@@ -1300,17 +1301,15 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              Navigator.of(context).pop();
               sendMessage(
-                // "\$#${currentUser.id.toString()}_$index",
                 "\$#${currentUser.id.toString()}_$index",
-                // "",
                 widget.room.id,
               );
               print(gifList[index]);
-              // gifReceive(gifList[index]);
+              Navigator.of(context).pop();
             },
             child: Gif(
+              fps: 30,
               controller: GifController(
                 vsync: this,
               ),
@@ -1375,6 +1374,16 @@ class AudioUserTile extends StatefulWidget {
 class _AudioUserTileState extends State<AudioUserTile>
     with TickerProviderStateMixin {
   bool isMuted = false;
+  GifController? gifController;
+
+  @override
+  void initState() {
+    super.initState();
+    gifController = GifController(
+      vsync: this,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -1415,17 +1424,18 @@ class _AudioUserTileState extends State<AudioUserTile>
                       height: 55.sp,
                       width: 55.sp,
                       child: Gif(
-                        controller: GifController(
-                          vsync: this,
-                        ),
-                        repeat: ImageRepeat.repeat,
-                        autostart: Autostart.loop,
+                        fps: 30,
+                        controller: gifController,
+                        useCache: true,
+                        autostart: Autostart.once,
+                        placeholder: (context) =>
+                            const Center(child: CircularProgressIndicator()),
                         image: AssetImage(
                           gifList[widget.gifIndex!],
                         ),
                       ),
                     ),
-                  ),  
+                  ),
               ],
             ),
           ),
