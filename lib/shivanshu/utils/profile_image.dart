@@ -21,7 +21,6 @@ class _ProfileImageState extends State<ProfileImage> {
           Positioned(
             top: 250 / 1080 * constraints.maxHeight,
             bottom: 200 / 1080 * constraints.maxHeight,
-            right: 210 / 1080 * constraints.maxHeight,
             child: Container(
               height: 600 / 1080 * constraints.maxHeight,
               decoration: const BoxDecoration(shape: BoxShape.circle),

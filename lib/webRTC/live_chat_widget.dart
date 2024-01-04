@@ -26,7 +26,7 @@ class _LiveChatBuilderState extends State<LiveChatBuilder> {
   void broadCastMsg(data) {
     log("Received a broadcast msg: $data");
     widget.onReceiveMsg?.call(data);
-    if (context.mounted) {
+    if (context.mounted && !(data['message'] as String).startsWith("\$#")) {
       setState(() {
         messages.add(data);
       });
