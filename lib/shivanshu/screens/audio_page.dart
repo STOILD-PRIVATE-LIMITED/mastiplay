@@ -721,35 +721,64 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                           crossAxisCount: 8 ~/ 2,
                           childAspectRatio: 1 / 1.3,
                           children: [
-                            EmptyEffect(
-                              borderColor: Colors.red,
-                              outerMostCircleEndRadius: 100,
-                              outerMostCircleStartRadius: 20,
-                              child: AudioUserTile(
-                                gifIndex: gifIndex == null
-                                    ? null
-                                    : int.parse('$gifIndex'),
-                                user: UserModel.fromJson(myUserData),
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    backgroundColor: const Color(0xFF011a51),
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20),
-                                      ),
-                                    ),
-                                    context: context,
-                                    builder: ((context) {
-                                      return BottomModel(
-                                        user: UserModel.fromJson(myUserData),
-                                        roomId: myUserData["id"],
+                            !controller.audio
+                                ? AudioUserTile(
+                                    gifIndex: gifIndex == null
+                                        ? null
+                                        : int.parse('$gifIndex'),
+                                    user: UserModel.fromJson(myUserData),
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        backgroundColor:
+                                            const Color(0xFF011a51),
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20),
+                                            topRight: Radius.circular(20),
+                                          ),
+                                        ),
+                                        context: context,
+                                        builder: ((context) {
+                                          return BottomModel(
+                                            user:
+                                                UserModel.fromJson(myUserData),
+                                            roomId: myUserData["id"],
+                                          );
+                                        }),
                                       );
-                                    }),
-                                  );
-                                },
-                              ),
-                            ),
+                                    },
+                                  )
+                                : EmptyEffect(
+                                    borderColor: Colors.white,
+                                    outerMostCircleEndRadius: 100,
+                                    outerMostCircleStartRadius: 20,
+                                    child: AudioUserTile(
+                                      gifIndex: gifIndex == null
+                                          ? null
+                                          : int.parse('$gifIndex'),
+                                      user: UserModel.fromJson(myUserData),
+                                      onTap: () {
+                                        showModalBottomSheet(
+                                          backgroundColor:
+                                              const Color(0xFF011a51),
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(20),
+                                              topRight: Radius.circular(20),
+                                            ),
+                                          ),
+                                          context: context,
+                                          builder: ((context) {
+                                            return BottomModel(
+                                              user: UserModel.fromJson(
+                                                  myUserData),
+                                              roomId: myUserData["id"],
+                                            );
+                                          }),
+                                        );
+                                      },
+                                    ),
+                                  ),
                             for (int i = 0; i < usersData.length; ++i)
                               AudioUserTile(
                                 // gifWidget: gifUserId !=
@@ -767,9 +796,9 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                                 //         ),
                                 //       )
                                 //     : null,
-                                gifIndex: gifIndex == null
-                                    ? null
-                                    : int.parse('$gifIndex'),
+                                // gifIndex: gifIndex == null
+                                //     ? null
+                                //     : int.parse('$gifIndex'),
                                 user: UserModel.fromJson(usersData[i]),
                                 onTap: () {
                                   showModalBottomSheet(
