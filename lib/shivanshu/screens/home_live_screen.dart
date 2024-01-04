@@ -237,7 +237,6 @@ class _HomeLiveState extends State<HomeLive> {
                       );
                     },
                   ),
-                const SizedBox(height: 10),
               ];
             },
           ),
