@@ -7,7 +7,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+// import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
@@ -115,7 +115,7 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
   }
 
   String filePath = '';
-  bool emojiShowing = false;
+  // bool emojiShowing = false;
   AudioPlayer audioPlayer = AudioPlayer();
   Future<void> playAudio() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -947,28 +947,28 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                       },
                     ),
                   ),
-                  Offstage(
-                    offstage: !emojiShowing,
-                    child: SizedBox(
-                      height: 250,
-                      child: EmojiPicker(
-                        onEmojiSelected: (category, emoji) {
-                          _controller.text += emoji.emoji;
-                        },
-                        onBackspacePressed: () {
-                          // Close the emojiPicker on backspace press
-                          setState(() {
-                            emojiShowing = false;
-                          });
-                        },
-                        config: const Config(
-                          columns: 7,
-                          initCategory: Category.SMILEYS,
-                          // bgColor: Color(0xFF21242D),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Offstage(
+                  //   offstage: !emojiShowing,
+                  //   child: SizedBox(
+                  //     height: 250,
+                  //     child: EmojiPicker(
+                  //       onEmojiSelected: (category, emoji) {
+                  //         _controller.text += emoji.emoji;
+                  //       },
+                  //       onBackspacePressed: () {
+                  //         // Close the emojiPicker on backspace press
+                  //         setState(() {
+                  //           emojiShowing = false;
+                  //         });
+                  //       },
+                  //       config: const Config(
+                  //         columns: 7,
+                  //         initCategory: Category.SMILEYS,
+                  //         // bgColor: Color(0xFF21242D),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -1201,14 +1201,14 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
               bottomNavigationBar: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          Navigator.pop(context);
-                          emojiShowing = !emojiShowing;
-                        });
-                      },
-                      child: const Icon(Icons.emoji_emotions)),
+                  // GestureDetector(
+                  //     onTap: () {
+                  //       setState(() {
+                  //         Navigator.pop(context);
+                  //         emojiShowing = !emojiShowing;
+                  //       });
+                  //     },
+                  //     child: const Icon(Icons.emoji_emotions)),
                   GestureDetector(
                       onTap: () {
                         setState(() {
@@ -1375,7 +1375,6 @@ class AudioUserTile extends StatefulWidget {
 class _AudioUserTileState extends State<AudioUserTile>
     with TickerProviderStateMixin {
   bool isMuted = false;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -1384,52 +1383,52 @@ class _AudioUserTileState extends State<AudioUserTile>
       children: [
         Expanded(
           child: GestureDetector(
-              onTap: () {
-                if (widget.onTap != null) {
-                  widget.onTap!();
-                  // setState(() {
-                  //   isMuted = !isMuted;
-                  //   print("object");
-                  // });
-                }
-              },
-              child: Stack(
-                children: [
-                  widget.user.photo.isEmpty
-                      ? Container(
-                          height: 60.sp,
-                          width: 60.sp,
-                          decoration: const BoxDecoration(
-                            color: Colors.black45,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            (isMuted
-                                ? Icons.mic_off_outlined
-                                : Icons.mic_none_outlined),
-                            size: 40,
-                            color: colorScheme(context).primary,
-                          ),
-                        )
-                      : ProfileImage(user: widget.user),
-                  if (widget.gifIndex != null)
-                    Positioned(
-                        top: 18.sp,
-                        left: 14.sp,
-                        child: SizedBox(
-                          height: 55.sp,
-                          width: 55.sp,
-                          child: Gif(
-                            controller: GifController(
-                              vsync: this,
-                            ),
-                            // repeat: ImageRepeat.repeat,
-                            autostart: Autostart.once,
-                            image: AssetImage(gifList[widget.gifIndex!]),
-                          ),
-                        )),
-                ],
-              )),
+            onTap: () {
+              if (widget.onTap != null) {
+                widget.onTap!();
+              }
+            },
+            child: Stack(
+              children: [
+                widget.user.photo.isEmpty
+                    ? Container(
+                        height: 60.sp,
+                        width: 60.sp,
+                        decoration: const BoxDecoration(
+                          color: Colors.black45,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          (isMuted
+                              ? Icons.mic_off_outlined
+                              : Icons.mic_none_outlined),
+                          size: 40,
+                          color: colorScheme(context).primary,
+                        ),
+                      )
+                    : ProfileImage(user: widget.user),
+                if (widget.gifIndex != null)
+                  Positioned(
+                    top: 18.sp,
+                    left: 14.sp,
+                    child: SizedBox(
+                      height: 55.sp,
+                      width: 55.sp,
+                      child: Gif(
+                        controller: GifController(
+                          vsync: this,
+                        ),
+                        repeat: ImageRepeat.repeat,
+                        autostart: Autostart.loop,
+                        image: AssetImage(
+                          gifList[widget.gifIndex!],
+                        ),
+                      ),
+                    ),
+                  ),  
+              ],
+            ),
+          ),
         ),
         Text(
           widget.user.name.isEmpty ? "No. ${widget.index}" : widget.user.name,

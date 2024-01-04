@@ -53,7 +53,6 @@ class _HomeLiveState extends State<HomeLive> {
             loader: (context, start, interval) async {
               Query<Map<String, dynamic>> query =
                   firestore.collection("rooms/");
-
               query = query.orderBy('updatedAt', descending: true);
               query = query.where('roomType', isEqualTo: RoomType.video.index);
               if (lastUpdatedAt != null) {
@@ -87,7 +86,7 @@ class _HomeLiveState extends State<HomeLive> {
                   },
                   child: Container(
                     width: widget.mediaQuery.size.width,
-                    height: 100,
+                    height: 100.sp,
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 192, 105, 105),
                       borderRadius: BorderRadius.circular(10),
