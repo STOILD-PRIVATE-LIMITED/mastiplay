@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:spinner_try/shivanshu/models/momets/post.dart';
+import 'package:spinner_try/shivanshu/models/globals.dart';
 
 class Tag {
   String tag;
