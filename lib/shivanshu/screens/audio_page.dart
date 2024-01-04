@@ -134,6 +134,7 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
       await audioPlayer.play(DeviceFileSource(file.path));
     }
   }
+  //  bool _isPlaying = true;
 
   // final WebRtcController controller = WebRtcController(
   //   audio: true,
@@ -720,44 +721,34 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                           crossAxisCount: 8 ~/ 2,
                           childAspectRatio: 1 / 1.3,
                           children: [
-                            AudioUserTile(
-                              // gifWidget: gifUserId !=
-                              //             UserModel.fromJson(myUserData).id &&
-                              //         gifIndex != null
-                              //     ? Gif(
-                              //         controller: GifController(
-                              //           vsync: this,
-                              //         ),
-                              //         repeat: ImageRepeat.repeat,
-                              //         autostart: Autostart.loop,
-                              //         image: AssetImage(
-                              //           gifList[int.tryParse(gifIndex!) ?? 0],
-                              //         ),
-                              //       )
-                              //     : null,
-                              // gifIndex: int.parse('$gifIndex'),
-                              gifIndex: gifIndex == null
-                                  ? null
-                                  : int.parse('$gifIndex'),
-                              user: UserModel.fromJson(myUserData),
-                              onTap: () {
-                                showModalBottomSheet(
-                                  backgroundColor: const Color(0xFF011a51),
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20),
+                            EmptyEffect(
+                              borderColor: Colors.red,
+                              outerMostCircleEndRadius: 100,
+                              outerMostCircleStartRadius: 20,
+                              child: AudioUserTile(
+                                gifIndex: gifIndex == null
+                                    ? null
+                                    : int.parse('$gifIndex'),
+                                user: UserModel.fromJson(myUserData),
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    backgroundColor: const Color(0xFF011a51),
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20),
+                                      ),
                                     ),
-                                  ),
-                                  context: context,
-                                  builder: ((context) {
-                                    return BottomModel(
-                                      user: UserModel.fromJson(myUserData),
-                                      roomId: myUserData["id"],
-                                    );
-                                  }),
-                                );
-                              },
+                                    context: context,
+                                    builder: ((context) {
+                                      return BottomModel(
+                                        user: UserModel.fromJson(myUserData),
+                                        roomId: myUserData["id"],
+                                      );
+                                    }),
+                                  );
+                                },
+                              ),
                             ),
                             for (int i = 0; i < usersData.length; ++i)
                               AudioUserTile(
@@ -1085,7 +1076,6 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // shareRoomLink(widget.room.id);
                       playAudio();
                     },
                     onDoubleTap: () async {
@@ -1356,8 +1346,6 @@ class _AudioUserTileState extends State<AudioUserTile>
     with TickerProviderStateMixin {
   bool isMuted = false;
 
- 
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -1379,20 +1367,20 @@ class _AudioUserTileState extends State<AudioUserTile>
                 children: [
                   widget.user.photo.isEmpty
                       ? Container(
-                        height: 60.sp,
-                        width: 60.sp,
-                        decoration: const BoxDecoration(
-                          color: Colors.black45,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          (isMuted
-                              ? Icons.mic_off_outlined
-                              : Icons.mic_none_outlined),
-                          size: 40,
-                          color: colorScheme(context).primary,
-                        ),
-                      )
+                          height: 60.sp,
+                          width: 60.sp,
+                          decoration: const BoxDecoration(
+                            color: Colors.black45,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            (isMuted
+                                ? Icons.mic_off_outlined
+                                : Icons.mic_none_outlined),
+                            size: 40,
+                            color: colorScheme(context).primary,
+                          ),
+                        )
                       : ProfileImage(user: widget.user),
                   if (widget.gifIndex != null)
                     Positioned(
@@ -1425,7 +1413,6 @@ class _AudioUserTileState extends State<AudioUserTile>
       ],
     );
   }
-
 }
 
 void showAlertDialog(BuildContext context) {

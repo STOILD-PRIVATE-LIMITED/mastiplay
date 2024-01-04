@@ -8,8 +8,8 @@ import 'package:spinner_try/shivanshu/utils.dart';
 
 import '../../shivanshu/models/globals.dart';
 
-String chatServer = "https://v9nm4hsv-3000.asse.devtunnels.ms";
-// String chatServer = "https://3.7.66.245:3000";
+// String chatServer = "https://v9nm4hsv-3000.asse.devtunnels.ms";
+String chatServer = "https://3.7.66.245:3000";
 // keep this without trailing slash
 
 class ChatData {
