@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spinner_try/screen/creator_application.dart';
+import 'package:spinner_try/shivanshu/screens/family_room_page.dart';
+
 // import 'package:spinner_try/screen/creator_page.dart';
 
 import 'agency_creator.dart';
@@ -35,15 +37,7 @@ class _AgencyCenterState extends State<AgencyCenter> {
       backgroundColor: const Color(0xFFf7f8fc),
       appBar: AppBar(
         backgroundColor: const Color(0xFFf7f8fc),
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            size: height / 40,
-          ),
-        ),
+        leading: const ElevatedBackButton(),
         title: Text(
           "Agency Center",
           style: TextStyle(fontSize: height / 40),

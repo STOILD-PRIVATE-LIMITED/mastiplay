@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:spinner_try/chat/models/chat.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'package:spinner_try/shivanshu/wallet/exchange_screen.dart';
+import 'package:spinner_try/user_model.dart';
 
 class AgencyScreen extends StatefulWidget {
   final int maxBeans;
@@ -318,9 +321,14 @@ class _AgencyScreenState extends State<AgencyScreen> {
   }
 }
 
-class PersonTile extends StatelessWidget {
+class AgentTile extends StatelessWidget {
   final bool showPaymentMethod;
-  const PersonTile({super.key, this.showPaymentMethod = true});
+  final UserModel user;
+  const AgentTile({
+    super.key,
+    this.showPaymentMethod = true,
+    required this.user,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -343,7 +351,7 @@ class PersonTile extends StatelessWidget {
             contentPadding: const EdgeInsets.all(0),
             trailing: IconButton.filled(
               onPressed: () {
-                showMsg(context, 'Chat');
+                showChatWithUserId(user.id!, context);
               },
               style: IconButton.styleFrom(
                 backgroundColor: Colors.amber,
@@ -352,88 +360,47 @@ class PersonTile extends StatelessWidget {
               ),
               icon: const Icon(Icons.chat_rounded),
             ),
-            leading: Stack(
-              alignment: Alignment.center,
-              children: [
-                const CircleAvatar(
-                  backgroundColor: Colors.green,
-                  radius: 22,
-                ),
-                const CircleAvatar(
-                  backgroundImage: AssetImage('assets/dummy_person.png'),
-                ),
-                Positioned(
-                  bottom: 0,
-                  child: Container(
-                    padding: const EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.green,
-                    ),
-                    child: Text(
-                      'Online',
-                      style: textTheme(context).bodySmall!.copyWith(
-                            color: Colors.white,
-                            fontSize: 9,
-                          ),
-                    ),
-                  ),
-                ),
-              ],
+            leading: SizedBox(
+              width: 56,
+              height: 56,
+              child: ProfileImage(user: user),
             ),
-            title: const Text('Agent'),
+            title: Text(user.name),
             isThreeLine: true,
-            subtitle: const Wrap(
+            subtitle: Wrap(
               children: [
-                Text('Deal of last 30 days'),
-                Icon(
+                const Text('Deal of last 30 days'),
+                const Icon(
                   Icons.attach_money_outlined,
                   size: 14,
                   color: Colors.amber,
                 ),
-                Text('618.52M'),
+                if (user.agentData != null)
+                  Text('${user.agentData!.monthlyDiamonds}'),
               ],
             ),
           ),
-          if (showPaymentMethod) ...[
+          if (showPaymentMethod && user.agentData != null) ...[
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
                   const Text('Payment method:'),
-                  const SizedBox(width: 10),
-                  InkWell(
-                    onTap: () {
-                      showMsg(context, "gpay");
-                    },
-                    child: Image.asset(
-                      'assets/gpay.png',
-                      height: 30,
-                      width: 30,
+                  for (int i = 0;
+                      i < user.agentData!.paymentMethods.length;
+                      ++i) ...[
+                    const SizedBox(width: 10),
+                    InkWell(
+                      onTap: () {
+                        showMsg(context, user.agentData!.paymentMethods[i]);
+                      },
+                      child: Image.asset(
+                        'assets/${user.agentData!.paymentMethods[i]}.png',
+                        height: 30,
+                        width: 30,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  InkWell(
-                    onTap: () {
-                      showMsg(context, "paytm");
-                    },
-                    child: Image.asset(
-                      'assets/paytm.png',
-                      height: 30,
-                      width: 30,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  InkWell(
-                    onTap: () {
-                      showMsg(context, "phonepe");
-                    },
-                    child: Image.asset(
-                      'assets/phonepe.png',
-                      height: 30,
-                      width: 30,
-                    ),
-                  ),
+                  ],
                 ],
               ),
             ),

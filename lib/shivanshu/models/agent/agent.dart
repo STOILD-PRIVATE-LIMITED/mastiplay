@@ -83,9 +83,9 @@ Future<UserModel> fetchAgentData(String id) async {
   }
 }
 
-Future<List<UserModel>> fetchAgentsAll() async {
+Future<List<UserModel>> fetchAgentsAll(int start, int limit) async {
   final response = await http.get(
-    Uri.parse('$momentsServer/api/agent/all'),
+    Uri.parse('$momentsServer/api/agent/all?start=$start&limit=$limit'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
