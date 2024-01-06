@@ -22,10 +22,7 @@ String chatServer = "https://rkncpgkx-3000.inc1.devtunnels.ms";
 const String momentsServer = "https://rkncpgkx-3007.inc1.devtunnels.ms";
 // const String momentsServer = "https://3.7.66.245:3007";
 
-// const String websocketUrl = "https://rkncpgkx-8080.inc1.devtunnels.ms";
-// const String websocketUrl = "https://v9nm4hsv-8080.asse.devtunnels.ms/";
-const String websocketUrl = "https://rkncpgkx-8080.inc1.devtunnels.ms";
 // The below represents the server address of the server running the socket.io server
 // const String websocketUrl = "https://3.7.66.245:8080";
 // const String websocketUrl = "https://192.168.9.64:8080";
-// const String websocketUrl = "https://v9nm4hsv-8080.asse.devtunnels.ms";
+const String websocketUrl = "https://rkncpgkx-8080.inc1.devtunnels.ms";

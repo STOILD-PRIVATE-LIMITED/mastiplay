@@ -63,7 +63,7 @@ class _RolesPanelState extends State<RolesPanel> {
                   ),
                   GridTileLogo(
                     onTap: () {
-                      navigatorPush(context, const AgentPanel());
+                      navigatorPush(context, const AdminAgentPanel());
                     },
                     title: "Agent",
                     icon: const Icon(Icons.support_agent_rounded, size: 50),

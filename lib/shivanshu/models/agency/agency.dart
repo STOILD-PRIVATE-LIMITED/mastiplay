@@ -6,11 +6,11 @@ import 'package:spinner_try/shivanshu/models/globals.dart';
 class AgencyData {
   String? id;
   String name;
-  double beans = 0;
+  int beansCount = 0;
   String owner;
   AgencyData({
     this.id,
-    this.beans = 0,
+    this.beansCount = 0,
     this.name = "",
     this.owner = "",
   });
@@ -18,7 +18,7 @@ class AgencyData {
   factory AgencyData.fromJson(Map<String, dynamic> json) {
     return AgencyData(
       id: json['id'],
-      beans: json['beans'],
+      beansCount: json['beansCount'],
       name: json['name'] ?? '',
       owner: json['owner'] ?? '',
     );
@@ -26,7 +26,7 @@ class AgencyData {
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'beans': beans,
+        'beansCount': beansCount,
         'name': name,
         'owner': owner,
       };
@@ -86,22 +86,6 @@ Future<void> changeRole(String userId, String role) async {
   );
   if (response.statusCode != 200) {
     throw Exception('Failed to change role');
-  }
-}
-
-Future<void> addbeans(String userId, double beans) async {
-  final response = await http.post(
-    Uri.parse('$momentsServer/api/add-beans'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: {
-      'userId': userId,
-      'beans': beans,
-    },
-  );
-  if (response.statusCode != 200) {
-    throw Exception('Failed to add beans');
   }
 }
 
