@@ -337,7 +337,7 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                 ,
                 IconButton(
                   onPressed: () {
-                    // showAlertDialog(context);
+                    showAlertDialog(context);
                   },
                   icon: Image.asset(
                     'assets/close-square.png',
@@ -764,30 +764,44 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                                     borderColor: Colors.white,
                                     outerMostCircleEndRadius: 100,
                                     outerMostCircleStartRadius: 20,
-                                    child: AudioUserTile(
-                                      gifIndex: gifIndex == null
-                                          ? null
-                                          : int.parse('$gifIndex'),
-                                      user: UserModel.fromJson(myUserData),
-                                      onTap: () {
-                                        showModalBottomSheet(
-                                          backgroundColor:
-                                              const Color(0xFF011a51),
-                                          shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(20),
-                                              topRight: Radius.circular(20),
-                                            ),
-                                          ),
-                                          context: context,
-                                          builder: ((context) {
-                                            return BottomModel(
-                                              user: UserModel.fromJson(
-                                                  myUserData),
+                                    child: Stack(
+                                      children: [
+                                        AudioUserTile(
+                                          gifIndex: gifIndex == null
+                                              ? null
+                                              : int.parse('$gifIndex'),
+                                          user: UserModel.fromJson(myUserData),
+                                          onTap: () {
+                                            showModalBottomSheet(
+                                              backgroundColor:
+                                                  const Color(0xFF011a51),
+                                              shape:
+                                                  const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(20),
+                                                  topRight: Radius.circular(20),
+                                                ),
+                                              ),
+                                              context: context,
+                                              builder: ((context) {
+                                                return BottomModel(
+                                                  user: UserModel.fromJson(
+                                                      myUserData),
+                                                );
+                                              }),
                                             );
-                                          }),
-                                        );
-                                      },
+                                          },
+                                        ),
+                                        const Positioned(
+                                          bottom: 35,
+                                          right: 20,
+                                          child: Icon(
+                                            Icons.mic_rounded,
+                                            size: 20,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
                             for (int i = 0; i < usersData.length; ++i)
