@@ -135,7 +135,6 @@ class _BottomModelState extends State<BottomModel> {
               SizedBox(height: 10.sp),
               ElevatedButton(
                 onPressed: () async {
-                  print(widget.user.id!);
                   showChatWithUserId(widget.user.id!, context);
                 },
                 child: const Text("Chat"),

@@ -10,7 +10,6 @@ import 'package:audioplayers/audioplayers.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:gif/gif.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
@@ -219,7 +218,7 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                           },
                         ),
                       ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10.sp),
                     Expanded(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -227,8 +226,8 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                         children: [
                           Text(
                             widget.room.name,
-                            style: const TextStyle(
-                              fontSize: 12,
+                            style: TextStyle(
+                              fontSize: 12.sp,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
@@ -236,8 +235,8 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                           ),
                           Text(
                             "id: ${widget.room.id}",
-                            style: const TextStyle(
-                              fontSize: 10,
+                            style: TextStyle(
+                              fontSize: 10.sp,
                               color: Colors.grey,
                             ),
                           ),
@@ -261,10 +260,10 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                           horizontal: 8.sp,
                           vertical: 2.sp,
                         ),
-                        child: const Text(
+                        child: Text(
                           'Follow',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 12.sp,
                           ),
                         ),
                       ),
@@ -723,61 +722,88 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                           childAspectRatio: 1 / 1.3,
                           children: [
                             !controller.audio
-                                ? AudioUserTile(
-                                    gifIndex: gifIndex == null
-                                        ? null
-                                        : int.parse('$gifIndex'),
-                                    user: UserModel.fromJson(myUserData),
-                                    onTap: () {
-                                      showModalBottomSheet(
-                                        backgroundColor:
-                                            const Color(0xFF011a51),
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20),
-                                          ),
-                                        ),
-                                        context: context,
-                                        builder: ((context) {
-                                          return BottomModel(
-                                            user:
-                                                UserModel.fromJson(myUserData),
-                                            roomId: myUserData["id"],
+                                ? Stack(
+                                    children: [
+                                      AudioUserTile(
+                                        gifIndex: gifIndex == null
+                                            ? null
+                                            : int.parse('$gifIndex'),
+                                        user: UserModel.fromJson(myUserData),
+                                        onTap: () {
+                                          showModalBottomSheet(
+                                            backgroundColor:
+                                                const Color(0xFF011a51),
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(20),
+                                                topRight: Radius.circular(20),
+                                              ),
+                                            ),
+                                            context: context,
+                                            builder: ((context) {
+                                              return BottomModel(
+                                                user: UserModel.fromJson(
+                                                    myUserData),
+                                                roomId: myUserData["id"],
+                                              );
+                                            }),
                                           );
-                                        }),
-                                      );
-                                    },
+                                        },
+                                      ),
+                                      const Positioned(
+                                        bottom: 35,
+                                        right: 20,
+                                        child: Icon(
+                                          Icons.mic_off_rounded,
+                                          size: 20,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    ],
                                   )
                                 : EmptyEffect(
                                     borderColor: Colors.white,
                                     outerMostCircleEndRadius: 100,
                                     outerMostCircleStartRadius: 20,
-                                    child: AudioUserTile(
-                                      gifIndex: gifIndex == null
-                                          ? null
-                                          : int.parse('$gifIndex'),
-                                      user: UserModel.fromJson(myUserData),
-                                      onTap: () {
-                                        showModalBottomSheet(
-                                          backgroundColor:
-                                              const Color(0xFF011a51),
-                                          shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(20),
-                                              topRight: Radius.circular(20),
-                                            ),
-                                          ),
-                                          context: context,
-                                          builder: ((context) {
-                                            return BottomModel(
-                                              user: UserModel.fromJson(
-                                                  myUserData),
-                                              roomId: myUserData["id"],
+                                    child: Stack(
+                                      children: [
+                                        AudioUserTile(
+                                          gifIndex: gifIndex == null
+                                              ? null
+                                              : int.parse('$gifIndex'),
+                                          user: UserModel.fromJson(myUserData),
+                                          onTap: () {
+                                            showModalBottomSheet(
+                                              backgroundColor:
+                                                  const Color(0xFF011a51),
+                                              shape:
+                                                  const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(20),
+                                                  topRight: Radius.circular(20),
+                                                ),
+                                              ),
+                                              context: context,
+                                              builder: ((context) {
+                                                return BottomModel(
+                                                  user: UserModel.fromJson(
+                                                      myUserData),
+                                                  roomId: myUserData["id"],
+                                                );
+                                              }),
                                             );
-                                          }),
-                                        );
-                                      },
+                                          },
+                                        ),
+                                        const Positioned(
+                                          bottom: 35,
+                                          right: 20,
+                                          child: Icon(
+                                            Icons.mic_rounded,
+                                            size: 20,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                             for (int i = 0; i < usersData.length; ++i)
@@ -930,13 +956,22 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        TextSpan(
-                                          text: message,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            // fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
+                                        // message == "asdf"
+                                        message.contains("@${userData['name']}")
+                                            ? TextSpan(
+                                                text: message,
+                                                style: const TextStyle(
+                                                  color: Colors.pink,
+                                                  // fontWeight: FontWeight.bold,
+                                                ),
+                                              )
+                                            : TextSpan(
+                                                text: message,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  // fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
                                       ],
                                     ),
                                   ),
