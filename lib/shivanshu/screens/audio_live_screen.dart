@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
-import 'package:spinner_try/shivanshu/models/webRTC/new_audio_room.dart';
+import 'package:spinner_try/shivanshu/screens/audio_page.dart';
 import 'package:spinner_try/shivanshu/screens/home_page.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/widgets/scroll_builder.dart';
 import 'package:spinner_try/webRTC/video_room.dart';
-
-import 'audio_page.dart';
 
 class AudioLive extends StatefulWidget {
   const AudioLive({
@@ -88,12 +86,9 @@ class _AudioLiveState extends State<AudioLive> {
                           navigatorPush(
                               context,
                               rooms[index].roomType == RoomType.audio
-                                  // ? NewAudioRoom(
-                                  //     room: rooms[index],
-                                  //   )
                                   ? AudioPage(
-                                    room: rooms[index],
-                                  )
+                                      room: rooms[index],
+                                    )
                                   : VideoRoom(
                                       room: rooms[index],
                                     ));

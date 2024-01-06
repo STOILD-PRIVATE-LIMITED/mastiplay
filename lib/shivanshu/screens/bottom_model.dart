@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:spinner_try/shivanshu/screens/moments.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/shivanshu/utils/loading_elevated_button.dart';
 import 'package:spinner_try/user_model.dart';
 
 import '../../chat/models/chat.dart';
 
 class BottomModel extends StatefulWidget {
   final UserModel user;
-  final String roomId;
-  const BottomModel({super.key, required this.roomId, required this.user});
+  const BottomModel({super.key, required this.user});
 
   @override
   State<BottomModel> createState() => _BottomModelState();
@@ -109,7 +109,7 @@ class _BottomModelState extends State<BottomModel> {
                   Padding(
                     padding: EdgeInsets.only(left: 8.0.sp),
                     child: Text(
-                      widget.roomId,
+                      widget.user.id ?? "No id",
                       style: TextStyle(
                         fontSize: 13.sp,
                         color: Colors.white,
@@ -120,7 +120,8 @@ class _BottomModelState extends State<BottomModel> {
                     padding: const EdgeInsets.only(left: 4.0),
                     child: GestureDetector(
                       onTap: () {
-                        Clipboard.setData(ClipboardData(text: widget.roomId));
+                        Clipboard.setData(
+                            ClipboardData(text: widget.user.id ?? "No id"));
                         showMsg(context, "Copied to clipboard");
                       },
                       child: Icon(
@@ -133,23 +134,31 @@ class _BottomModelState extends State<BottomModel> {
                 ],
               ),
               SizedBox(height: 10.sp),
-              ElevatedButton(
-                onPressed: () async {
-                  showChatWithUserId(widget.user.id!, context);
-                },
-                child: const Text("Chat"),
-              ),
-              SizedBox(height: 10.sp),
-              ElevatedButton(
-                onPressed: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Moments(),
-                    ),
-                  );
-                },
-                child: const Text("Moments"),
+              Wrap(
+                alignment: WrapAlignment.spaceAround,
+                spacing: 10,
+                children: [
+                  LoadingElevatedButton(
+                    icon: const Icon(Icons.chat_rounded),
+                    onPressed: () async {
+                      print(widget.user.id!);
+                      await showChatWithUserId(widget.user.id!, context);
+                    },
+                    label: const Text("Chat"),
+                  ),
+                  LoadingElevatedButton(
+                    icon: const Icon(Icons.collections_rounded),
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Moments(),
+                        ),
+                      );
+                    },
+                    label: const Text("Moments"),
+                  ),
+                ],
               ),
             ],
           ),

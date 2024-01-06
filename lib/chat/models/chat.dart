@@ -144,7 +144,7 @@ Future<List<ChatData>> fetchAllChats(String userID) async {
   }
 }
 
-showChatWithUserId(String userId, BuildContext context) async {
+Future<void> showChatWithUserId(String userId, BuildContext context) async {
   final chatData = await createChat(ChatData(
     id: "-1",
     admins: [currentUser.id!, userId],

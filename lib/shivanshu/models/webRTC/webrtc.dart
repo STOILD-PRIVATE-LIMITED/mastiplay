@@ -5,7 +5,6 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
-import 'package:spinner_try/webRTC/web_rtc.dart';
 
 /*
   usage: Create an object of WebRTCRoom
@@ -353,35 +352,44 @@ class WebRTCRoom {
   }
 
   void disconnect() async {
-    log("Disconnected from signaling server");
-    for (final peerId in _peers.entries) {
-      _peers[peerId.key]!.close();
-    }
-    _peers.clear();
-    for (final peerId in _remoteRTCVideoRenderers.entries) {
+    try {
+      log("Disconnected from signaling server");
+      for (final peerId in _peers.entries) {
+        _peers[peerId.key]!.close();
+      }
+      _localStream?.getTracks().forEach((element) async {
+        await element.stop();
+      });
+      await _localStream?.dispose();
+      _localStream = null;
+      _peers.clear();
+      for (final peerId in _remoteRTCVideoRenderers.entries) {
+        // _remoteRTCVideoRenderers[peerId.key]!.dispose();
+      }
+      _remoteRTCVideoRenderers.clear();
+      roomId = null;
+      socket.close();
+      socket.onReconnect((data) {
+        log("Socket was reconnected!");
+      });
+      // _localRTCVideoRenderer.dispose();
+      // for (final peerId in _remoteRTCVideoRenderers.entries) {
       // _remoteRTCVideoRenderers[peerId.key]!.dispose();
+      // }
+      _remoteRTCVideoRenderers.clear();
+      for (final peerId in _peers.entries) {
+        _peers[peerId.key]!.close();
+        _peers[peerId.key]!.dispose();
+        _peers[peerId.key]!.restartIce();
+        _peers.remove(peerId);
+        _remoteRTCVideoRenderers[peerId]?.dispose();
+        _remoteRTCVideoRenderers.remove(peerId);
+        _peersData.remove(peerId);
+      }
+      _peers.clear();
+      onDisconnect?.call();
+    } catch (e) {
+      log("Error Disconnecting: $e");
     }
-    _remoteRTCVideoRenderers.clear();
-    roomId = null;
-    socket.close();
-    socket.onReconnect((data) {
-      log("Socket was reconnected!");
-    });
-    // _localRTCVideoRenderer.dispose();
-    // for (final peerId in _remoteRTCVideoRenderers.entries) {
-    // _remoteRTCVideoRenderers[peerId.key]!.dispose();
-    // }
-    _remoteRTCVideoRenderers.clear();
-    for (final peerId in _peers.entries) {
-      _peers[peerId.key]!.close();
-      _peers[peerId.key]!.dispose();
-      _peers[peerId.key]!.restartIce();
-      _peers.remove(peerId);
-      _remoteRTCVideoRenderers[peerId]?.dispose();
-      _remoteRTCVideoRenderers.remove(peerId);
-      _peersData.remove(peerId);
-    }
-    _peers.clear();
-    onDisconnect?.call();
   }
 }

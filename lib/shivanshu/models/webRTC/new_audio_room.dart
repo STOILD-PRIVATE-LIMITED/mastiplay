@@ -58,13 +58,11 @@ class _NewAudioRoomState extends State<NewAudioRoom> {
     WebRTCRoom.instance.onConnectError = () {
       log("SetState for function: onConnectError");
       showMsg(context, "Connect Error");
-      Navigator.of(context).pop();
     };
     WebRTCRoom.instance.onDisconnect = () {
       log("SetState for function: onDisconnect");
       if (context.mounted) {
         showMsg(context, "Disconnected");
-        Navigator.of(context).pop();
       }
     };
     // WebRTCRoom.instance.onExit = () => showMsg(context, "You exited!");

@@ -42,8 +42,8 @@ class _AgencyPanelState extends State<AgencyPanel> {
                     Navigator.of(context).pop();
                   },
                   title: "Agency",
-                  icon: const Icon(Icons.support_agent_rounded, size: 50),
-                  color: Colors.blue,
+                  icon: const Icon(Icons.business_rounded, size: 50),
+                  color: Colors.blueAccent,
                 ),
               ),
               const SizedBox(height: 50),
