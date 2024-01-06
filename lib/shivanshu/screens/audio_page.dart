@@ -105,12 +105,17 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    itemss();
-    autoScroll(2000);
     _controllerr = VideoPlayerController.asset('assets/videoo.mp4')
       ..initialize().then((_) {
+        print("video initialized");
+        _controllerr.play();
+        _controllerr.setLooping(true);
         setState(() {});
+      }).catchError((error) {
+        print("Error in video initialization: $error");
       });
+    itemss();
+    autoScroll(2000);
     log("Setting up socket listeners for chat");
   }
 
