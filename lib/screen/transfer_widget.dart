@@ -2,73 +2,83 @@ import 'package:flutter/material.dart';
 import 'package:spinner_try/screen/exchange_method.dart';
 import 'package:spinner_try/screen/recharge_method.dart';
 import 'package:spinner_try/screen/transfer_method.dart';
+import 'package:spinner_try/user_model.dart';
 
-class TransferWidget extends StatefulWidget {
+class TransferWidget extends StatelessWidget {
+  final UserModel user;
   const TransferWidget({
     super.key,
     required this.height,
     required this.width,
+    required this.user,
   });
 
   final double height;
   final double width;
 
   @override
-  State<TransferWidget> createState() => _TransferWidgetState();
-}
-
-class _TransferWidgetState extends State<TransferWidget>
-    with SingleTickerProviderStateMixin {
-  @override
   Widget build(BuildContext context) {
-    double height = widget.height;
-    double width = widget.width;
     return DefaultTabController(
       length: 3,
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: height / 20,
-          horizontal: width / 20,
+        padding: EdgeInsets.only(
+          top: height / 20,
+          left: width / 20,
+          right: width / 20,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(
-                      Icons.diamond,
-                      color: Colors.pink,
-                    ),
+                    Image.asset('assets/diamond.png',
+                        height: height / 15, width: width / 15),
                     SizedBox(
                       width: width / 30,
                     ),
                     Text(
-                      "999999",
+                      user.agentData!.diamonds.toString(),
                       style: TextStyle(
-                          fontSize: height / 60, fontWeight: FontWeight.bold),
+                          fontSize: height / 40, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
                 Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(
-                      Icons.diamond,
-                      color: Colors.pink,
+                    Image.asset('assets/bean.png',
+                        height: height / 15, width: width / 15),
+                    SizedBox(
+                      width: width / 30,
                     ),
                     Text(
-                      "CoinSeller",
+                      user.beans.toString(),
                       style: TextStyle(
-                          fontSize: height / 50, fontWeight: FontWeight.bold),
+                          fontSize: height / 40, fontWeight: FontWeight.bold),
                     ),
-                    Icon(
-                      Icons.question_mark,
-                      size: height / 60,
-                    )
                   ],
-                )
+                ),
+                // Row(
+                //   children: [
+                //     const Icon(
+                //       Icons.diamond,
+                //       color: Colors.pink,
+                //     ),
+                //     Text(
+                //       "CoinSeller",
+                //       style: TextStyle(
+                //           fontSize: height / 50, fontWeight: FontWeight.bold),
+                //     ),
+                //     Icon(
+                //       Icons.question_mark,
+                //       size: height / 60,
+                //     )
+                //   ],
+                // )
               ],
             ),
             SizedBox(
@@ -140,6 +150,7 @@ class _TransferWidgetState extends State<TransferWidget>
                     width: width,
                   ),
                   ExchangeMethod(
+                    user: user,
                     height: height,
                     width: width,
                   )

@@ -239,6 +239,7 @@ class WebRTCRoom {
     };
 
     _peers[peerId]!.onTrack = (event) async {
+      log("isAudioOn($peerId) = ${event.streams[0].getAudioTracks().first.enabled}");
       log("onTrack Called from peerId: $peerId");
       if (!_remoteRTCVideoRenderers.containsKey(peerId)) {
         _remoteRTCVideoRenderers.addAll({

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:spinner_try/shivanshu/screens/moments.dart';
+import 'package:spinner_try/shivanshu/screens/my_posts.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/loading_elevated_button.dart';
 import 'package:spinner_try/user_model.dart';
@@ -149,12 +149,8 @@ class _BottomModelState extends State<BottomModel> {
                   LoadingElevatedButton(
                     icon: const Icon(Icons.collections_rounded),
                     onPressed: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Moments(),
-                        ),
-                      );
+                      navigatorPush(
+                          context, UserPosts(userId: widget.user.id!));
                     },
                     label: const Text("Moments"),
                   ),

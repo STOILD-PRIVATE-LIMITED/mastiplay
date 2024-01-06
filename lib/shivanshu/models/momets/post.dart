@@ -159,9 +159,11 @@ Future<void> sharePost(String postId) async {
   }
 }
 
-Future<List<Post>> searchPost(List<String>? tags, int limit, int start) async {
+Future<List<Post>> searchPost(List<String>? tags, int limit, int start,
+    {String? userId}) async {
   final response = await http.post(
-    Uri.parse('$momentsServer/api/search-with-tags?userId=${currentUser.id}'),
+    Uri.parse(
+        '$momentsServer/api/search-with-tags?userId=${userId ?? currentUser.id}'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

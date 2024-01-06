@@ -4,8 +4,9 @@ import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/widgets/post_widget.dart';
 import 'package:spinner_try/shivanshu/widgets/scroll_builder.dart';
 
-class MyPosts extends StatelessWidget {
-  const MyPosts({super.key});
+class UserPosts extends StatelessWidget {
+  final String userId;
+  const UserPosts({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class MyPosts extends StatelessWidget {
                 color: Colors.black),
           ),
           loader: (start, lastPost) async {
-            return await searchPost(null, 20, start);
+            return await searchPost(null, 20, start, userId: userId);
           },
           separatorBuilder: (context, index) {
             return const Divider();

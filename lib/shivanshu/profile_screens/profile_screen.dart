@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/screen/about.dart';
 import 'package:spinner_try/screen/agency_center.dart';
-import 'package:spinner_try/screen/agent.dart';
+import 'package:spinner_try/screen/agent_panel.dart';
 import 'package:spinner_try/screen/creator_page.dart';
 import 'package:spinner_try/screen/help_form.dart';
 import 'package:spinner_try/screen/inv_friends.dart';
@@ -11,6 +11,7 @@ import 'package:spinner_try/screen/profile_edit.dart';
 import 'package:spinner_try/screen/setting.dart';
 import 'package:spinner_try/screen/store.dart';
 import 'package:spinner_try/shivanshu/admin_panel/admin_panel.dart';
+import 'package:spinner_try/shivanshu/models/agent/agent.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/moments/followers_screen.dart';
 import 'package:spinner_try/shivanshu/moments/following_screen.dart';
@@ -195,16 +196,31 @@ class ProfileScreen extends StatelessWidget {
                 title: const Text('Wallet'),
               ),
               if (kDebugMode || currentUser.agentId != null)
-                ListTile(
-                  onTap: () {
-                    navigatorPush(context, const Agent());
-                  },
-                  leading: Image.asset(
-                    'assets/diamond.png',
-                    width: 20,
-                  ),
-                  title: const Text('Agent'),
-                ),
+                FutureBuilder(
+                    future: fetchAgentData(currentUser.id!),
+                    builder: (context, snapshot) {
+                      final loading =
+                          snapshot.connectionState == ConnectionState.waiting;
+                      final userData = snapshot.data;
+                      return ListTile(
+                        onTap: loading || userData == null
+                            ? null
+                            : () {
+                                currentUser.agentData = userData.agentData;
+                                navigatorPush(
+                                    context, AgentPanel(user: currentUser));
+                              },
+                        leading: loading
+                            ? const CircularProgressIndicatorRainbow()
+                            : Image.asset(
+                                'assets/diamond.png',
+                                width: 20,
+                              ),
+                        title: Text(userData == null && !loading
+                            ? snapshot.error.toString()
+                            : 'Agent'),
+                      );
+                    }),
               ListTile(
                 onTap: () {
                   Navigator.push(
@@ -311,7 +327,8 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      navigatorPush(context, const MyPosts());
+                      navigatorPush(
+                          context, UserPosts(userId: currentUser.id!));
                     },
                     child: MyColumn(
                       children: [

@@ -7,14 +7,14 @@ import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'package:spinner_try/shivanshu/widgets/grid_tile_logo.dart';
 import 'package:spinner_try/user_model.dart';
 
-class AgentPanel extends StatefulWidget {
-  const AgentPanel({super.key});
+class AdminAgentPanel extends StatefulWidget {
+  const AdminAgentPanel({super.key});
 
   @override
-  State<AgentPanel> createState() => _AgentPanelState();
+  State<AdminAgentPanel> createState() => _AdminAgentPanelState();
 }
 
-class _AgentPanelState extends State<AgentPanel> {
+class _AdminAgentPanelState extends State<AdminAgentPanel> {
   final _userIdController = TextEditingController();
   UserModel? userData;
 
