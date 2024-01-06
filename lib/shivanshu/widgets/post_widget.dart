@@ -4,6 +4,7 @@ import 'package:spinner_try/chat/screens/image_preview.dart';
 import 'package:spinner_try/chat/widgets/message.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/momets/post.dart';
+import 'package:spinner_try/shivanshu/screens/post_comments.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/loading_elevated_button.dart';
 import 'package:spinner_try/shivanshu/utils/loading_icon_button.dart';
@@ -272,18 +273,7 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               label: Text(widget.post.commentsCount.toString()),
               onPressed: () async {
-                if (widget.post.hasCommented) return;
-                final comment = await promptUser(
-                  context,
-                  question: "Comment",
-                );
-                if (comment != null) {
-                  await commentPost(widget.post, comment);
-                  setState(() {
-                    widget.post.hasCommented = true;
-                    widget.post.commentsCount++;
-                  });
-                }
+                navigatorPush(context, CommentsScreen(post: widget.post));
               },
             ),
             // TextButton.icon(

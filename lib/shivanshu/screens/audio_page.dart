@@ -728,24 +728,8 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                                         : int.parse('$gifIndex'),
                                     user: UserModel.fromJson(myUserData),
                                     onTap: () {
-                                      showModalBottomSheet(
-                                        backgroundColor:
-                                            const Color(0xFF011a51),
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20),
-                                          ),
-                                        ),
-                                        context: context,
-                                        builder: ((context) {
-                                          return BottomModel(
-                                            user:
-                                                UserModel.fromJson(myUserData),
-                                            roomId: myUserData["id"],
-                                          );
-                                        }),
-                                      );
+                                      showProfile(context,
+                                          UserModel.fromJson(myUserData));
                                     },
                                   )
                                 : EmptyEffect(
@@ -772,7 +756,6 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                                             return BottomModel(
                                               user: UserModel.fromJson(
                                                   myUserData),
-                                              roomId: myUserData["id"],
                                             );
                                           }),
                                         );
@@ -812,9 +795,8 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                                     context: context,
                                     builder: ((context) {
                                       return BottomModel(
-                                        user: UserModel.fromJson(usersData[i]),
-                                        roomId: usersData[i]["id"],
-                                      );
+                                          user:
+                                              UserModel.fromJson(usersData[i]));
                                     }),
                                   );
                                 },

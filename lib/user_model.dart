@@ -8,7 +8,7 @@ import 'package:spinner_try/chat/widgets/profile_preview.dart';
 import 'package:spinner_try/shivanshu/models/agency/agency.dart';
 import 'package:spinner_try/shivanshu/models/agent/agent.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
-import 'package:spinner_try/shivanshu/models/momets/post.dart';
+import 'package:spinner_try/shivanshu/screens/bottom_model.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 
 class UserModel {
@@ -61,8 +61,8 @@ class UserModel {
   }
 
   void load(Map<String, dynamic> data) {
-    id = data['id'] ?? id;
-    agentId = data['agentId'] ?? agentId;
+    id = data['id'] ?? data['UserId'] ?? id;
+    agentId = data['agentId'] ?? data['AgentId'] ?? agentId;
     photo = data["photo"] ?? photo;
     name = data["name"] ?? name;
     phoneNumber = data["phoneNumber"] ?? phoneNumber;
@@ -225,4 +225,80 @@ Future<void> createUser(UserModel userData) async {
   } catch (e) {
     log("Failed to create user: $e");
   }
+}
+
+Future<List<UserModel>> fetchFollowers(
+    String userId, int start, int limit) async {
+  final response = await http.get(
+    Uri.parse(
+        '$momentsServer/api/followers?userId=$userId&start=$start&limit=$limit'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
+  if (response.statusCode != 200) {
+    throw Exception('Failed to fetch followers: ${response.body}');
+  }
+  final List<UserModel> users = [];
+  final data = json.decode(response.body);
+  for (final user in data) {
+    users.add(UserModel.fromJson(user));
+  }
+  return users;
+}
+
+Future<List<UserModel>> fetchFollowingUsers(
+    String userId, int start, int limit) async {
+  final response = await http.get(
+    Uri.parse(
+        '$momentsServer/api/following-users?userId=$userId&start=$start&limit=$limit'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
+  if (response.statusCode != 200) {
+    throw Exception('Failed to fetch following users: ${response.body}');
+  }
+  final List<UserModel> users = [];
+  final data = json.decode(response.body);
+  for (final user in data) {
+    users.add(UserModel.fromJson(user));
+  }
+  return users;
+}
+
+Future<List<UserModel>> fetchFriends(
+    String userId, int start, int limit) async {
+  final response = await http.get(
+    Uri.parse(
+        '$momentsServer/api/friends?userId=$userId&start=$start&limit=$limit'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
+  if (response.statusCode != 200) {
+    throw Exception('Failed to fetch friends: ${response.body}');
+  }
+  final List<UserModel> users = [];
+  final data = json.decode(response.body);
+  for (final user in data) {
+    users.add(UserModel.fromJson(user));
+  }
+  return users;
+}
+
+Future<void> showProfile(BuildContext context, UserModel user) async {
+  return await showModalBottomSheet(
+    backgroundColor: const Color(0xFF011a51),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+      ),
+    ),
+    context: context,
+    builder: ((context) {
+      return BottomModel(user: user);
+    }),
+  );
 }

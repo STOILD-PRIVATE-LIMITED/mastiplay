@@ -100,6 +100,7 @@ Future<List<Post>> getHotPosts(int limit, int startPostId) async {
       'Content-Type': 'application/json; charset=UTF-8',
     },
   );
+  log(response.body);
   if (response.statusCode == 200) {
     final List<dynamic> posts = json.decode(response.body);
     return posts.map((e) => Post.fromJson(e)).toList();

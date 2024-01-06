@@ -2,17 +2,14 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:spinner_try/shivanshu/models/globals.dart';
-import 'package:spinner_try/shivanshu/models/momets/post.dart';
 
 class AgencyData {
   String? id;
   String name;
-  double diamonds = 0;
   double beans = 0;
   String owner;
   AgencyData({
     this.id,
-    this.diamonds = 0,
     this.beans = 0,
     this.name = "",
     this.owner = "",
@@ -21,16 +18,14 @@ class AgencyData {
   factory AgencyData.fromJson(Map<String, dynamic> json) {
     return AgencyData(
       id: json['id'],
-      diamonds: json['diamonds'],
       beans: json['beans'],
       name: json['name'] ?? '',
-      owner: json['name'] ?? '',
+      owner: json['owner'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'diamonds': diamonds,
         'beans': beans,
         'name': name,
         'owner': owner,
@@ -94,19 +89,19 @@ Future<void> changeRole(String userId, String role) async {
   }
 }
 
-Future<void> addDiamonds(String userId, double diamonds) async {
+Future<void> addbeans(String userId, double beans) async {
   final response = await http.post(
-    Uri.parse('$momentsServer/api/add-diamonds'),
+    Uri.parse('$momentsServer/api/add-beans'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: {
       'userId': userId,
-      'diamonds': diamonds,
+      'beans': beans,
     },
   );
   if (response.statusCode != 200) {
-    throw Exception('Failed to add diamonds');
+    throw Exception('Failed to add beans');
   }
 }
 

@@ -46,6 +46,11 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  // final query = await firestore.collection('users').get();
+  // for (var e in query.docs) {
+  //   final user = UserModel.fromJson(e.data());
+  //   await createUser(user);
+  // }
   runApp(const MyApp());
 }
 

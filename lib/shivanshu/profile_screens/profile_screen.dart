@@ -12,6 +12,9 @@ import 'package:spinner_try/screen/setting.dart';
 import 'package:spinner_try/screen/store.dart';
 import 'package:spinner_try/shivanshu/admin_panel/admin_panel.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
+import 'package:spinner_try/shivanshu/moments/followers_screen.dart';
+import 'package:spinner_try/shivanshu/moments/following_screen.dart';
+import 'package:spinner_try/shivanshu/moments/friends_screen.dart';
 import 'package:spinner_try/shivanshu/profile_screens/family_screen.dart';
 import 'package:spinner_try/shivanshu/screens/bind_agency.dart';
 import 'package:spinner_try/shivanshu/screens/my_posts.dart';
@@ -104,7 +107,7 @@ class ProfileScreen extends StatelessWidget {
                           ],
                         ),
                         onTap: () {
-                          showMsg(context, "Hehe");
+                          navigatorPush(context, const FollowersScreen());
                         },
                       ),
                       InkWell(
@@ -127,7 +130,7 @@ class ProfileScreen extends StatelessWidget {
                           ],
                         ),
                         onTap: () {
-                          showMsg(context, "Hehe");
+                          navigatorPush(context, const FollowingScreen());
                         },
                       ),
                       InkWell(
@@ -150,7 +153,7 @@ class ProfileScreen extends StatelessWidget {
                           ],
                         ),
                         onTap: () {
-                          showMsg(context, "Hehe");
+                          navigatorPush(context, const FriendsScreen());
                         },
                       ),
                       // InkWell(
@@ -191,7 +194,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 title: const Text('Wallet'),
               ),
-              if (currentUser.agentData != null)
+              if (kDebugMode || currentUser.agentId != null)
                 ListTile(
                   onTap: () {
                     navigatorPush(context, const Agent());
@@ -225,7 +228,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 title: const Text('Noble Center'),
               ),
-              if (currentUser.ownedAgencyData != null)
+              if (kDebugMode || currentUser.ownedAgencyData != null)
                 ListTile(
                   onTap: () {
                     navigatorPush(context, const AgencyCenter());
@@ -276,16 +279,17 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 title: const Text('User level center'),
               ),
-              ListTile(
-                onTap: () {
-                  navigatorPush(context, const BindAgency());
-                },
-                leading: Image.asset(
-                  'assets/diamond.png',
-                  width: 20,
+              if (kDebugMode || currentUser.ownedAgencyData == null)
+                ListTile(
+                  onTap: () {
+                    navigatorPush(context, const BindAgency());
+                  },
+                  leading: Image.asset(
+                    'assets/diamond.png',
+                    width: 20,
+                  ),
+                  title: const Text('Bind Agency'),
                 ),
-                title: const Text('Bind Agency'),
-              ),
               const Divider(),
               GridView.extent(
                 maxCrossAxisExtent: 100,
