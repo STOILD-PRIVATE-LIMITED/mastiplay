@@ -11,6 +11,7 @@ import 'package:spinner_try/screen/profile_edit.dart';
 import 'package:spinner_try/screen/setting.dart';
 import 'package:spinner_try/screen/store.dart';
 import 'package:spinner_try/shivanshu/admin_panel/admin_panel.dart';
+import 'package:spinner_try/shivanshu/models/agency/agency.dart';
 import 'package:spinner_try/shivanshu/models/agent/agent.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/moments/followers_screen.dart';
@@ -216,9 +217,15 @@ class ProfileScreen extends StatelessWidget {
                                 'assets/diamond.png',
                                 width: 20,
                               ),
-                        title: Text(userData == null && !loading
-                            ? snapshot.error.toString()
-                            : 'Agent'),
+                        title: Text(
+                          userData == null && !loading
+                              ? "Can't reach the server right now"
+                              : 'Agent',
+                          style: TextStyle(
+                              color: userData == null && !loading
+                                  ? Colors.red
+                                  : (loading ? Colors.black45 : Colors.black)),
+                        ),
                       );
                     }),
               ListTile(
@@ -245,15 +252,37 @@ class ProfileScreen extends StatelessWidget {
                 title: const Text('Noble Center'),
               ),
               if (kDebugMode || currentUser.ownedAgencyData != null)
-                ListTile(
-                  onTap: () {
-                    navigatorPush(context, const AgencyCenter());
+                FutureBuilder(
+                  future: getAgencyData(currentUser.id!),
+                  builder: (context, snapshot) {
+                    final loading =
+                        snapshot.connectionState == ConnectionState.waiting;
+                    final agencyData = snapshot.data;
+                    currentUser.ownedAgencyData = agencyData;
+                    return ListTile(
+                      onTap: loading || agencyData == null
+                          ? null
+                          : () {
+                              navigatorPush(
+                                  context, AgencyCenter(user: currentUser));
+                            },
+                      leading: loading
+                          ? const CircularProgressIndicatorRainbow()
+                          : Image.asset(
+                              'assets/diamond.png',
+                              width: 20,
+                            ),
+                      title: Text(
+                        agencyData == null && !loading
+                            ? "Can't reach the server right now"
+                            : 'Agency Center',
+                        style: TextStyle(
+                            color: agencyData == null && !loading
+                                ? Colors.red
+                                : (loading ? Colors.black45 : Colors.black)),
+                      ),
+                    );
                   },
-                  leading: Image.asset(
-                    'assets/diamond.png',
-                    width: 20,
-                  ),
-                  title: const Text('Agency Center'),
                 ),
               ListTile(
                 onTap: () {

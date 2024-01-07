@@ -71,6 +71,13 @@ class _NewAudioRoomState extends State<NewAudioRoom> {
       final user = UserModel.fromJson(myUserData);
       final List<UserModel> remoteUsers =
           usersData.map<UserModel>((e) => UserModel.fromJson(e)).toList();
+      for (var element in videoViews) {
+        element.videoRenderer.addListener(() {
+          setState(() {
+            log("isAudioOn() = ${element.videoRenderer.muted}");
+          });
+        });
+      }
       return GridView.extent(
         maxCrossAxisExtent: 100,
         childAspectRatio: 1,
@@ -78,11 +85,14 @@ class _NewAudioRoomState extends State<NewAudioRoom> {
           AudioUserTile(
             user: user,
             onTap: () {
-              WebRTCRoom.instance.toggleMic(false);
+              WebRTCRoom.instance.toggleMic(!WebRTCRoom.instance.isAudioOn);
               showMsg(context, "Muted");
+              setState(() {});
             },
           ),
-          ...remoteUsers.map((e) => AudioUserTile(user: e)),
+          for (int i = 0; i < remoteUsers.length; i++)
+            AudioUserTile(
+                user: remoteUsers[i], muted: videoViews[i].videoRenderer.muted),
         ],
       );
     };

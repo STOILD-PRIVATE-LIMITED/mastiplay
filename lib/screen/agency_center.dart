@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:spinner_try/screen/creator_application.dart';
 import 'package:spinner_try/shivanshu/screens/family_room_page.dart';
+import 'package:spinner_try/shivanshu/utils/profile_image.dart';
+import 'package:spinner_try/user_model.dart';
 
 // import 'package:spinner_try/screen/creator_page.dart';
 
 import 'agency_creator.dart';
 
 class AgencyCenter extends StatefulWidget {
-  const AgencyCenter({super.key});
+  final UserModel user;
+  const AgencyCenter({super.key, required this.user});
 
   @override
   State<AgencyCenter> createState() => _AgencyCenterState();
@@ -29,6 +32,7 @@ class _AgencyCenterState extends State<AgencyCenter> {
     "November",
     "December"
   ];
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -50,14 +54,18 @@ class _AgencyCenterState extends State<AgencyCenter> {
           child: Column(
             children: [
               ListTile(
-                leading: Icon(Icons.abc, size: height / 30),
+                leading: SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: ProfileImage(user: widget.user),
+                ),
                 title: Text(
-                  "SR",
+                  widget.user.name,
                   style: TextStyle(
                       fontSize: height / 40, fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
-                  "ID: 1234567890",
+                  "ID: ${widget.user.id}",
                   style: TextStyle(fontSize: height / 50, color: Colors.grey),
                 ),
                 trailing: Container(
@@ -159,7 +167,8 @@ class _AgencyCenterState extends State<AgencyCenter> {
                                 color: Colors.pink,
                               ),
                               Text(
-                                "96000",
+                                widget.user.ownedAgencyData!.beansCount
+                                    .toString(),
                                 style: TextStyle(
                                     fontSize: height / 40,
                                     fontWeight: FontWeight.bold),

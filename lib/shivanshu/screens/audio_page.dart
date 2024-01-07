@@ -1386,12 +1386,14 @@ class AudioUserTile extends StatefulWidget {
   final void Function()? onTap;
   final int? index;
   final int? gifIndex;
+  final bool muted;
   const AudioUserTile({
     super.key,
     required this.user,
     this.index,
     this.onTap,
     this.gifIndex,
+    this.muted = false,
   });
 
   @override
@@ -1463,6 +1465,8 @@ class _AudioUserTileState extends State<AudioUserTile>
                       ),
                     ),
                   ),
+                if (widget.muted)
+                  const Icon(Icons.mic_off_outlined, color: Colors.white),
               ],
             ),
           ),

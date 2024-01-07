@@ -47,7 +47,7 @@ Future<void> joinAgency(String agencyId) async {
 
 Future<AgencyData> getAgencyData(String id) async {
   final response =
-      await http.get(Uri.parse('$momentsServer/api/agency?id=$id'));
+      await http.get(Uri.parse('$momentsServer/api/agency?userId=$id'));
   if (response.statusCode != 200) {
     throw Exception('Failed to get agency data');
   }
