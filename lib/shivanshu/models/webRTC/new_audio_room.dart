@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class NewAudioRoom extends StatefulWidget {
 
 class _NewAudioRoomState extends State<NewAudioRoom> {
   bool connected = false;
+  Map<String, bool> isMuted = {};
 
   @override
   void initState() {
@@ -65,8 +67,13 @@ class _NewAudioRoomState extends State<NewAudioRoom> {
         showMsg(context, "Disconnected");
       }
     };
-    WebRTCRoom.instance.onReceiveMsg = (msgData) {
-      log(msgData);
+    WebRTCRoom.instance.onReceiveMsg = (dynamic msgData) {
+      log(msgData.toString());
+      if (msgData['data'] != null) {
+        final userData = UserModel.fromJson(json.decode(msgData['userData']));
+        bool isAudioOn = json.decode(msgData['data'])['isAudioOn'];
+        isMuted[userData.id!] = isAudioOn;
+      }
     };
     // WebRTCRoom.instance.onExit = () => showMsg(context, "You exited!");
     WebRTCRoom.instance.builder =
@@ -100,7 +107,8 @@ class _NewAudioRoomState extends State<NewAudioRoom> {
           ),
           for (int i = 0; i < remoteUsers.length; i++)
             AudioUserTile(
-                user: remoteUsers[i], muted: videoViews[i].videoRenderer.muted),
+                user: remoteUsers[i],
+                muted: isMuted[remoteUsers[i].id!] ?? false),
         ],
       );
     };

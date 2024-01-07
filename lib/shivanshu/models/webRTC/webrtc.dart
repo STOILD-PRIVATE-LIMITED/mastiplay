@@ -141,6 +141,7 @@ class WebRTCRoom {
         }
       },
     );
+    socket.on('broadcastMsg', broadCastMsg);
   }
 
   Future<void> _join() async {
@@ -389,6 +390,7 @@ class WebRTCRoom {
       }
       _remoteRTCVideoRenderers.clear();
       roomId = null;
+      socket.off('broadcastMsg', broadCastMsg);
       socket.close();
       socket.onReconnect((data) {
         log("Socket was reconnected!");
