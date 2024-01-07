@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class WebRTCRoom {
   Function()? onRemoteStreamAdded;
   Function()? onRemoteRemoved;
   Function()? onDisconnect;
+  Function(dynamic data)? onReceiveMsg;
   Function()? onExit;
 
   Widget Function(
@@ -336,6 +338,7 @@ class WebRTCRoom {
     _localStream?.getAudioTracks().forEach((track) {
       track.enabled = isAudioOn;
     });
+    sendMessage(null, roomId!, {'isAudioOn': isAudioOn});
   }
 
   toggleCamera(bool value) {
@@ -350,6 +353,23 @@ class WebRTCRoom {
     _localStream?.getVideoTracks().forEach((track) {
       track.switchCamera();
     });
+  }
+
+  void sendMessage(String? msg, String roomId, Map<String, dynamic>? data) {
+    log("Sending msg: $msg with roomID: $roomId with data: $data");
+    socket.emit('message', {
+      'channel': roomId,
+      'message': msg,
+      'data': json.encode(data),
+    });
+  }
+
+  void broadCastMsg(data) {
+    log("Received a broadcast msg: $data");
+    onReceiveMsg?.call(data);
+    if (onReceiveMsg == null) {
+      log("Warning: you received a broadcast msg, but there are no handlers to handle it. Use WebRTCRoom.instance.onReceiveMsg = (data) => {...} to handle it.");
+    }
   }
 
   void disconnect() async {

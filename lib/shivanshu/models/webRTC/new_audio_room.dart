@@ -65,6 +65,9 @@ class _NewAudioRoomState extends State<NewAudioRoom> {
         showMsg(context, "Disconnected");
       }
     };
+    WebRTCRoom.instance.onReceiveMsg = (msgData) {
+      log(msgData);
+    };
     // WebRTCRoom.instance.onExit = () => showMsg(context, "You exited!");
     WebRTCRoom.instance.builder =
         (context, roomId, usersData, videoViews, myUserData, myVideoView) {
@@ -78,9 +81,14 @@ class _NewAudioRoomState extends State<NewAudioRoom> {
           });
         });
       }
+      for (int i = 0; i < remoteUsers.length; i++) {
+        log("isMuted(i): ${videoViews[i].videoRenderer.muted}");
+      }
       return GridView.extent(
         maxCrossAxisExtent: 100,
         childAspectRatio: 1,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         children: [
           AudioUserTile(
             user: user,
@@ -104,6 +112,8 @@ class _NewAudioRoomState extends State<NewAudioRoom> {
     WebRTCRoom.instance.disconnect();
     super.dispose();
   }
+
+  final List<Map<String, dynamic>> msgs = [];
 
   @override
   Widget build(BuildContext context) {

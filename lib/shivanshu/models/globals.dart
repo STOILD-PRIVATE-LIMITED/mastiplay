@@ -18,8 +18,9 @@ String chatServer = "https://rkncpgkx-3000.inc1.devtunnels.ms";
 // String chatServer = "https://3.7.66.245:8080";
 // keep this without trailing slash
 
+// const String momentsServer = "https://rkncpgkx-3007.inc1.devtunnels.ms";
+const String momentsServer = "https://f82a-103-137-198-235.ngrok-free.app";
 // const String momentsServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
-const String momentsServer = "https://rkncpgkx-3007.inc1.devtunnels.ms";
 // const String momentsServer = "https://3.7.66.245:3007";
 
 // The below represents the server address of the server running the socket.io server
