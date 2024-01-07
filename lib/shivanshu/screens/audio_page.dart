@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'dart:io';
 // import 'dart:math';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
@@ -1489,25 +1490,94 @@ void showAlertDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Confirmation'),
-        content: const Text('Do you want to close?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-            child: const Text('Yes'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('No'),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Card(
+            color: Colors.transparent,
+            child: SizedBox(
+              height: 400,
+              width: 400,
+              child: GlassWidget(
+                blur: 2,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                        width: 50.sp,
+                        height: 500.sp,
+                        decoration: const ShapeDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment(-1.00, -0.01),
+                            end: Alignment(1, 0.01),
+                            colors: [Color(0xFFF36158), Color(0xFF04A4FF)],
+                          ),
+                          shape: OvalBorder(),
+                        ),
+                        child: Image.asset(
+                          "assets/mini.png",
+                          height: 20.sp,
+                        )),
+                  Text(
+                      'Keep',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.sp,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w900,
+                        height: 0,
+                      ),
+                    ),
+                    Container(
+                        width: 50.sp,
+                        height: 50.sp,
+                        decoration: const ShapeDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment(-1.00, -0.01),
+                            end: Alignment(1, 0.01),
+                            colors: [Color(0xFFF36158), Color(0xFF04A4FF)],
+                          ),
+                          shape: OvalBorder(),
+                        ),
+                        child: Image.asset("assets/shut.png", height: 20.sp)),
+                    Text(
+                      'Exit',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.sp,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w900,
+                        height: 0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ],
       );
     },
   );
 }
+        // actions: [
+        //   TextButton(
+        //     onPressed: () {
+        //       Navigator.of(context).pop();
+        //       Navigator.of(context).pop();
+        //       showOverlay(
+        //           context,
+        //           AudioUserTile(
+        //             user: currentUser,
+        //           ));
+        //     },
+        //     child: const Text('Keep'),
+        //   ),
+        //   TextButton(
+        //     onPressed: () {
+        //       Navigator.of(context).pop();
+        //       Navigator.of(context).pop();
+        //     },
+        //     child: const Text('Exit'),
+        //   ),
+        // ],
