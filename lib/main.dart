@@ -90,6 +90,35 @@ class _NewAuthState extends State<NewAuth> {
       final msg = MessageData.fromJson(jsonDecode(messageData));
       showChat(context, chatId: msg.chatId);
     });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (auth.currentUser != null) {
+        _load();
+      }
+    });
+  }
+
+  bool _loading = false;
+  String? _err;
+
+  void _load() async {
+    if (context.mounted) {
+      setState(() {
+        _loading = true;
+      });
+    }
+    try {
+      await Future.wait([
+        fetchUserWithEmail(auth.currentUser!.email!),
+        setupFCMTokenMangement(),
+      ]);
+    } catch (e) {
+      _err = e.toString();
+    }
+    if (context.mounted) {
+      setState(() {
+        _loading = false;
+      });
+    }
   }
 
   @override
@@ -99,52 +128,48 @@ class _NewAuthState extends State<NewAuth> {
       stream: auth.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return FutureBuilder(
-            key: const ValueKey('newAuthFutureBuilder'),
-            future: fetchUserWithEmail(auth.currentUser!.email!),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return GenderScreen(
-                  email: auth.currentUser!.email!,
-                );
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return Scaffold(
-                  body: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.asset(
-                          'assets/logo.png',
-                          width: width / 2,
-                          height: width / 2,
-                          fit: BoxFit.contain,
-                        ),
-                        const CircularProgressIndicatorRainbow(),
-                        const Text('Loading...'),
-                      ],
+          // Looged in
+          if (_err != null) {
+            log("_err is not null");
+            return GenderScreen(
+              email: auth.currentUser!.email!,
+            );
+          } else if (_loading) {
+            return Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      'assets/logo.png',
+                      width: width / 2,
+                      height: width / 2,
+                      fit: BoxFit.contain,
                     ),
-                  ),
-                );
-              } else if (snapshot.hasData) {
-                currentUser = snapshot.data!;
-                setupFCMTokenMangement();
-                log("Current User: ${currentUser.toJson()}");
-                if (currentUser.gender == -1 ||
-                    currentUser.dob == null ||
-                    currentUser.country.isEmpty ||
-                    currentUser.frame == null) {
-                  return GenderScreen(
-                    email: auth.currentUser!.email!,
-                  );
-                } else {
-                  return HomeLive(
-                    email: auth.currentUser!.email!,
-                  );
-                }
-              }
-              return const Login();
-            },
-          );
+                    const SizedBox(
+                      height: 16,
+                      width: 16,
+                      child: CircularProgressIndicatorRainbow(),
+                    ),
+                    const Text('Loading...'),
+                  ],
+                ),
+              ),
+            );
+          }
+          log("Current User: ${currentUser.toJson()}");
+          if (currentUser.gender == -1 ||
+              currentUser.dob == null ||
+              currentUser.country.isEmpty ||
+              currentUser.frame == null) {
+            return GenderScreen(
+              email: auth.currentUser!.email!,
+            );
+          } else {
+            return HomeLive(
+              email: auth.currentUser!.email!,
+            );
+          }
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
             body: Center(
@@ -158,7 +183,6 @@ class _NewAuthState extends State<NewAuth> {
                     fit: BoxFit.contain,
                   ),
                   const Text("You're logged in"),
-                  const CircularProgressIndicatorRainbow(),
                 ],
               ),
             ),

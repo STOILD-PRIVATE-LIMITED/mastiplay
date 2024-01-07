@@ -365,8 +365,7 @@ class CircularProgressIndicatorRainbow extends StatelessWidget {
         },
       )
           .custom(
-            duration:
-                const Duration(seconds: 2), // Adjust the duration as needed
+            duration: const Duration(seconds: 2),
             curve: Curves.linear,
             builder: (context, value, child) {
               return CircularProgressIndicator(

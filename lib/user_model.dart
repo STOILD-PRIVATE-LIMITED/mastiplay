@@ -140,6 +140,9 @@ Future<UserModel> fetchUserWithEmail(String email) async {
   } catch (e) {
     log("Failed to load user: $e");
   }
+  if (email == auth.currentUser!.email) {
+    currentUser = user;
+  }
   return user;
 }
 
@@ -163,6 +166,9 @@ Future<UserModel> fetchUserWithId(String id) async {
     user.load(json.decode(response.body));
   } catch (e) {
     log("Failed to load user: $e");
+  }
+  if (user.email == auth.currentUser!.email) {
+    currentUser = user;
   }
   return user;
 }
