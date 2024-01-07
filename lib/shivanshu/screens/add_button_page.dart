@@ -13,6 +13,8 @@ import 'package:spinner_try/shivanshu/utils/loading_icon_button.dart';
 import 'package:spinner_try/shivanshu/widgets/tab_view.dart';
 import 'package:spinner_try/webRTC/video_room.dart';
 
+import '../models/webRTC/new_audio_room.dart';
+
 class AddButtonPage extends StatefulWidget {
   final String email;
   const AddButtonPage({super.key, required this.email});
@@ -184,7 +186,10 @@ class _AddButtonPageState extends State<AddButtonPage> {
       } else {
         await navigatorPush(
           context,
-          AudioPage(
+          // AudioPage(
+          //   room: room!,
+          // ),
+          NewAudioRoom(
             room: room!,
           ),
         );
