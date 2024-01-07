@@ -57,7 +57,10 @@ class _EmptyEffectState extends State<EmptyEffect>
   @override
   void initState() {
     super.initState();
+    aFunction();
+  }
 
+  aFunction() {
     _radiusOpacityController = AnimationController(
       vsync: this,
       duration: widget.animationTime,
@@ -65,7 +68,7 @@ class _EmptyEffectState extends State<EmptyEffect>
         setState(() {});
       });
 
-    Timer.periodic(widget.delay, (_) {
+    Timer(widget.delay, () {
       _radiusOpacityController?.reset();
       _radiusOpacityController?.forward();
     });
