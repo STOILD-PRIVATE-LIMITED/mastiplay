@@ -41,7 +41,7 @@ class WebRTCRoom {
   MediaStream? _localStream;
   final Map<String, RTCPeerConnection> _peers = {};
   final Map<String, RTCVideoRenderer> _remoteRTCVideoRenderers = {};
-  bool _isAudioOn = true, _isVideoOn = true, _isFrontCameraSelected = true;
+  bool isAudioOn = true, isVideoOn = true, isFrontCameraSelected = true;
 
   void connectToServer(
     String roomId,
@@ -77,9 +77,9 @@ class WebRTCRoom {
   Future<void> _initLocalStream() async {
     log("Initializing local stream");
     _localStream = await navigator.mediaDevices.getUserMedia({
-      'audio': _isAudioOn,
-      'video': _isVideoOn
-          ? {'facingMode': _isFrontCameraSelected ? 'user' : 'environment'}
+      'audio': isAudioOn,
+      'video': isVideoOn
+          ? {'facingMode': isFrontCameraSelected ? 'user' : 'environment'}
           : false,
     });
     _localRTCVideoRenderer.srcObject = _localStream;
@@ -239,7 +239,6 @@ class WebRTCRoom {
     };
 
     _peers[peerId]!.onTrack = (event) async {
-      log("isAudioOn($peerId) = ${event.streams[0].getAudioTracks().first.enabled}");
       log("onTrack Called from peerId: $peerId");
       if (!_remoteRTCVideoRenderers.containsKey(peerId)) {
         _remoteRTCVideoRenderers.addAll({
@@ -254,6 +253,7 @@ class WebRTCRoom {
       log("7-END");
       onRemoteStreamAdded?.call();
       log("8-END");
+      log("isAudioOn($peerId) = ${_remoteRTCVideoRenderers[peerId]!.muted}");
     };
 
     _localStream!.getTracks().forEach((track) {
@@ -331,22 +331,22 @@ class WebRTCRoom {
   }
 
   toggleMic(bool value) {
-    _isAudioOn = value;
+    isAudioOn = value;
     log("Audio set to $value");
     _localStream?.getAudioTracks().forEach((track) {
-      track.enabled = _isAudioOn;
+      track.enabled = isAudioOn;
     });
   }
 
   toggleCamera(bool value) {
-    _isVideoOn = value;
+    isVideoOn = value;
     _localStream?.getVideoTracks().forEach((track) {
-      track.enabled = _isVideoOn;
+      track.enabled = isVideoOn;
     });
   }
 
   switchCamera(bool value) {
-    _isFrontCameraSelected = value;
+    isFrontCameraSelected = value;
     _localStream?.getVideoTracks().forEach((track) {
       track.switchCamera();
     });

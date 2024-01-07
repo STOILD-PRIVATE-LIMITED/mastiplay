@@ -172,30 +172,9 @@ class ScrollBuilder2<T> extends StatefulWidget {
 }
 
 class _ScrollBuilder2State<T> extends State<ScrollBuilder2<T>> {
-  // final _scrollController = ScrollController();
   final List<T> items = [];
   bool finished = false;
   String? err;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // _scrollController.addListener(_scrollListener);
-  //   // fetchData();
-  // }
-
-  // @override
-  // void dispose() {
-  //   _scrollController.dispose();
-  //   super.dispose();
-  // }
-
-  // void _scrollListener() {
-  //   if (_scrollController.position.pixels >=
-  //       _scrollController.position.maxScrollExtent - widget.loadingMargin) {
-  //     fetchData();
-  //   }
-  // }
 
   bool fetching = false;
   Future<void> fetchData() async {
@@ -206,19 +185,23 @@ class _ScrollBuilder2State<T> extends State<ScrollBuilder2<T>> {
       final List<T> fetchedItems =
           (await widget.loader(items.length, items.isEmpty ? null : items.last))
               .cast();
-      if (fetchedItems.isEmpty) {
+      if (context.mounted) {
+        if (fetchedItems.isEmpty) {
+          setState(() {
+            finished = true;
+          });
+          return;
+        }
         setState(() {
-          finished = true;
+          items.addAll(fetchedItems);
         });
-        return;
       }
-      setState(() {
-        items.addAll(fetchedItems);
-      });
     } catch (e) {
-      setState(() {
-        err = e.toString();
-      });
+      if (context.mounted) {
+        setState(() {
+          err = e.toString();
+        });
+      }
     }
     fetching = false;
   }
@@ -257,7 +240,6 @@ class _ScrollBuilder2State<T> extends State<ScrollBuilder2<T>> {
         }
         return widget.itemBuilder(context, items[index]);
       },
-      // controller: _scrollController,
       separatorBuilder:
           widget.separatorBuilder ?? (ctx, index) => const SizedBox(height: 10),
       itemCount: items.length + (finished ? 0 : 1),
