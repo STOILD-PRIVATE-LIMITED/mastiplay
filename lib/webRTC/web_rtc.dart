@@ -191,10 +191,9 @@ class _WebRTCWidgetState extends State<WebRTCWidget> {
         if (await askUser(context, 'Do you really want to exit the room?',
                 yes: true, no: true) !=
             'yes') {
-          return true;
+          return false;
         }
         WakelockPlus.disable();
-        // await AndroidWakeLock.releaseWakeLock();
         await widget.onExit?.call();
         if (socket != null) {
           socket!.disconnect();
