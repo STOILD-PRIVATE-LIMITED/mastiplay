@@ -6,8 +6,6 @@ import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/widgets/scroll_builder.dart';
 import 'package:spinner_try/webRTC/video_room.dart';
 
-import 'audio_page.dart';
-
 class AudioLive extends StatefulWidget {
   const AudioLive({
     super.key,
@@ -88,7 +86,7 @@ class _AudioLiveState extends State<AudioLive> {
                           navigatorPush(
                               context,
                               rooms[index].roomType == RoomType.audio
-                                  ? AudioPage(
+                                  ? NewAudioRoom(
                                       room: rooms[index],
                                     )
                                   : VideoRoom(

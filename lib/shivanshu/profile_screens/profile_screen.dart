@@ -276,19 +276,19 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     );
                   }
-                  if (snapshot.hasError) {
-                    return ListTile(
-                      onTap: null,
-                      leading: Image.asset(
-                        'assets/diamond.png',
-                        width: 20,
-                      ),
-                      title: const Text(
-                        "Network Error",
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    );
-                  }
+                  // if (snapshot.hasError) {
+                  //   return ListTile(
+                  //     onTap: null,
+                  //     leading: Image.asset(
+                  //       'assets/diamond.png',
+                  //       width: 20,
+                  //     ),
+                  //     title: const Text(
+                  //       "Network Error",
+                  //       style: TextStyle(color: Colors.red),
+                  //     ),
+                  //   );
+                  // }
                   if (agencyData == null) {
                     return ListTile(
                       onTap: () {
@@ -312,7 +312,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       title: const Text(
                         'Agency Center',
-                        style: TextStyle(color: Colors.black45),
+                        style: TextStyle(color: Colors.black),
                       ),
                     );
                   }

@@ -131,11 +131,12 @@ Future<List<UserModel>> getAgencyParticipants(
 }
 
 Future<void> collectBeans(String agencyId) async {
-  final response = await http.put(
-    Uri.parse('$momentsServer/api/agency/collect?agencyId=$agencyId'),
+  final response = await http.post(
+    Uri.parse('$momentsServer/api/agency/collect'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
+    body: jsonEncode({"agencyId": agencyId}),
   );
   if (response.statusCode != 200) {
     throw Exception('Failed to collect beans');
