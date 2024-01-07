@@ -810,43 +810,33 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                                     ),
                                   ),
                             for (int i = 0; i < usersData.length; ++i)
-                              AudioUserTile(
-                                // gifWidget: gifUserId !=
-                                //             UserModel.fromJson(usersData[i])
-                                //                 .id &&
-                                //         gifIndex != null
-                                //     ? Gif(
-                                //         controller: GifController(
-                                //           vsync: this,
-                                //         ),
-                                //         repeat: ImageRepeat.repeat,
-                                //         autostart: Autostart.loop,
-                                //         image: AssetImage(
-                                //           gifList[int.tryParse(gifIndex!) ?? 0],
-                                //         ),
-                                //       )
-                                //     : null,
-                                // gifIndex: gifIndex == null
-                                //     ? null
-                                //     : int.parse('$gifIndex'),
-                                user: UserModel.fromJson(usersData[i]),
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    backgroundColor: const Color(0xFF011a51),
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20),
-                                      ),
-                                    ),
-                                    context: context,
-                                    builder: ((context) {
-                                      return BottomModel(
-                                          user:
-                                              UserModel.fromJson(usersData[i]));
-                                    }),
-                                  );
-                                },
+                              Stack(
+                                children: [
+                                  AudioUserTile(
+                                    user: UserModel.fromJson(usersData[i]),
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        backgroundColor:
+                                            const Color(0xFF011a51),
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20),
+                                            topRight: Radius.circular(20),
+                                          ),
+                                        ),
+                                        context: context,
+                                        builder: ((context) {
+                                          return BottomModel(
+                                            user: UserModel.fromJson(
+                                              usersData[i],
+                                            ),
+                                          );
+                                        }),
+                                      );
+                                    },
+                                  ),
+                                  // Positioned(child: child)
+                                ],
                               ),
                             for (int i = usersData.length + 1; i < 8; ++i)
                               AudioUserTile(
