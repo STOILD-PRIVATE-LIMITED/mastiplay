@@ -61,7 +61,7 @@ class UserModel {
   }
 
   void load(Map<String, dynamic> data) {
-    id = data['id'] ?? data['UserId'] ?? id;
+    id = data['id'] ?? data['UserId'] ?? data['userId'] ?? id;
     agentId = data['agentId'] ?? data['AgentId'] ?? agentId;
     photo = data["photo"] ?? photo;
     name = data["name"] ?? name;

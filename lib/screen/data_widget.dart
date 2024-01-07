@@ -3,6 +3,7 @@ import 'package:spinner_try/shivanshu/models/agent/agent.dart';
 import 'package:spinner_try/shivanshu/screens/in_dev_screen.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/profile_image.dart';
+import 'package:spinner_try/shivanshu/widgets/scroll_builder.dart';
 import 'package:spinner_try/user_model.dart';
 
 class DataWidget extends StatefulWidget {
@@ -173,48 +174,34 @@ class _DataWidgetState extends State<DataWidget> {
             ],
           ),
           const Divider(),
-          FutureBuilder(
-              future: fetchResellersOf(widget.user.id!),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicatorRainbow(),
-                  );
-                }
-                if (snapshot.hasError) {
-                  return Text("Error fetching resellers: ${snapshot.error}");
-                }
-                if (snapshot.data == null || snapshot.data!.isEmpty) {
-                  return const Text("You have no resellers yet");
-                }
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ListTile(
-                            leading: const Icon(Icons.person),
-                            title: const Text("Person Name"),
-                            subtitle: Text(
-                              "ID: 123456789",
-                              style: TextStyle(
-                                  fontSize: height / 50, color: Colors.grey),
-                            ),
-                            trailing: const Icon(Icons.chat),
-                          ),
-                          Text(
-                            "Sales volume (this month): 0",
-                            style: TextStyle(fontSize: height / 50),
-                          ),
-                          const Divider()
-                        ],
-                      );
-                    },
-                  ),
+          Expanded(
+            child: ScrollBuilder2(
+              loader: (start, lastItem) =>
+                  fetchResellersOf(widget.user.id!, start, 20),
+              itemBuilder: (context, user) {
+                return MyColumn(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.person),
+                      title: Text(user.name),
+                      subtitle: Text(
+                        "ID: ${user.id}",
+                        style: TextStyle(
+                            fontSize: height / 50, color: Colors.grey),
+                      ),
+                      trailing: const Icon(Icons.chat),
+                    ),
+                    Text(
+                      "Sales volume (this month): ${user.agentData!.monthlyDiamonds}",
+                      style: TextStyle(fontSize: height / 50),
+                    ),
+                    const Divider()
+                  ],
                 );
-              })
+              },
+            ),
+          )
         ],
       ),
     );

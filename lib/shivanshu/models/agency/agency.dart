@@ -2,25 +2,29 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:spinner_try/shivanshu/models/globals.dart';
+import 'package:spinner_try/user_model.dart';
 
 class AgencyData {
   String? id;
   String name;
   int beansCount = 0;
   String owner;
+  double totalBeansReceived;
   AgencyData({
     this.id,
     this.beansCount = 0,
+    this.totalBeansReceived = 0,
     this.name = "",
     this.owner = "",
   });
 
   factory AgencyData.fromJson(Map<String, dynamic> json) {
     return AgencyData(
-      id: json['id'],
+      id: json['id'] ?? json['agencyId'] ?? json['AgencyId'],
       beansCount: json['beansCount'],
       name: json['name'] ?? '',
-      owner: json['owner'] ?? '',
+      owner: json['ownerId'] ?? '',
+      totalBeansReceived: json['totalBeansReceived'] ?? 0,
     );
   }
 
@@ -29,6 +33,7 @@ class AgencyData {
         'beansCount': beansCount,
         'name': name,
         'owner': owner,
+        'totalBeansReceived': totalBeansReceived,
       };
 }
 
@@ -45,9 +50,15 @@ Future<void> joinAgency(String agencyId) async {
       AgencyData.fromJson(json.decode(response.body));
 }
 
-Future<AgencyData> getAgencyData(String id) async {
-  final response =
-      await http.get(Uri.parse('$momentsServer/api/agency?userId=$id'));
+Future<AgencyData> getAgencyData({String? userId, String? agencyId}) async {
+  assert(userId == null || agencyId == null);
+  assert(userId != null || agencyId != null);
+  final response = await http.get(
+      Uri.parse(
+          '$momentsServer/api/agency?${userId != null ? "userId=$userId" : "agencyId=$agencyId"}'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      });
   if (response.statusCode != 200) {
     throw Exception('Failed to get agency data');
   }
@@ -102,5 +113,31 @@ Future<void> addBeans(String userId, double beans) async {
   );
   if (response.statusCode != 200) {
     throw Exception('Failed to add beans');
+  }
+}
+
+Future<List<UserModel>> getAgencyParticipants(
+    String agencyId, int start, int limit) async {
+  final response = await http.get(
+    Uri.parse(
+        '$momentsServer/api/agency/participants?agencyId=$agencyId&start=$start&limit=$limit'),
+  );
+  if (response.statusCode != 200) {
+    throw Exception('Failed to get agency participants: ${response.body}');
+  }
+  return (json.decode(response.body) as List)
+      .map((e) => UserModel.fromJson(e))
+      .toList();
+}
+
+Future<void> collectBeans(String agencyId) async {
+  final response = await http.put(
+    Uri.parse('$momentsServer/api/agency/collect?agencyId=$agencyId'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
+  if (response.statusCode != 200) {
+    throw Exception('Failed to collect beans');
   }
 }

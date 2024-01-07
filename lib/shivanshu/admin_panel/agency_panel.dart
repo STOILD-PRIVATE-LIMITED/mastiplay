@@ -137,7 +137,7 @@ class _AgencyPanelState extends State<AgencyPanel> {
       showMsg(context, "Please enter agency id");
       return;
     }
-    agencyData = await getAgencyData(_textController.text);
+    agencyData = await getAgencyData(agencyId: _textController.text);
     setState(() {
       agencyData = agencyData;
     });

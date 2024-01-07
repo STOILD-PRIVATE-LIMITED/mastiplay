@@ -14,6 +14,7 @@ import 'package:spinner_try/shivanshu/admin_panel/admin_panel.dart';
 import 'package:spinner_try/shivanshu/models/agency/agency.dart';
 import 'package:spinner_try/shivanshu/models/agent/agent.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
+import 'package:spinner_try/shivanshu/models/settings.dart';
 import 'package:spinner_try/shivanshu/moments/followers_screen.dart';
 import 'package:spinner_try/shivanshu/moments/following_screen.dart';
 import 'package:spinner_try/shivanshu/moments/friends_screen.dart';
@@ -196,7 +197,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 title: const Text('Wallet'),
               ),
-              if (kDebugMode || currentUser.agentId != null)
+              if (currentUser.agentId != null)
                 FutureBuilder(
                     future: fetchAgentData(currentUser.id!),
                     builder: (context, snapshot) {
@@ -251,39 +252,83 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 title: const Text('Noble Center'),
               ),
-              if (kDebugMode || currentUser.ownedAgencyData != null)
-                FutureBuilder(
-                  future: getAgencyData(currentUser.id!),
-                  builder: (context, snapshot) {
-                    final loading =
-                        snapshot.connectionState == ConnectionState.waiting;
-                    final agencyData = snapshot.data;
-                    currentUser.ownedAgencyData = agencyData;
-                    return ListTile(
-                      onTap: loading || agencyData == null
-                          ? null
-                          : () {
-                              navigatorPush(
-                                  context, AgencyCenter(user: currentUser));
-                            },
-                      leading: loading
-                          ? const CircularProgressIndicatorRainbow()
-                          : Image.asset(
-                              'assets/diamond.png',
-                              width: 20,
-                            ),
+              FutureBuilder(
+                future: getAgencyData(userId: currentUser.id!),
+                builder: (context, snapshot) {
+                  final loading =
+                      snapshot.connectionState == ConnectionState.waiting;
+                  final agencyData = snapshot.data;
+                  if (agencyData != null) {
+                    if (agencyData.owner == currentUser.id) {
+                      currentUser.ownedAgencyData = agencyData;
+                    } else {
+                      currentUser.joinedAgencyData = agencyData;
+                    }
+                    PrefStorage.hasAgency = true;
+                  }
+                  if (loading) {
+                    return const ListTile(
+                      onTap: null,
+                      leading: CircularProgressIndicatorRainbow(),
                       title: Text(
-                        agencyData == null && !loading
-                            ? "Can't reach the server right now"
-                            : 'Agency Center',
-                        style: TextStyle(
-                            color: agencyData == null && !loading
-                                ? Colors.red
-                                : (loading ? Colors.black45 : Colors.black)),
+                        'Loading...',
+                        style: TextStyle(color: Colors.black45),
                       ),
                     );
-                  },
-                ),
+                  }
+                  if (snapshot.hasError) {
+                    return ListTile(
+                      onTap: null,
+                      leading: Image.asset(
+                        'assets/diamond.png',
+                        width: 20,
+                      ),
+                      title: const Text(
+                        "Network Error",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    );
+                  }
+                  if (agencyData == null) {
+                    return ListTile(
+                      onTap: () {
+                        navigatorPush(context, const BindAgency());
+                      },
+                      leading: Image.asset(
+                        'assets/diamond.png',
+                        width: 20,
+                      ),
+                      title: const Text('Bind Agency'),
+                    );
+                  }
+                  if (currentUser.ownedAgencyData != null) {
+                    return ListTile(
+                      onTap: () {
+                        navigatorPush(context, AgencyCenter(user: currentUser));
+                      },
+                      leading: Image.asset(
+                        'assets/diamond.png',
+                        width: 20,
+                      ),
+                      title: const Text(
+                        'Agency Center',
+                        style: TextStyle(color: Colors.black45),
+                      ),
+                    );
+                  }
+                  return ListTile(
+                    onTap: null,
+                    leading: Image.asset(
+                      'assets/diamond.png',
+                      width: 20,
+                    ),
+                    title: const Text(
+                      'You Already Joined a Agency',
+                      style: TextStyle(color: Colors.black45),
+                    ),
+                  );
+                },
+              ),
               ListTile(
                 onTap: () {
                   navigatorPush(context, const CreatorPage());
@@ -324,17 +369,6 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 title: const Text('User level center'),
               ),
-              if (kDebugMode || currentUser.ownedAgencyData == null)
-                ListTile(
-                  onTap: () {
-                    navigatorPush(context, const BindAgency());
-                  },
-                  leading: Image.asset(
-                    'assets/diamond.png',
-                    width: 20,
-                  ),
-                  title: const Text('Bind Agency'),
-                ),
               const Divider(),
               GridView.extent(
                 maxCrossAxisExtent: 100,

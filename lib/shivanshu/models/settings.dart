@@ -40,6 +40,18 @@ class PrefStorage {
     }
   }
 
+  static bool? get hasAgency {
+    return prefs.getBool('hasAgency');
+  }
+
+  static set hasAgency(bool? url) {
+    if (url == null) {
+      prefs.remove('hasAgency');
+    } else {
+      prefs.setBool('hasAgency', url);
+    }
+  }
+
   static void clear() {
     prefs.clear();
   }

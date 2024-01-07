@@ -100,9 +100,11 @@ Future<List<UserModel>> fetchAgentsAll(int start, int limit) async {
 }
 
 // The userId should not start with a 'A'
-Future<List<UserModel>> fetchResellersOf(String userId) async {
+Future<List<UserModel>> fetchResellersOf(
+    String userId, int start, int limit) async {
   final response = await http.get(
-    Uri.parse('$momentsServer/api/agent/resellers?userId=$userId'),
+    Uri.parse(
+        '$momentsServer/api/agent/resellers?userId=$userId&limit=$limit&start=$start'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -140,7 +142,7 @@ Future<void> transferDiamondsFromAgentToUser(
 }
 
 Future<void> agentBeansToDiamonds(String agentId, int beans) async {
-  final response = await http.post(
+  final response = await http.put(
     Uri.parse('$momentsServer/api/agent/convert'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
