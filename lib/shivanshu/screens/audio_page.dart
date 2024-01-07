@@ -1499,26 +1499,38 @@ void showAlertDialog(BuildContext context) {
               height: 400,
               width: 400,
               child: GlassWidget(
-                blur: 2,
+                blur: 4,
+                radius: 20,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                        width: 50.sp,
-                        height: 500.sp,
-                        decoration: const ShapeDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment(-1.00, -0.01),
-                            end: Alignment(1, 0.01),
-                            colors: [Color(0xFFF36158), Color(0xFF04A4FF)],
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        showOverlay(
+                            context,
+                            AudioUserTile(
+                              user: currentUser,
+                            ));
+                      },
+                      child: Container(
+                          width: 100.sp,
+                          height: 100.sp,
+                          padding: const EdgeInsets.all(25),
+                          decoration: const ShapeDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment(-1.00, -0.01),
+                              end: Alignment(1, 0.01),
+                              colors: [Color(0xFFF36158), Color(0xFF04A4FF)],
+                            ),
+                            shape: OvalBorder(),
                           ),
-                          shape: OvalBorder(),
-                        ),
-                        child: Image.asset(
-                          "assets/mini.png",
-                          height: 20.sp,
-                        )),
-                  Text(
+                          child: Image.asset(
+                            "assets/mini.png",
+                          )),
+                    ),
+                    Text(
                       'Keep',
                       style: TextStyle(
                         color: Colors.white,
@@ -1528,18 +1540,28 @@ void showAlertDialog(BuildContext context) {
                         height: 0,
                       ),
                     ),
-                    Container(
-                        width: 50.sp,
-                        height: 50.sp,
-                        decoration: const ShapeDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment(-1.00, -0.01),
-                            end: Alignment(1, 0.01),
-                            colors: [Color(0xFFF36158), Color(0xFF04A4FF)],
+                    const SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                          width: 100.sp,
+                          height: 100.sp,
+                          padding: const EdgeInsets.all(25),
+                          decoration: const ShapeDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment(-1.00, -0.01),
+                              end: Alignment(1, 0.01),
+                              colors: [Color(0xFFF36158), Color(0xFF04A4FF)],
+                            ),
+                            shape: OvalBorder(),
                           ),
-                          shape: OvalBorder(),
-                        ),
-                        child: Image.asset("assets/shut.png", height: 20.sp)),
+                          child: Image.asset(
+                            "assets/shut.png",
+                          )),
+                    ),
                     Text(
                       'Exit',
                       style: TextStyle(
