@@ -186,12 +186,12 @@ class _AddButtonPageState extends State<AddButtonPage> {
       } else {
         await navigatorPush(
           context,
-          AudioPage(
-            room: room!,
-          ),
-          // NewAudioRoom(
+          // AudioPage(
           //   room: room!,
           // ),
+          NewAudioRoom(
+            room: room!,
+          ),
         );
       }
     }
