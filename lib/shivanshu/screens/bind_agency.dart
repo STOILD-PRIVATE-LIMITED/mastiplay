@@ -50,24 +50,18 @@ class _BindAgencyState extends State<BindAgency> {
                   onPressed: _searchAgency,
                 ),
                 const SizedBox(height: 20),
-                if (agencyData != null)
-                  Chip(
-                    label: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          leading: const Icon(Icons.support_agent_rounded),
-                          title: Text(agencyData?.name ?? 'Agency Name'),
-                          subtitle: Text(agencyData?.id ?? 'Agency Id'),
-                        ),
-                        LoadingElevatedButton(
-                          icon: const Icon(Icons.emoji_people_rounded),
-                          label: const Text('Join Agency'),
-                          onPressed: _joinAgency,
-                        ),
-                      ],
-                    ),
+                if (agencyData != null) ...[
+                  ListTile(
+                    leading: const Icon(Icons.support_agent_rounded),
+                    title: Text(agencyData?.name ?? 'Agency Name'),
+                    subtitle: Text(agencyData?.id ?? 'Agency Id'),
                   ),
+                  LoadingElevatedButton(
+                    icon: const Icon(Icons.emoji_people_rounded),
+                    label: const Text('Join Agency'),
+                    onPressed: _joinAgency,
+                  ),
+                ],
               ],
             ),
           ),
@@ -82,10 +76,8 @@ class _BindAgencyState extends State<BindAgency> {
       return;
     }
     try {
-      agencyData = await getAgencyData(_textController.text);
-      setState(() {
-        agencyData = agencyData;
-      });
+      agencyData = await getAgencyData(agencyId: _textController.text);
+      setState(() {});
     } catch (e) {
       if (context.mounted) {
         showMsg(context, e.toString());

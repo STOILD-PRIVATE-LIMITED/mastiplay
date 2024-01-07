@@ -25,6 +25,7 @@ class _NewAudioRoomState extends State<NewAudioRoom> {
     super.initState();
     log("Initializing WebRTCRoom. This Should be called only once");
     WebRTCRoom.instance.roomId = widget.room.id;
+    WebRTCRoom.instance.isVideoOn = false;
     WebRTCRoom.instance.onLocalStreamAdded = () {
       log("SetState for function: onLocalStreamAdded");
       if (context.mounted) {
