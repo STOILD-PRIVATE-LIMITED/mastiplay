@@ -75,7 +75,13 @@ class _NewAudioRoomState extends State<NewAudioRoom> {
         maxCrossAxisExtent: 100,
         childAspectRatio: 1,
         children: [
-          AudioUserTile(user: user),
+          AudioUserTile(
+            user: user,
+            onTap: () {
+              WebRTCRoom.instance.toggleMic(false);
+              showMsg(context, "Muted");
+            },
+          ),
           ...remoteUsers.map((e) => AudioUserTile(user: e)),
         ],
       );
