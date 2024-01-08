@@ -35,6 +35,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF1DBDB),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
@@ -189,192 +190,307 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
               const Divider(),
-              ListTile(
-                onTap: () {
-                  navigatorPush(context, const WalletScreen());
-                },
-                leading: Image.asset(
-                  'assets/wallet 1.png',
-                  width: 20,
-                ),
-                title: const Text('Wallet'),
-              ),
-              if (currentUser.agentId != null)
-                FutureBuilder(
-                    future: fetchAgentData(currentUser.id!),
-                    builder: (context, snapshot) {
-                      final loading =
-                          snapshot.connectionState == ConnectionState.waiting;
-                      final userData = snapshot.data;
-                      return ListTile(
-                        onTap: loading || userData == null
-                            ? null
-                            : () {
-                                currentUser.agentData = userData.agentData;
-                                navigatorPush(
-                                    context, AgentPanel(user: currentUser));
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 60,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                        border: Border.fromBorderSide(
+                          BorderSide(
+                            color: Colors.black12,
+                          ),
+                        ),
+                        image: DecorationImage(
+                          image: AssetImage('assets/back/0.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: ListTile(
+                        onTap: () {
+                          navigatorPush(context, const WalletScreen());
+                        },
+                        leading: Image.asset(
+                          'assets/wallet 1.png',
+                          width: 20,
+                        ),
+                        title: const Text('Wallet'),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    if (currentUser.agentId != null)
+                      FutureBuilder(
+                          future: fetchAgentData(currentUser.id!),
+                          builder: (context, snapshot) {
+                            final loading = snapshot.connectionState ==
+                                ConnectionState.waiting;
+                            final userData = snapshot.data;
+                            return ListTile(
+                              onTap: loading || userData == null
+                                  ? null
+                                  : () {
+                                      currentUser.agentData =
+                                          userData.agentData;
+                                      navigatorPush(context,
+                                          AgentPanel(user: currentUser));
+                                    },
+                              leading: loading
+                                  ? const CircularProgressIndicatorRainbow()
+                                  : Image.asset(
+                                      'assets/gem 1.png',
+                                      width: 20,
+                                    ),
+                              title: Text(
+                                userData == null && !loading
+                                    ? "Can't reach the server right now"
+                                    : 'Agent',
+                                style: TextStyle(
+                                    color: userData == null && !loading
+                                        ? Colors.red
+                                        : (loading
+                                            ? Colors.black45
+                                            : Colors.black)),
+                              ),
+                            );
+                          }),
+                    Container(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        image: DecorationImage(
+                          image: AssetImage('assets/back/1.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: ListTile(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const NobelCenter()));
+                        },
+                        leading: Image.asset(
+                          'assets/vip 1.png',
+                          width: 20,
+                        ),
+                        title: const Text('VIP Center'),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        image: DecorationImage(
+                          image: AssetImage('assets/back/2.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: ListTile(
+                        onTap: () {
+                          navigatorPush(context, const NobelCenter());
+                        },
+                        leading: Image.asset(
+                          'assets/—Pngtree—knight s shield illustration with_12235284 1.png',
+                          width: 20,
+                        ),
+                        title: const Text('Noble Center'),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    FutureBuilder(
+                      future: getAgencyData(userId: currentUser.id!),
+                      builder: (context, snapshot) {
+                        final loading =
+                            snapshot.connectionState == ConnectionState.waiting;
+                        final agencyData = snapshot.data;
+                        if (agencyData != null) {
+                          if (agencyData.owner == currentUser.id) {
+                            currentUser.ownedAgencyData = agencyData;
+                          } else {
+                            currentUser.joinedAgencyData = agencyData;
+                          }
+                          PrefStorage.hasAgency = true;
+                        }
+                        if (loading) {
+                          return const ListTile(
+                            onTap: null,
+                            leading: CircularProgressIndicatorRainbow(),
+                            title: Text(
+                              'Loading...',
+                              style: TextStyle(color: Colors.black45),
+                            ),
+                          );
+                        }
+                        // if (snapshot.hasError) {
+                        //   return ListTile(
+                        //     onTap: null,
+                        //     leading: Image.asset(
+                        //       'assets/diamond.png',
+                        //       width: 20,
+                        //     ),
+                        //     title: const Text(
+                        //       "Network Error",
+                        //       style: TextStyle(color: Colors.red),
+                        //     ),
+                        //   );
+                        // }
+                        // SizedBox(height:10,),
+
+                        if (agencyData == null) {
+                          return Container(
+                            decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              image: DecorationImage(
+                                image: AssetImage('assets/back/3.png'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                navigatorPush(context, const BindAgency());
                               },
-                        leading: loading
-                            ? const CircularProgressIndicatorRainbow()
-                            : Image.asset(
-                                'assets/gem 1.png',
+                              leading: Image.asset(
+                                'assets/add-user 2.png',
                                 width: 20,
                               ),
-                        title: Text(
-                          userData == null && !loading
-                              ? "Can't reach the server right now"
-                              : 'Agent',
-                          style: TextStyle(
-                              color: userData == null && !loading
-                                  ? Colors.red
-                                  : (loading
-                                      ? Colors.black45
-                                      : Colors.black)),
+                              title: const Text('Bind Agency'),
+                            ),
+                          );
+                        }
+                        if (currentUser.ownedAgencyData != null) {
+                          return ListTile(
+                            onTap: () {
+                              navigatorPush(
+                                  context, AgencyCenter(user: currentUser));
+                            },
+                            leading: Image.asset(
+                              'assets/agency_Center.png',
+                              width: 20,
+                            ),
+                            title: const Text(
+                              'Agency Center',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          );
+                        }
+                        return ListTile(
+                          onTap: null,
+                          leading: Image.asset(
+                            'assets/agency_Center.png',
+                            width: 20,
+                          ),
+                          title: const Text(
+                            'You Already Joined a Agency',
+                            style: TextStyle(color: Colors.black45),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        image: DecorationImage(
+                          image: AssetImage('assets/back/4.png'),
+                          fit: BoxFit.cover,
                         ),
-                      );
-                    }),
-              ListTile(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const NobelCenter()));
-                },
-                leading: Image.asset(
-                  'assets/vip 1.png',
-                  width: 20,
-                ),
-                title: const Text('VIP Center'),
-              ),
-              ListTile(
-                onTap: () {
-                  navigatorPush(context, const NobelCenter());
-                },
-                leading: Image.asset(
-                  'assets/—Pngtree—knight s shield illustration with_12235284 1.png',
-                  width: 20,
-                ),
-                title: const Text('Noble Center'),
-              ),
-              FutureBuilder(
-                future: getAgencyData(userId: currentUser.id!),
-                builder: (context, snapshot) {
-                  final loading =
-                      snapshot.connectionState == ConnectionState.waiting;
-                  final agencyData = snapshot.data;
-                  if (agencyData != null) {
-                    if (agencyData.owner == currentUser.id) {
-                      currentUser.ownedAgencyData = agencyData;
-                    } else {
-                      currentUser.joinedAgencyData = agencyData;
-                    }
-                    PrefStorage.hasAgency = true;
-                  }
-                  if (loading) {
-                    return const ListTile(
-                      onTap: null,
-                      leading: CircularProgressIndicatorRainbow(),
-                      title: Text(
-                        'Loading...',
-                        style: TextStyle(color: Colors.black45),
                       ),
-                    );
-                  }
-                  // if (snapshot.hasError) {
-                  //   return ListTile(
-                  //     onTap: null,
-                  //     leading: Image.asset(
-                  //       'assets/diamond.png',
-                  //       width: 20,
-                  //     ),
-                  //     title: const Text(
-                  //       "Network Error",
-                  //       style: TextStyle(color: Colors.red),
-                  //     ),
-                  //   );
-                  // }
-                  if (agencyData == null) {
-                    return ListTile(
-                      onTap: () {
-                        navigatorPush(context, const BindAgency());
-                      },
-                      leading: Image.asset(
-                        'assets/add-user 2.png',
-                        width: 20,
+                      child: ListTile(
+                        onTap: () {
+                          navigatorPush(context, const CreatorCenter());
+                        },
+                        leading: Image.asset(
+                          'assets/Group-2.png',
+                          width: 20,
+                        ),
+                        title: const Text('Creator Center'),
                       ),
-                      title: const Text('Bind Agency'),
-                    );
-                  }
-                  if (currentUser.ownedAgencyData != null) {
-                    return ListTile(
-                      onTap: () {
-                        navigatorPush(
-                            context, AgencyCenter(user: currentUser));
-                      },
-                      leading: Image.asset(
-                        'assets/agency_Center.png',
-                        width: 20,
-                      ),
-                      title: const Text(
-                        'Agency Center',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    );
-                  }
-                  return ListTile(
-                    onTap: null,
-                    leading: Image.asset(
-                      'assets/agency_Center.png',
-                      width: 20,
                     ),
-                    title: const Text(
-                      'You Already Joined a Agency',
-                      style: TextStyle(color: Colors.black45),
+                    const SizedBox(
+                      height: 10,
                     ),
-                  );
-                },
-              ),
-              ListTile(
-                onTap: () {
-                  navigatorPush(context, const CreatorCenter());
-                },
-                leading: Image.asset(
-                  'assets/Group-2.png',
-                  width: 20,
+                    Container(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        image: DecorationImage(
+                          image: AssetImage('assets/back/5.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: ListTile(
+                        onTap: () {
+                          navigatorPush(context, const Store());
+                        },
+                        leading: Image.asset(
+                          'assets/shopping-bag 1.png',
+                          width: 20,
+                        ),
+                        title: const Text('Privilege Bag'),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        image: DecorationImage(
+                          image: AssetImage('assets/back/6.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: ListTile(
+                        onTap: () {
+                          navigatorPush(context, const FamilyScreen());
+                        },
+                        leading: Image.asset(
+                          'assets/Group 18114.png',
+                          width: 20,
+                        ),
+                        title: const Text('Family'),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        image: DecorationImage(
+                          image: AssetImage('assets/back/7.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: ListTile(
+                        onTap: () {
+                          navigatorPush(context, const UserLevelPage());
+                        },
+                        leading: Image.asset(
+                          'assets/level up.png',
+                          width: 20,
+                        ),
+                        title: const Text('User level center'),
+                      ),
+                    ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
+                  ],
                 ),
-                title: const Text('Creator Center'),
               ),
-              ListTile(
-                onTap: () {
-                  navigatorPush(context, const Store());
-                },
-                leading: Image.asset(
-                  'assets/shopping-bag 1.png',
-                  width: 20,
-                ),
-                title: const Text('Privilege Bag'),
-              ),
-              ListTile(
-                onTap: () {
-                  navigatorPush(context, const FamilyScreen());
-                },
-                leading: Image.asset(
-                  'assets/Group 18114.png',
-                  width: 20,
-                ),
-                title: const Text('Family'),
-              ),
-              ListTile(
-                onTap: () {
-                  navigatorPush(context, const UserLevelPage());
-                },
-                leading: Image.asset(
-                  'assets/level up.png',
-                  width: 20,
-                ),
-                title: const Text('User level center'),
-              ),
-              // const Divider(),
               Container(
                 color: const Color(0xFFF1DBDB),
                 child: GridView.extent(
@@ -385,14 +501,21 @@ class ProfileScreen extends StatelessWidget {
                       onTap: () {
                         navigatorPush(context, const InviteFriends());
                       },
-                      child: MyColumn(
-                        children: [
-                          Image.asset(
-                            "assets/Frame 32.png",
-                            width: 30,
-                          ),
-                          const Text('Invite'),
-                        ],
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        child: MyColumn(
+                          children: [
+                            Image.asset(
+                              "assets/Frame 32.png",
+                              width: 30,
+                              height: 35,
+                            ),
+                            const Text('Invite'),
+                          ],
+                        ),
                       ),
                     ),
                     InkWell(
@@ -402,7 +525,11 @@ class ProfileScreen extends StatelessWidget {
                       },
                       child: MyColumn(
                         children: [
-                          Image.asset("assets/heart.png"),
+                          Image.asset(
+                            "assets/heart.png",
+                            width: 30,
+                            height: 35,
+                          ),
                           const Text('Moment'),
                         ],
                       ),
@@ -421,6 +548,7 @@ class ProfileScreen extends StatelessWidget {
                           Image.asset(
                             "assets/Group-1.png",
                             width: 30,
+                            height: 35,
                           ),
                           const Text('Account Info'),
                         ],
@@ -433,6 +561,7 @@ class ProfileScreen extends StatelessWidget {
                           Image.asset(
                             "assets/starGroup 18115.png",
                             width: 30,
+                            height: 35,
                           ),
                           const Text('Events'),
                         ],
@@ -451,6 +580,7 @@ class ProfileScreen extends StatelessWidget {
                           Image.asset(
                             "assets/settings-01.png",
                             width: 30,
+                            height: 35,
                           ),
                           const Text('Settings'),
                         ],
@@ -465,6 +595,7 @@ class ProfileScreen extends StatelessWidget {
                           Image.asset(
                             "assets/caller.png",
                             width: 30,
+                            height: 35,
                           ),
                           const Text('Help'),
                         ],
@@ -481,6 +612,7 @@ class ProfileScreen extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.admin_panel_settings_rounded,
+                              size: 30,
                               color: Colors.green,
                             ),
                             Text('Admin Panel'),
@@ -496,6 +628,7 @@ class ProfileScreen extends StatelessWidget {
                           Image.asset(
                             "assets/info 2.png",
                             width: 30,
+                            height: 35,
                           ),
                           const Text('About'),
                         ],
