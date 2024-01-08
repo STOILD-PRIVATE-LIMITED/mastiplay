@@ -27,6 +27,8 @@ import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'package:spinner_try/user_model.dart';
 
+import '../../screen/creator_center.dart';
+
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
@@ -331,7 +333,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {
-                  navigatorPush(context, const CreatorPage());
+                  navigatorPush(context, const CreatorCenter());
                 },
                 leading: Image.asset(
                   'assets/diamond.png',

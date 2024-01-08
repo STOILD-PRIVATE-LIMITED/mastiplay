@@ -138,6 +138,9 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
           'audioData': mp3Data,
         },
       });
+      mediaStream.getAudioTracks().forEach((track) {
+        log("Track: $track");
+      });
       await audioPlayer.play(DeviceFileSource(file.path));
     }
   }

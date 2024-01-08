@@ -34,9 +34,14 @@ class _CreatorCenterState extends State<CreatorCenter> {
       backgroundColor: const Color(0xFFf7f8fc),
       appBar: AppBar(
         backgroundColor: const Color(0xFFf7f8fc),
-        leading: Icon(
-          Icons.arrow_back_ios,
-          size: height / 40,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back_ios,
+            size: height / 40,
+          ),
         ),
         title: Text(
           "Creator Center",
