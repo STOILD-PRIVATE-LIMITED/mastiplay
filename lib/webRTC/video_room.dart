@@ -1113,22 +1113,120 @@ class _VideoRoomState extends State<VideoRoom> with TickerProviderStateMixin {
                       );
                     },
                   ),
-                  floatingActionButton: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  // floatingActionButton: Column(
+                  //   mainAxisSize: MainAxisSize.min,
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   children: [
+                  //     for (int i = 0; i < usersData.length; ++i)
+                  //       SizedBox(
+                  //         height: 90,
+                  //         width: 90,
+                  //         child: AudioUserTile(
+                  //           user: UserModel.fromJson(usersData[i]),
+                  //         ),
+                  //       ),
+                  //   ],
+                  //   // showMsg(context, "In Developement");
+                  // )
+                  // floatingActionButton: Column(
+                  //   mainAxisSize: MainAxisSize.min,
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     SizedBox(
+                  //       height: 100,
+                  //       width: 100,
+                  //       child: AudioUserTile(
+                  //         user: currentUser,
+                  //         gifIndex:
+                  //             gifIndex == null ? null : int.parse('$gifIndex'),
+                  //       ),
+                  //     ),
+                  //     SizedBox(
+                  //       height: 100,
+                  //       width: 100,
+                  //       child: AudioUserTile(
+                  //         user: currentUser,
+                  //         gifIndex:
+                  //             gifIndex == null ? null : int.parse('$gifIndex'),
+                  //       ),
+                  //     ),
+                  //     SizedBox(
+                  //       height: 100,
+                  //       width: 100,
+                  //       child: AudioUserTile(
+                  //         user: currentUser,
+                  //         gifIndex:
+                  //             gifIndex == null ? null : int.parse('$gifIndex'),
+                  //       ),
+                  //     ),
+                  //     SizedBox(
+                  //       height: 100,
+                  //       width: 100,
+                  //       child: AudioUserTile(
+                  //         user: currentUser,
+                  //         gifIndex:
+                  //             gifIndex == null ? null : int.parse('$gifIndex'),
+                  //       ),
+                  //     ),
+                  // FloatingActionButton(
+                  //   onPressed: () {
+                  //     showMsg(context, "In Developement");
+                  //   },
+                  //   child: const Icon(Icons.mic),
+                  // ),
+                  // FloatingActionButton(
+                  //   onPressed: () {
+                  //     showMsg(context, "In Developement");
+                  //   },
+                  //   child: const Icon(Icons.mic),
+                  // ),
+                  // FloatingActionButton(
+                  //   onPressed: () {
+                  //     showMsg(context, "In Developement");
+                  //   },
+                  //   child: const Icon(Icons.mic),
+                  // ),
+                  //   ],
+                  // ),
+
+                  floatingActionButton: GridView.count(
+                    crossAxisCount: 1,
+                    shrinkWrap: true,
                     children: [
+                      AudioUserTile(
+                        user: currentUser,
+                        gifIndex:
+                            gifIndex == null ? null : int.parse('$gifIndex'),
+                      ),
                       for (int i = 0; i < usersData.length; ++i)
-                        SizedBox(
-                          height: 90,
-                          width: 90,
-                          child: AudioUserTile(
-                            user: UserModel.fromJson(usersData[i]),
-                          ),
+                        Stack(
+                          children: [
+                            AudioUserTile(
+                              user: UserModel.fromJson(usersData[i]),
+                            )
+                          ],
                         ),
+                      for (int i = usersData.length + 1; i < 8; ++i)
+                        AudioUserTile(
+                          user: UserModel(),
+                          index: i + 1,
+                        ),
+
+                      // for (int i = 0; i < usersData.length; ++i)
+                      //   SizedBox(
+                      //     height: 90,
+                      //     width: 90,
+                      //     child: AudioUserTile(
+                      //       user: UserModel.fromJson(usersData[i]),
+                      //       gifIndex: gifIndex == null
+                      //           ? null
+                      //           : int.parse('$gifIndex'),
+                      //     ),
+                      //   ),
                     ],
-                    // showMsg(context, "In Developement");
                   ),
+
                   bottomNavigationBar: Card(
                     // elevation: 0,
                     color: Colors.black26,
@@ -1182,9 +1280,9 @@ class _VideoRoomState extends State<VideoRoom> with TickerProviderStateMixin {
                                 color: Colors.black45,
                               ),
                               suffixIcon: GestureDetector(
-                                onTap:(){
+                                  onTap: () {
                                     gifBottom(context);
-                                },
+                                  },
                                   child: Image.asset('assets/smile.png')),
                               contentPadding: EdgeInsets.symmetric(
                                 horizontal: width / 30,
@@ -1277,7 +1375,9 @@ class _VideoRoomState extends State<VideoRoom> with TickerProviderStateMixin {
         );
       },
     );
-  } gifBottom(BuildContext context) {
+  }
+
+  gifBottom(BuildContext context) {
     return showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -1407,5 +1507,20 @@ class _VideoRoomState extends State<VideoRoom> with TickerProviderStateMixin {
       ),
     );
     // }
+  }
+
+  String? gifUserId;
+  String? gifIndex;
+
+  void showGif(String userId, String index) async {
+    setState(() {
+      gifUserId = userId;
+      gifIndex = index;
+    });
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      gifUserId = null;
+      gifIndex = null;
+    });
   }
 }

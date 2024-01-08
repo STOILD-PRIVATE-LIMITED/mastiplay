@@ -1243,12 +1243,13 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                   //     },
                   //     child: const Icon(Icons.emoji_emotions)),
                   GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedIcon = Icons.animation_rounded;
-                        });
-                      },
-                      child: const Icon(Icons.animation_rounded)),
+                    onTap: () {
+                      setState(() {
+                        selectedIcon = Icons.animation_rounded;
+                      });
+                    },
+                    child: const Icon(Icons.emoji_emotions_outlined),
+                  ),
                   // GestureDetector(
                   //     onTap: () {
                   //       setState(() {
