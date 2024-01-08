@@ -457,10 +457,12 @@ class _NewAudioRoomState extends State<NewAudioRoom>
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                   ),
-                                  child: Image.network(
-                                    users[i].photo,
-                                    fit: BoxFit.cover,
-                                  ),
+                                  child: users[i].photo.isEmpty
+                                      ? Image.asset('assets/dummy_person.png')
+                                      : Image.network(
+                                          users[i].photo,
+                                          fit: BoxFit.cover,
+                                        ),
                                 ),
                               ),
                             Positioned(
@@ -487,6 +489,7 @@ class _NewAudioRoomState extends State<NewAudioRoom>
               ),
               body: connected
                   ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         WebRTCRoom.instance.build(context),
@@ -496,17 +499,39 @@ class _NewAudioRoomState extends State<NewAudioRoom>
                               horizontal: 8.sp,
                               vertical: 8.sp,
                             ),
+                            width: width * 2 / 3,
                             child: ListView.builder(
                               reverse: true,
                               // controller: controllerr,
                               itemCount: msgs.length +
                                   (widget.room.announcement != null ? 1 : 0),
                               itemBuilder: (context, index) {
-                                if (widget.room.announcement != null &&
-                                    index == 0) {
-                                  return Text(widget.room.announcement!);
-                                } else {
-                                  index--;
+                                if (widget.room.announcement != null) {
+                                  if (index == msgs.length) {
+                                    return Card(
+                                      color: Colors.white,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Align(
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "Announcement",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            Text(widget.room.announcement!),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    // index--;
+                                  }
                                 }
                                 final msg = msgs[msgs.length - index - 1];
                                 final user =
