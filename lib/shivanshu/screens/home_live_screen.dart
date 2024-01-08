@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:spinner_try/shivanshu/models/firestore/firestore_document.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
@@ -32,6 +33,35 @@ class HomeLive extends StatefulWidget {
 class _HomeLiveState extends State<HomeLive> {
   String? lastUpdatedAt;
   int refreshCount = 0;
+
+  final imagePageController = PageController(initialPage: 0);
+  List<Widget> imageItems = [];
+  itemss() {
+    imageItems = [
+      Image.asset("assets/Frame 4.png"),
+      Image.asset("assets/Frame 12.png"),
+    ];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    itemss();
+    autoScroll(2000);
+  }
+
+  void autoScroll([int delayMilliseconds = 2000]) {
+    Future.delayed(Duration(milliseconds: delayMilliseconds)).then((value) {
+      int nextPage =
+          ((imagePageController.page!.round() + 1) % imageItems.length).toInt();
+      imagePageController.animateToPage(
+        nextPage,
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.fastOutSlowIn,
+      );
+      autoScroll(delayMilliseconds);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,21 +110,54 @@ class _HomeLiveState extends State<HomeLive> {
                 lastUpdatedAt = null;
               }
               return [
-                InkWell(
-                  onTap: () {
-                    showMsg(context, 'Hehe');
-                  },
-                  child: Container(
-                    width: widget.mediaQuery.size.width,
-                    height: 100.sp,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 192, 105, 105),
-                      borderRadius: BorderRadius.circular(10),
-                      image: const DecorationImage(
-                        image: AssetImage('assets/banner.png'),
-                        fit: BoxFit.cover,
+                // InkWell(
+                //   onTap: () {
+                //     showMsg(context, 'Hehe');
+                //   },
+                //   child: Container(
+                //     width: widget.mediaQuery.size.width,
+                //     height: 100.sp,
+                //     decoration: BoxDecoration(
+                //       color: const Color.fromARGB(255, 192, 105, 105),
+                //       borderRadius: BorderRadius.circular(10),
+                //       image: const DecorationImage(
+                //         image: AssetImage('assets/banner.png'),
+                //         fit: BoxFit.cover,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                SizedBox(
+                  height: 150.sp,
+                  width: MediaQuery.of(context).size.width,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      PageView(
+                        controller: imagePageController,
+                        children: imageItems,
                       ),
-                    ),
+                      Positioned(
+                        bottom: 25,
+                        child: SmoothPageIndicator(
+                          controller: imagePageController,
+                          count: imageItems.length,
+                          effect: const ExpandingDotsEffect(
+                            dotHeight: 10,
+                            dotWidth: 10,
+                            dotColor: Colors.grey,
+                            activeDotColor: Colors.white,
+                          ),
+                          onDotClicked: (index) {
+                            imagePageController.animateToPage(
+                              index,
+                              duration: const Duration(milliseconds: 800),
+                              curve: Curves.fastOutSlowIn,
+                            );
+                          },
+                        ),
+                      )
+                    ],
                   ),
                 ),
                 const SizedBox(height: 10),
