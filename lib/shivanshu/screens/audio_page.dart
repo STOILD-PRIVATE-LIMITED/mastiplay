@@ -1338,7 +1338,6 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
               Navigator.of(context).pop();
             },
             child: Gif(
-              fps: 30,
               controller: GifController(
                 vsync: this,
               ),
