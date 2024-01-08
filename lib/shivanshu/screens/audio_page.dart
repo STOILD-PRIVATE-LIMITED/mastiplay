@@ -1388,9 +1388,9 @@ class AudioUserTile extends StatefulWidget {
   final UserModel user;
   final void Function()? onTap;
   final int? index;
-  final int? gifIndex;
+  int? gifIndex;
   final bool muted;
-  const AudioUserTile({
+  AudioUserTile({
     super.key,
     required this.user,
     this.index,
@@ -1407,6 +1407,7 @@ class _AudioUserTileState extends State<AudioUserTile>
     with TickerProviderStateMixin {
   bool isMuted = false;
   GifController? gifController;
+  int _repeat = 2;
 
   @override
   void initState() {
@@ -1414,6 +1415,18 @@ class _AudioUserTileState extends State<AudioUserTile>
     gifController = GifController(
       vsync: this,
     );
+    gifController!.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _repeat--;
+        if (_repeat > 0) {
+          gifController!.repeat();
+        } else if (context.mounted) {
+          setState(() {
+            widget.gifIndex = null;
+          });
+        }
+      }
+    });
   }
 
   @override
