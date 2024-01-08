@@ -5,7 +5,6 @@ import 'dart:developer';
 import 'dart:io';
 // import 'dart:math';
 import 'dart:typed_data';
-import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
 // import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
@@ -13,7 +12,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:gif/gif.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/screens/bottom_model.dart';
@@ -95,14 +93,14 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
   final controllerr = PageController(initialPage: 0);
 
   List<Widget> items = [];
-  itemss() {
-    items = [
-      const Icon(Icons.star),
-      const Icon(Icons.favorite),
-      const Icon(Icons.thumb_up),
-      const Icon(Icons.thumb_down),
-    ];
-  }
+  // itemss() {
+  //   items = [
+  //     const Icon(Icons.star),
+  //     const Icon(Icons.favorite),
+  //     const Icon(Icons.thumb_up),
+  //     const Icon(Icons.thumb_down),
+  //   ];
+  // }
 
   @override
   void initState() {
@@ -116,7 +114,7 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
       }).catchError((error) {
         print("Error in video initialization: $error");
       });
-    itemss();
+    // itemss();
     autoScroll(2000);
     log("Setting up socket listeners for chat");
   }
