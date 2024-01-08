@@ -1194,23 +1194,33 @@ class _VideoRoomState extends State<VideoRoom> with TickerProviderStateMixin {
                     crossAxisCount: 1,
                     shrinkWrap: true,
                     children: [
-                      AudioUserTile(
-                        user: currentUser,
-                        gifIndex:
-                            gifIndex == null ? null : int.parse('$gifIndex'),
+                      Container(
+                        height: 50,
+                        width: 50,
+                        alignment: Alignment.center,
+                        child: AudioUserTile(
+                          user: currentUser,
+                          gifIndex:
+                              gifIndex == null ? null : int.parse('$gifIndex'),
+                        ),
                       ),
                       for (int i = 0; i < usersData.length; ++i)
-                        Stack(
-                          children: [
-                            AudioUserTile(
+                        Container(
+                            height: 100,
+                            width: 100,
+                            alignment: Alignment.center,
+                            child: AudioUserTile(
                               user: UserModel.fromJson(usersData[i]),
-                            )
-                          ],
-                        ),
-                      for (int i = usersData.length + 1; i < 8; ++i)
-                        AudioUserTile(
-                          user: UserModel(),
-                          index: i + 1,
+                            )),
+                      for (int i = usersData.length + 1; i < 4; ++i)
+                        Container(
+                          height: 100,
+                          width: 100,
+                          alignment: Alignment.center,
+                          child: AudioUserTile(
+                            user: UserModel(),
+                            index: i + 1,
+                          ),
                         ),
 
                       // for (int i = 0; i < usersData.length; ++i)
