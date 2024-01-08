@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
@@ -15,6 +16,7 @@ import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/live_chat_widget.dart';
 import 'package:spinner_try/webRTC/web_rtc.dart';
 
+import '../shivanshu/models/webRTC/webrtc.dart';
 import '../shivanshu/utils/loading_icon_button.dart';
 import 'audio_room.dart';
 
@@ -50,6 +52,28 @@ class _VideoRoomState extends State<VideoRoom> with TickerProviderStateMixin {
         });
         await audioPlayer.play(DeviceFileSource(file.path));
       }
+    }
+
+    final List<Map<String, dynamic>> msgs = [];
+    @override
+    void initState() {
+      super.initState();
+      WebRTCRoom.instance.onReceiveMsg = (dynamic msgData) {
+        log(msgData.toString());
+        if (msgData['data'] != null) {
+          final userData = UserModel.fromJson(msgData['userdata']);
+          try {} catch (e) {
+            log(e.toString());
+          }
+          gifReceive(msgData['data']);
+        }
+        if (msgData['message'] != null &&
+            !(msgData['message'] as String).startsWith("\$#")) {
+          setState(() {
+            msgs.add(msgData);
+          });
+        }
+      };
     }
 
     return WebRTCWidget(
@@ -1189,54 +1213,44 @@ class _VideoRoomState extends State<VideoRoom> with TickerProviderStateMixin {
                   // ),
                   //   ],
                   // ),
-
-                  floatingActionButton: GridView.count(
-                    crossAxisCount: 1,
-                    shrinkWrap: true,
-                    children: [
-                      Container(
-                        height: 50,
-                        width: 50,
-                        alignment: Alignment.center,
-                        child: AudioUserTile(
-                          user: currentUser,
-                          gifIndex:
-                              gifIndex == null ? null : int.parse('$gifIndex'),
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.endFloat,
+                  floatingActionButton: SizedBox(
+                    width: 80,
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: [
+                        SizedBox(
+                          height: 80,
+                          width: 80,
+                          child: AudioUserTile(
+                            user: currentUser,
+                            gifIndex: gifIndex == null
+                                ? null
+                                : int.parse('$gifIndex'),
+                          ),
                         ),
-                      ),
-                      for (int i = 0; i < usersData.length; ++i)
-                        Container(
+                        for (int i = 0; i < usersData.length; ++i)
+                          Container(
+                              height: 100,
+                              width: 100,
+                              alignment: Alignment.center,
+                              child: AudioUserTile(
+                                user: UserModel.fromJson(usersData[i]),
+                              )),
+                        for (int i = usersData.length + 1; i < 4; ++i)
+                          Container(
                             height: 100,
                             width: 100,
                             alignment: Alignment.center,
                             child: AudioUserTile(
-                              user: UserModel.fromJson(usersData[i]),
-                            )),
-                      for (int i = usersData.length + 1; i < 4; ++i)
-                        Container(
-                          height: 100,
-                          width: 100,
-                          alignment: Alignment.center,
-                          child: AudioUserTile(
-                            user: UserModel(),
-                            index: i + 1,
+                              user: UserModel(),
+                              index: i + 1,
+                            ),
                           ),
-                        ),
-
-                      // for (int i = 0; i < usersData.length; ++i)
-                      //   SizedBox(
-                      //     height: 90,
-                      //     width: 90,
-                      //     child: AudioUserTile(
-                      //       user: UserModel.fromJson(usersData[i]),
-                      //       gifIndex: gifIndex == null
-                      //           ? null
-                      //           : int.parse('$gifIndex'),
-                      //     ),
-                      //   ),
-                    ],
+                      ],
+                    ),
                   ),
-
                   bottomNavigationBar: Card(
                     // elevation: 0,
                     color: Colors.black26,
@@ -1495,10 +1509,10 @@ class _VideoRoomState extends State<VideoRoom> with TickerProviderStateMixin {
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              sendMessage(
-                "\$#${currentUser.id.toString()}_$index",
-                widget.room.id,
-              );
+              WebRTCRoom.instance.sendMessage(null, widget.room.id, {
+                'userdata': currentUser.toJson(),
+                'gif': index,
+              });
               Navigator.of(context).pop();
             },
             child: Gif(
@@ -1517,6 +1531,16 @@ class _VideoRoomState extends State<VideoRoom> with TickerProviderStateMixin {
       ),
     );
     // }
+  }
+
+  void gifReceive(dynamic data) {
+    log("Received a gif msg: $data");
+    Map<String, dynamic> gifData = json.decode(data);
+    gifIndex = gifData['gif'] ?? 0;
+    final userId = UserModel.fromJson(gifData['userdata']).id!;
+    log("userId = $userId");
+    log("gifIndex = $gifIndex");
+    showGif(userId, gifIndex!);
   }
 
   String? gifUserId;
