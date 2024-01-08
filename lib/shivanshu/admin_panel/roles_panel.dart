@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/admin_panel/agency_panel.dart';
 import 'package:spinner_try/shivanshu/admin_panel/agent_panel.dart';
+import 'package:spinner_try/shivanshu/admin_panel/bd_panel.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/screens/family_room_page.dart';
 import 'package:spinner_try/shivanshu/screens/in_dev_screen.dart';
@@ -67,6 +68,14 @@ class _RolesPanelState extends State<RolesPanel> {
                     },
                     title: "Agent",
                     icon: const Icon(Icons.support_agent_rounded, size: 50),
+                    color: Colors.greenAccent,
+                  ),
+                  GridTileLogo(
+                    onTap: () {
+                      navigatorPush(context, const BDPanel());
+                    },
+                    title: "BD",
+                    icon: const Icon(Icons.people_alt_rounded, size: 50),
                     color: Colors.greenAccent,
                   ),
                   GridTileLogo(
