@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
-import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/user_model.dart';
 
 /*
@@ -27,6 +26,7 @@ class WebRTCRoom {
   Function(dynamic data)? onReceiveMsg;
   Function()? onExit;
   Function(List<String?> seats)? onSeatsChanged;
+  Function(List<UserModel> users)? onUsersChanged;
 
   Widget Function(
     BuildContext context,
@@ -178,29 +178,16 @@ class WebRTCRoom {
         ));
       }
     }
-    return WillPopScope(
-      onWillPop: () async {
-        if (await askUser(context, 'Do you really want to exit the room?',
-                yes: true, no: true) !=
-            'yes') {
-          return false;
-        }
-        await onExit?.call();
-        socket.disconnect();
-        socket.close();
-        return true;
-      },
-      child: builder!.call(
-        context,
-        roomId!,
-        usersData,
-        videoViews,
-        currentUser.toJson(),
-        RTCVideoView(
-          _localRTCVideoRenderer,
-          objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
-          mirror: true,
-        ),
+    return builder!.call(
+      context,
+      roomId!,
+      usersData,
+      videoViews,
+      currentUser.toJson(),
+      RTCVideoView(
+        _localRTCVideoRenderer,
+        objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+        mirror: true,
       ),
     );
   }
@@ -456,6 +443,7 @@ class WebRTCRoom {
     final users = List<UserModel>.from(
         data['users'].map((e) => UserModel.fromJson(e)).toList());
     completer.complete(users);
+    onUsersChanged?.call(users);
   }
 
   void addAudioStream(MediaStream mediaStream) {
