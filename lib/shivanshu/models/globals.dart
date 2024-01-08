@@ -19,20 +19,20 @@ late final SharedPreferences prefs;
 // KEEP ALL SERVER ADRESSES WITHOUT A TRAILING SLASH
 
 // Chat Server -----------------------------------------------------
-// const String chatServer = "https://3.7.66.245:8080";
+const String chatServer = "http://3.7.66.245:3001";
 // const String chatServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
-String chatServer = "https://rkncpgkx-3000.inc1.devtunnels.ms";
+// const String chatServer = "https://rkncpgkx-3000.inc1.devtunnels.ms";
 
 // Moments Server --------------------------------------------------
-const String momentsServer = "https://92v8xmgw-3007.inc1.devtunnels.ms";
+// const String momentsServer = "https://92v8xmgw-3007.inc1.devtunnels.ms";
 // const String momentsServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
-// const String momentsServer = "https://3.7.66.245:3007";
+const String momentsServer = "http://3.7.66.245:3007";
 // const String momentsServer = "https://rkncpgkx-3007.inc1.devtunnels.ms";
 
 // WebRTC Server --------------------------------------------------
-// const String websocketUrl = "https://3.7.66.245:8080";
+const String websocketUrl = "http://3.7.66.245:8080";
 // const String websocketUrl = "https://v9nm4hsv-8080.asse.devtunnels.ms";
-const String websocketUrl = "https://rkncpgkx-8080.inc1.devtunnels.ms";
+// const String websocketUrl = "https://rkncpgkx-8080.inc1.devtunnels.ms";
 
 OverlayEntry? entry;
 Offset offset = Offset(220.sp, 600.sp);
