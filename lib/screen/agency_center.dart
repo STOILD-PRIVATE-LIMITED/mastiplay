@@ -191,6 +191,23 @@ class _AgencyCenterState extends State<AgencyCenter> {
                               widget.user.ownedAgencyData!.id!,
                             );
                           },
+                          loadingWidget: Container(
+                            height: height / 20,
+                            width: width / 3,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.purple,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.purple.withOpacity(0.5),
+                                  spreadRadius: 1,
+                                  blurRadius: 5,
+                                ),
+                              ],
+                            ),
+                            alignment: Alignment.center,
+                            child: const CircularProgressIndicatorRainbow(),
+                          ),
                           child: Container(
                             height: height / 20,
                             width: width / 3,
@@ -286,191 +303,191 @@ class _AgencyCenterState extends State<AgencyCenter> {
                 ],
               ),
             ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Myself: "),
-                Icon(
-                  Icons.abc,
-                  color: Colors.purple,
-                ),
-                Text("1234567890"),
-              ],
-            ),
+            // const Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Text("Myself: "),
+            //     Icon(
+            //       Icons.abc,
+            //       color: Colors.purple,
+            //     ),
+            //     Text("1234567890"),
+            //   ],
+            // ),
             SizedBox(
               height: height / 40,
             ),
-            Container(
-              width: width / 1.2,
-              padding: EdgeInsets.symmetric(
-                  horizontal: width / 30, vertical: height / 35),
-              decoration: BoxDecoration(
-                color: Colors.blue[100],
-                borderRadius: BorderRadius.circular(20),
-              ),
-              alignment: Alignment.center,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Monthly tasks",
-                        style: TextStyle(
-                            fontSize: height / 50, fontWeight: FontWeight.bold),
-                      ),
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.access_time_rounded,
-                            color: Colors.grey,
-                          ),
-                          Text(
-                            "25days 01:32:53",
-                            style: TextStyle(
-                              fontSize: height / 60,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Text(
-                    "Tasks to be completed every month",
-                    style:
-                        TextStyle(fontSize: height / 60, color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: height / 90,
-                  ),
-                  Text(
-                    "Option Task A",
-                    style: TextStyle(
-                        fontSize: height / 60,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: height / 90,
-                  ),
-                  Container(
-                    height: height / 10,
-                    width: width / 1.2,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 1,
-                          blurRadius: 5,
-                        ),
-                      ],
-                    ),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: width / 30, vertical: height / 80),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.abc,
-                          color: Colors.purple,
-                        ),
-                        SizedBox(
-                          width: width / 30,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Number of invited creators",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: height / 60),
-                            ),
-                            Text(
-                              "2/5",
-                              style: TextStyle(fontSize: height / 60),
-                            ),
-                            SizedBox(
-                              width: width / 2.5,
-                              child: const LinearProgressIndicator(
-                                value: .75,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(20),
-                                ),
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.green),
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: height / 90,
-                  ),
-                  Container(
-                    height: height / 10,
-                    width: width / 1.2,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 1,
-                          blurRadius: 5,
-                        ),
-                      ],
-                    ),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: width / 30, vertical: height / 80),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.abc,
-                          color: Colors.purple,
-                        ),
-                        SizedBox(
-                          width: width / 30,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Number of valid new Creators",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: height / 60),
-                            ),
-                            Text(
-                              "3/5",
-                              style: TextStyle(fontSize: height / 60),
-                            ),
-                            SizedBox(
-                              width: width / 2.5,
-                              child: const LinearProgressIndicator(
-                                value: .75,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(20),
-                                ),
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.green),
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: height / 40,
-            ),
+            // Container(
+            //   width: width / 1.2,
+            //   padding: EdgeInsets.symmetric(
+            //       horizontal: width / 30, vertical: height / 35),
+            //   decoration: BoxDecoration(
+            //     color: Colors.blue[100],
+            //     borderRadius: BorderRadius.circular(20),
+            //   ),
+            //   alignment: Alignment.center,
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           Text(
+            //             "Monthly tasks",
+            //             style: TextStyle(
+            //                 fontSize: height / 50, fontWeight: FontWeight.bold),
+            //           ),
+            //           Row(
+            //             children: [
+            //               const Icon(
+            //                 Icons.access_time_rounded,
+            //                 color: Colors.grey,
+            //               ),
+            //               Text(
+            //                 "25days 01:32:53",
+            //                 style: TextStyle(
+            //                   fontSize: height / 60,
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //         ],
+            //       ),
+            //       Text(
+            //         "Tasks to be completed every month",
+            //         style:
+            //             TextStyle(fontSize: height / 60, color: Colors.black),
+            //       ),
+            //       SizedBox(
+            //         height: height / 90,
+            //       ),
+            //       Text(
+            //         "Option Task A",
+            //         style: TextStyle(
+            //             fontSize: height / 60,
+            //             color: Colors.black,
+            //             fontWeight: FontWeight.bold),
+            //       ),
+            //       SizedBox(
+            //         height: height / 90,
+            //       ),
+            //       Container(
+            //         height: height / 10,
+            //         width: width / 1.2,
+            //         decoration: BoxDecoration(
+            //           borderRadius: BorderRadius.circular(20),
+            //           color: Colors.white,
+            //           boxShadow: [
+            //             BoxShadow(
+            //               color: Colors.grey.withOpacity(0.5),
+            //               spreadRadius: 1,
+            //               blurRadius: 5,
+            //             ),
+            //           ],
+            //         ),
+            //         padding: EdgeInsets.symmetric(
+            //             horizontal: width / 30, vertical: height / 80),
+            //         child: Row(
+            //           children: [
+            //             const Icon(
+            //               Icons.abc,
+            //               color: Colors.purple,
+            //             ),
+            //             SizedBox(
+            //               width: width / 30,
+            //             ),
+            //             Column(
+            //               crossAxisAlignment: CrossAxisAlignment.start,
+            //               children: [
+            //                 Text(
+            //                   "Number of invited creators",
+            //                   style: TextStyle(
+            //                       fontWeight: FontWeight.bold,
+            //                       fontSize: height / 60),
+            //                 ),
+            //                 Text(
+            //                   "2/5",
+            //                   style: TextStyle(fontSize: height / 60),
+            //                 ),
+            //                 SizedBox(
+            //                   width: width / 2.5,
+            //                   child: const LinearProgressIndicator(
+            //                     value: .75,
+            //                     borderRadius: BorderRadius.all(
+            //                       Radius.circular(20),
+            //                     ),
+            //                     valueColor:
+            //                         AlwaysStoppedAnimation<Color>(Colors.green),
+            //                   ),
+            //                 )
+            //               ],
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //       SizedBox(
+            //         height: height / 90,
+            //       ),
+            //       Container(
+            //         height: height / 10,
+            //         width: width / 1.2,
+            //         decoration: BoxDecoration(
+            //           borderRadius: BorderRadius.circular(20),
+            //           color: Colors.white,
+            //           boxShadow: [
+            //             BoxShadow(
+            //               color: Colors.grey.withOpacity(0.5),
+            //               spreadRadius: 1,
+            //               blurRadius: 5,
+            //             ),
+            //           ],
+            //         ),
+            //         padding: EdgeInsets.symmetric(
+            //             horizontal: width / 30, vertical: height / 80),
+            //         child: Row(
+            //           children: [
+            //             const Icon(
+            //               Icons.abc,
+            //               color: Colors.purple,
+            //             ),
+            //             SizedBox(
+            //               width: width / 30,
+            //             ),
+            //             Column(
+            //               crossAxisAlignment: CrossAxisAlignment.start,
+            //               children: [
+            //                 Text(
+            //                   "Number of valid new Creators",
+            //                   style: TextStyle(
+            //                       fontWeight: FontWeight.bold,
+            //                       fontSize: height / 60),
+            //                 ),
+            //                 Text(
+            //                   "3/5",
+            //                   style: TextStyle(fontSize: height / 60),
+            //                 ),
+            //                 SizedBox(
+            //                   width: width / 2.5,
+            //                   child: const LinearProgressIndicator(
+            //                     value: .75,
+            //                     borderRadius: BorderRadius.all(
+            //                       Radius.circular(20),
+            //                     ),
+            //                     valueColor:
+            //                         AlwaysStoppedAnimation<Color>(Colors.green),
+            //                   ),
+            //                 )
+            //               ],
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: height / 40,
+            // ),
             Row(
               children: [
                 GestureDetector(
