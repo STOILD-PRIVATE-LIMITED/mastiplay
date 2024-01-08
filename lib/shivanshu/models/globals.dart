@@ -2,10 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/wave/wave_painter.dart';
+
+import '../screens/audio_page.dart';
 
 /// Instead of creating multiple instances of the same object
 /// I created then altogether here
@@ -44,6 +47,10 @@ void showOverlay(context, Widget widget) {
       child: GestureDetector(
         onDoubleTap: () {
           entry!.remove();
+        },
+        onTap: () {
+          // entry!.remove();
+          Navigator.of(context).pop();
         },
         child: Card(
           color: Colors.transparent,

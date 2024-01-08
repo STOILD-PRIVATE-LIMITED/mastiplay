@@ -194,7 +194,7 @@ class ProfileScreen extends StatelessWidget {
                   navigatorPush(context, const WalletScreen());
                 },
                 leading: Image.asset(
-                  'assets/diamond.png',
+                  'assets/wallet 1.png',
                   width: 20,
                 ),
                 title: const Text('Wallet'),
@@ -217,7 +217,7 @@ class ProfileScreen extends StatelessWidget {
                         leading: loading
                             ? const CircularProgressIndicatorRainbow()
                             : Image.asset(
-                                'assets/diamond.png',
+                                'assets/gem 1.png',
                                 width: 20,
                               ),
                         title: Text(
@@ -227,7 +227,9 @@ class ProfileScreen extends StatelessWidget {
                           style: TextStyle(
                               color: userData == null && !loading
                                   ? Colors.red
-                                  : (loading ? Colors.black45 : Colors.black)),
+                                  : (loading
+                                      ? Colors.black45
+                                      : Colors.black)),
                         ),
                       );
                     }),
@@ -239,7 +241,7 @@ class ProfileScreen extends StatelessWidget {
                           builder: (context) => const NobelCenter()));
                 },
                 leading: Image.asset(
-                  'assets/diamond.png',
+                  'assets/vip 1.png',
                   width: 20,
                 ),
                 title: const Text('VIP Center'),
@@ -249,7 +251,7 @@ class ProfileScreen extends StatelessWidget {
                   navigatorPush(context, const NobelCenter());
                 },
                 leading: Image.asset(
-                  'assets/diamond.png',
+                  'assets/—Pngtree—knight s shield illustration with_12235284 1.png',
                   width: 20,
                 ),
                 title: const Text('Noble Center'),
@@ -297,7 +299,7 @@ class ProfileScreen extends StatelessWidget {
                         navigatorPush(context, const BindAgency());
                       },
                       leading: Image.asset(
-                        'assets/diamond.png',
+                        'assets/add-user 2.png',
                         width: 20,
                       ),
                       title: const Text('Bind Agency'),
@@ -306,10 +308,11 @@ class ProfileScreen extends StatelessWidget {
                   if (currentUser.ownedAgencyData != null) {
                     return ListTile(
                       onTap: () {
-                        navigatorPush(context, AgencyCenter(user: currentUser));
+                        navigatorPush(
+                            context, AgencyCenter(user: currentUser));
                       },
                       leading: Image.asset(
-                        'assets/diamond.png',
+                        'assets/agency_Center.png',
                         width: 20,
                       ),
                       title: const Text(
@@ -321,7 +324,7 @@ class ProfileScreen extends StatelessWidget {
                   return ListTile(
                     onTap: null,
                     leading: Image.asset(
-                      'assets/diamond.png',
+                      'assets/agency_Center.png',
                       width: 20,
                     ),
                     title: const Text(
@@ -336,7 +339,7 @@ class ProfileScreen extends StatelessWidget {
                   navigatorPush(context, const CreatorCenter());
                 },
                 leading: Image.asset(
-                  'assets/diamond.png',
+                  'assets/Group-2.png',
                   width: 20,
                 ),
                 title: const Text('Creator Center'),
@@ -346,7 +349,7 @@ class ProfileScreen extends StatelessWidget {
                   navigatorPush(context, const Store());
                 },
                 leading: Image.asset(
-                  'assets/diamond.png',
+                  'assets/shopping-bag 1.png',
                   width: 20,
                 ),
                 title: const Text('Privilege Bag'),
@@ -356,7 +359,7 @@ class ProfileScreen extends StatelessWidget {
                   navigatorPush(context, const FamilyScreen());
                 },
                 leading: Image.asset(
-                  'assets/diamond.png',
+                  'assets/Group 18114.png',
                   width: 20,
                 ),
                 title: const Text('Family'),
@@ -366,126 +369,140 @@ class ProfileScreen extends StatelessWidget {
                   navigatorPush(context, const UserLevelPage());
                 },
                 leading: Image.asset(
-                  'assets/diamond.png',
+                  'assets/level up.png',
                   width: 20,
                 ),
                 title: const Text('User level center'),
               ),
-              const Divider(),
-              GridView.extent(
-                maxCrossAxisExtent: 100,
-                shrinkWrap: true,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      navigatorPush(context, const InviteFriends());
-                    },
-                    child: const MyColumn(
-                      children: [
-                        Icon(
-                          Icons.attach_money_rounded,
-                          color: Colors.amber,
-                        ),
-                        Text('Invite'),
-                      ],
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      navigatorPush(
-                          context, UserPosts(userId: currentUser.id!));
-                    },
-                    child: MyColumn(
-                      children: [
-                        Image.asset("assets/heart.png"),
-                        const Text('Moment'),
-                      ],
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      // navigatorPush(context, const AccountInformation());
-                      navigatorPush(context, const ProfileEdit());
-                    },
-                    child: const MyColumn(
-                      children: [
-                        Icon(
-                          Icons.person,
-                          color: Colors.green,
-                        ),
-                        Text('Account Info'),
-                      ],
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: MyColumn(
-                      children: [
-                        Image.asset("assets/star.png"),
-                        const Text('Events'),
-                      ],
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      navigatorPush(context, const Setting());
-                    },
-                    child: const MyColumn(
-                      children: [
-                        Icon(
-                          Icons.settings_rounded,
-                          color: Colors.green,
-                        ),
-                        Text('Settings'),
-                      ],
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      navigatorPush(context, const HelpForm());
-                    },
-                    child: const MyColumn(
-                      children: [
-                        Icon(
-                          Icons.help,
-                          color: Colors.amber,
-                        ),
-                        Text('Help'),
-                      ],
-                    ),
-                  ),
-                  if (kDebugMode ||
-                      (currentUser.role != null &&
-                          currentUser.role!.contains('admin')))
+              // const Divider(),
+              Container(
+                color: const Color(0xFFF1DBDB),
+                child: GridView.extent(
+                  maxCrossAxisExtent: 100,
+                  shrinkWrap: true,
+                  children: [
                     InkWell(
                       onTap: () {
-                        navigatorPush(context, const AdminPanel());
+                        navigatorPush(context, const InviteFriends());
                       },
-                      child: const MyColumn(
+                      child: MyColumn(
                         children: [
-                          Icon(
-                            Icons.admin_panel_settings_rounded,
-                            color: Colors.green,
+                          Image.asset(
+                            "assets/Frame 32.png",
+                            width: 30,
                           ),
-                          Text('Admin Panel'),
+                          const Text('Invite'),
                         ],
                       ),
                     ),
-                  InkWell(
-                    onTap: () {
-                      navigatorPush(context, const About());
-                    },
-                    child: const MyColumn(
-                      children: [
-                        Icon(
-                          Icons.info_outline_rounded,
-                          color: Colors.green,
-                        ),
-                        Text('About'),
-                      ],
+                    InkWell(
+                      onTap: () {
+                        navigatorPush(
+                            context, UserPosts(userId: currentUser.id!));
+                      },
+                      child: MyColumn(
+                        children: [
+                          Image.asset("assets/heart.png"),
+                          const Text('Moment'),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    InkWell(
+                      onTap: () {
+                        // navigatorPush(context, const AccountInformation());
+                        navigatorPush(context, const ProfileEdit());
+                      },
+                      child: MyColumn(
+                        children: [
+                          // Icon(
+                          //   Icons.person,
+                          //   color: Colors.green,
+                          // ),
+                          Image.asset(
+                            "assets/Group-1.png",
+                            width: 30,
+                          ),
+                          const Text('Account Info'),
+                        ],
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      child: MyColumn(
+                        children: [
+                          Image.asset(
+                            "assets/starGroup 18115.png",
+                            width: 30,
+                          ),
+                          const Text('Events'),
+                        ],
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        navigatorPush(context, const Setting());
+                      },
+                      child: MyColumn(
+                        children: [
+                          // Icon(
+                          //   Icons.settings_rounded,
+                          //   color: Colors.green,
+                          // ),
+                          Image.asset(
+                            "assets/settings-01.png",
+                            width: 30,
+                          ),
+                          const Text('Settings'),
+                        ],
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        navigatorPush(context, const HelpForm());
+                      },
+                      child: MyColumn(
+                        children: [
+                          Image.asset(
+                            "assets/caller.png",
+                            width: 30,
+                          ),
+                          const Text('Help'),
+                        ],
+                      ),
+                    ),
+                    if (kDebugMode ||
+                        (currentUser.role != null &&
+                            currentUser.role!.contains('admin')))
+                      InkWell(
+                        onTap: () {
+                          navigatorPush(context, const AdminPanel());
+                        },
+                        child: const MyColumn(
+                          children: [
+                            Icon(
+                              Icons.admin_panel_settings_rounded,
+                              color: Colors.green,
+                            ),
+                            Text('Admin Panel'),
+                          ],
+                        ),
+                      ),
+                    InkWell(
+                      onTap: () {
+                        navigatorPush(context, const About());
+                      },
+                      child: MyColumn(
+                        children: [
+                          Image.asset(
+                            "assets/info 2.png",
+                            width: 30,
+                          ),
+                          const Text('About'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
