@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as math;
-
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -705,7 +705,7 @@ class _NewAudioRoomState extends State<NewAudioRoom>
                         backgroundColor: Colors.black12,
                       ),
                       onPressed: () {
-                        showMsg(context, "In Developement");
+                        giftBottom(context);
                       },
                       icon: Image.asset('assets/gift.png'),
                     ),
@@ -716,6 +716,93 @@ class _NewAudioRoomState extends State<NewAudioRoom>
           ],
         ),
       ),
+    );
+  }
+
+  List<String> value = ['all in the room', 'all on mic'];
+  String? selectedValue;
+  giftBottom(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Scaffold(
+          body: Container(
+              width: MediaQuery.of(context).size.width,
+              clipBehavior: Clip.antiAlias,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment(-0.78, -0.63),
+                  end: Alignment(0.78, 0.63),
+                  colors: [
+                    Color(0xFF3E3B6F),
+                    Color(0xE22C2B3B),
+                    Color(0xFF090909)
+                  ],
+                ),
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: const Color(0xFFA69F9F),
+                      ),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 250,
+                            height: 60,
+                            child: ListView.builder(
+                              itemCount: 80,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  width: 28.29,
+                                  height: 28.29,
+                                  decoration: const ShapeDecoration(
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                          "https://via.placeholder.com/28x28"),
+                                      fit: BoxFit.cover,
+                                    ),
+                                    shape: CircleBorder(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          DropdownButtonHideUnderline(
+                            child: DropdownButton2(
+                              customButton: Image.asset(
+                                  "assets/dropdownimage.png",
+                                  height: 10),
+                              items: value
+                                  .map(
+                                    (item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    
+                    ),
+                  ),
+                ],
+              )),
+        );
+      },
     );
   }
 
