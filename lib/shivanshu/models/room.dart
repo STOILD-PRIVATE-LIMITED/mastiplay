@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:spinner_try/shivanshu/models/globals.dart';
-import 'package:spinner_try/webRTC/web_rtc.dart';
 
 enum RoomType {
   audio,
@@ -20,7 +19,6 @@ class Room {
   String? announcement;
   DateTime updatedAt = DateTime.now();
   DateTime createdAt = DateTime.now();
-  List<String> seatUsers = [];
 
   Room({
     this.id = "",
@@ -36,7 +34,6 @@ class Room {
   }) {
     this.updatedAt = updatedAt ?? this.updatedAt;
     this.createdAt = createdAt ?? this.createdAt;
-    this.seatUsers = seatUsers ?? this.seatUsers;
   }
 
   void loadFromJson(Map<String, dynamic> data) {
@@ -53,9 +50,6 @@ class Room {
     announcement = data['announcement'] ?? announcement;
     roomType = RoomType.values[data['roomType'] ?? roomType.index];
     askBeforeJoining = data['askBeforeJoining'] ?? askBeforeJoining;
-    seatUsers = data['seatUsers'] == null
-        ? seatUsers
-        : List<String>.from(data['seatUsers']);
   }
 
   Map<String, dynamic> toJson() {
@@ -67,7 +61,6 @@ class Room {
       "askBeforeJoining": askBeforeJoining,
       "announcement": announcement,
       "roomType": roomType.index,
-      "seatUsers": seatUsers,
     };
   }
 

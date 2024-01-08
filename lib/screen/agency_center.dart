@@ -164,10 +164,11 @@ class _AgencyCenterState extends State<AgencyCenter> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
-                              Icons.diamond,
-                              color: Colors.pink,
-                            ),
+                            Image.asset('assets/bean.png'),
+                            // const Icon(
+                            //   Icons.diamond,
+                            //   color: Colors.pink,
+                            // ),
                             Text(
                               widget.user.ownedAgencyData!.beansCount
                                   .toString(),

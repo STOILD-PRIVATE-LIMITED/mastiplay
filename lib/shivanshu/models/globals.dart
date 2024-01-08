@@ -33,9 +33,8 @@ const String momentsServer = "http://3.7.66.245:3007";
 // const String momentsServer = "https://rkncpgkx-3007.inc1.devtunnels.ms";
 
 // WebRTC Server --------------------------------------------------
-const String websocketUrl = "http://3.7.66.245:8080";
-// const String websocketUrl = "https://rkncpgkx-8080.inc1.devtunnels.ms";
-// const String websocketUrl = "https://v9nm4hsv-8080.asse.devtunnels.ms";
+// const String websocketUrl = "http://3.7.66.245:8080";
+const String websocketUrl = "https://v9nm4hsv-8080.asse.devtunnels.ms";
 // const String websocketUrl = "https://rkncpgkx-8080.inc1.devtunnels.ms";
 
 OverlayEntry? entry;

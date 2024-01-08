@@ -87,17 +87,17 @@ class _TransferMethodState extends State<TransferMethod> {
               hintText: '1000',
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                  "Will Receive diamond: ${(int.tryParse(amount.text) ?? 0) * 0.68}"),
-              const Icon(
-                Icons.diamond,
-                color: Colors.pink,
-              )
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     Text(
+          //         "Will Receive diamond: ${(int.tryParse(amount.text) ?? 0) * 0.68}"),
+          //     const Icon(
+          //       Icons.diamond,
+          //       color: Colors.pink,
+          //     )
+          //   ],
+          // ),
           if (userData != null) ...[
             const SizedBox(height: 20),
             Chip(

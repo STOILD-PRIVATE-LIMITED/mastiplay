@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -6,6 +7,7 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
+import 'package:spinner_try/user_model.dart';
 
 /*
   usage: Create an object of WebRTCRoom
@@ -24,6 +26,7 @@ class WebRTCRoom {
   Function()? onDisconnect;
   Function(dynamic data)? onReceiveMsg;
   Function()? onExit;
+  Function(List<String?> seats)? onSeatsChanged;
 
   Widget Function(
     BuildContext context,
@@ -107,7 +110,7 @@ class WebRTCRoom {
       'sessionDescription',
       (config) {
         try {
-          sessionDescription(
+          _sessionDescription(
             peerId: config['peer_id'],
             session_description: config['session_description'],
           );
@@ -133,7 +136,7 @@ class WebRTCRoom {
       'removePeer',
       (config) {
         try {
-          removePeer(
+          _removePeer(
             config['peer_id'],
           );
         } catch (e) {
@@ -141,7 +144,9 @@ class WebRTCRoom {
         }
       },
     );
-    socket.on('broadcastMsg', broadCastMsg);
+    socket.on('broadcastMsg', _broadCastMsg);
+    socket.on('seatsChanged', _onSeatsChanged);
+    socket.on('receiveUsers', _onReceiveUsers);
   }
 
   Future<void> _join() async {
@@ -276,7 +281,7 @@ class WebRTCRoom {
     }
   }
 
-  Future<void> sessionDescription(
+  Future<void> _sessionDescription(
       {required peerId, required dynamic session_description}) async {
     final peer = _peers[peerId]!;
     final remoteDescription = session_description;
@@ -314,7 +319,7 @@ class WebRTCRoom {
     log("addIceCandidate succeeded");
   }
 
-  Future<void> removePeer(String peerId) async {
+  Future<void> _removePeer(String peerId) async {
     log("Removing peer: $peerId");
     if (_remoteRTCVideoRenderers.containsKey(peerId)) {
       _remoteRTCVideoRenderers[peerId]!.dispose();
@@ -339,7 +344,7 @@ class WebRTCRoom {
     _localStream?.getAudioTracks().forEach((track) {
       track.enabled = isAudioOn;
     });
-    sendMessage(null, roomId!, {'isAudioOn': isAudioOn});
+    sendMessage("", roomId!, {'isAudioOn': isAudioOn});
   }
 
   toggleCamera(bool value) {
@@ -356,7 +361,7 @@ class WebRTCRoom {
     });
   }
 
-  void sendMessage(String? msg, String roomId, Map<String, dynamic>? data) {
+  void sendMessage(String? msg, String roomId, [Map<String, dynamic>? data]) {
     log("Sending msg: $msg with roomID: $roomId with data: $data");
     socket.emit('message', {
       'channel': roomId,
@@ -365,7 +370,7 @@ class WebRTCRoom {
     });
   }
 
-  void broadCastMsg(data) {
+  void _broadCastMsg(data) {
     log("Received a broadcast msg: $data");
     onReceiveMsg?.call(data);
     if (onReceiveMsg == null) {
@@ -376,30 +381,26 @@ class WebRTCRoom {
   void disconnect() async {
     try {
       log("Disconnected from signaling server");
-      for (final peerId in _peers.entries) {
-        _peers[peerId.key]!.close();
-      }
       _localStream?.getTracks().forEach((element) async {
         await element.stop();
       });
       await _localStream?.dispose();
       _localStream = null;
       _peers.clear();
-      for (final peerId in _remoteRTCVideoRenderers.entries) {
-        // _remoteRTCVideoRenderers[peerId.key]!.dispose();
+      for (final entry in _remoteRTCVideoRenderers.entries) {
+        entry.value.srcObject?.getTracks().forEach((track) {
+          track.stop();
+        });
       }
-      _remoteRTCVideoRenderers.clear();
+      for (final peerId in _peers.entries) {
+        _peers[peerId.key]!.close();
+      }
       roomId = null;
-      socket.off('broadcastMsg', broadCastMsg);
+      socket.off('broadcastMsg', _broadCastMsg);
       socket.close();
       socket.onReconnect((data) {
         log("Socket was reconnected!");
       });
-      // _localRTCVideoRenderer.dispose();
-      // for (final peerId in _remoteRTCVideoRenderers.entries) {
-      // _remoteRTCVideoRenderers[peerId.key]!.dispose();
-      // }
-      _remoteRTCVideoRenderers.clear();
       for (final peerId in _peers.entries) {
         _peers[peerId.key]!.close();
         _peers[peerId.key]!.dispose();
@@ -409,10 +410,59 @@ class WebRTCRoom {
         _remoteRTCVideoRenderers.remove(peerId);
         _peersData.remove(peerId);
       }
+      _remoteRTCVideoRenderers.clear();
       _peers.clear();
       onDisconnect?.call();
     } catch (e) {
       log("Error Disconnecting: $e");
     }
+  }
+
+  void inviteUser(String userId, int seat) async {
+    assert(roomId != null && roomId!.isNotEmpty,
+        "Id shouldn't be empty when inviting a user");
+    assert(seat < 8 && seat >= 0);
+    socket.emit('inviteUser', {
+      'userId': userId,
+      'channel': roomId,
+      'seat': seat,
+    });
+  }
+
+  void _onSeatsChanged(data) async {
+    log("Seats changed: $data");
+    final seats = data['seats'] == null
+        ? List.generate(8, (index) => null)
+        : List<String?>.from(data['seats']);
+    onSeatsChanged?.call(seats);
+  }
+
+  void getSeats() {
+    socket.emit('getSeats', {
+      'channel': roomId,
+    });
+  }
+
+  Completer<List<UserModel>> completer = Completer();
+
+  Future<List<UserModel>> getUsers() async {
+    completer = Completer();
+    socket.emit('getUsers', {'channel': roomId});
+    return completer.future;
+  }
+
+  void _onReceiveUsers(data) async {
+    log("Received users: $data");
+    final users = List<UserModel>.from(
+        data['users'].map((e) => UserModel.fromJson(e)).toList());
+    completer.complete(users);
+  }
+
+  void addAudioStream(MediaStream mediaStream) {
+    mediaStream.getTracks().forEach((track) {
+      for (var element in _peers.entries) {
+        _peers[element.key]!.addTrack(track, mediaStream);
+      }
+    });
   }
 }
