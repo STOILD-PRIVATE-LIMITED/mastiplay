@@ -492,9 +492,20 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
               Container(
+                height: 20,
+                width: MediaQuery.of(context).size.width,
+                color: Colors.white,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
                 color: const Color(0xFFF1DBDB),
                 child: GridView.extent(
                   maxCrossAxisExtent: 100,
+                  padding: const EdgeInsets.all(2),
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 4,
                   shrinkWrap: true,
                   children: [
                     InkWell(
@@ -503,8 +514,15 @@ class ProfileScreen extends StatelessWidget {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          // color: Colors.white,
+                          image: const DecorationImage(
+                            image: AssetImage('assets/frame/Frame 1.png'),
+                            fit: BoxFit.cover,
+                          ),
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
                         ),
                         child: MyColumn(
                           children: [
@@ -523,15 +541,28 @@ class ProfileScreen extends StatelessWidget {
                         navigatorPush(
                             context, UserPosts(userId: currentUser.id!));
                       },
-                      child: MyColumn(
-                        children: [
-                          Image.asset(
-                            "assets/heart.png",
-                            width: 30,
-                            height: 35,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.white,
+                          image: const DecorationImage(
+                            image: AssetImage('assets/frame/Frame 2.png'),
+                            fit: BoxFit.cover,
                           ),
-                          const Text('Moment'),
-                        ],
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: MyColumn(
+                          children: [
+                            Image.asset(
+                              "assets/heart.png",
+                              width: 30,
+                              height: 35,
+                            ),
+                            const Text('Moment'),
+                          ],
+                        ),
                       ),
                     ),
                     InkWell(
@@ -539,66 +570,110 @@ class ProfileScreen extends StatelessWidget {
                         // navigatorPush(context, const AccountInformation());
                         navigatorPush(context, const ProfileEdit());
                       },
-                      child: MyColumn(
-                        children: [
-                          // Icon(
-                          //   Icons.person,
-                          //   color: Colors.green,
-                          // ),
-                          Image.asset(
-                            "assets/Group-1.png",
-                            width: 30,
-                            height: 35,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.white,
+                          image: const DecorationImage(
+                            image: AssetImage('assets/frame/Frame 3.png'),
+                            fit: BoxFit.cover,
                           ),
-                          const Text('Account Info'),
-                        ],
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: MyColumn(
+                          children: [
+                            Image.asset(
+                              "assets/Group-1.png",
+                              width: 30,
+                              height: 35,
+                            ),
+                            const Text('Account Info'),
+                          ],
+                        ),
                       ),
                     ),
                     InkWell(
                       onTap: () {},
-                      child: MyColumn(
-                        children: [
-                          Image.asset(
-                            "assets/starGroup 18115.png",
-                            width: 30,
-                            height: 35,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.white,
+                          image: const DecorationImage(
+                            image: AssetImage('assets/frame/Frame 4.png'),
+                            fit: BoxFit.cover,
                           ),
-                          const Text('Events'),
-                        ],
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: MyColumn(
+                          children: [
+                            Image.asset(
+                              "assets/starGroup 18115.png",
+                              width: 30,
+                              height: 35,
+                            ),
+                            const Text('Events'),
+                          ],
+                        ),
                       ),
                     ),
                     InkWell(
                       onTap: () {
                         navigatorPush(context, const Setting());
                       },
-                      child: MyColumn(
-                        children: [
-                          // Icon(
-                          //   Icons.settings_rounded,
-                          //   color: Colors.green,
-                          // ),
-                          Image.asset(
-                            "assets/settings-01.png",
-                            width: 30,
-                            height: 35,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.white,
+                          image: const DecorationImage(
+                            image: AssetImage('assets/frame/Frame 5.png'),
+                            fit: BoxFit.cover,
                           ),
-                          const Text('Settings'),
-                        ],
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: MyColumn(
+                          children: [
+                            Image.asset(
+                              "assets/settings-01.png",
+                              width: 30,
+                              height: 35,
+                            ),
+                            const Text('Settings'),
+                          ],
+                        ),
                       ),
                     ),
                     InkWell(
                       onTap: () {
                         navigatorPush(context, const HelpForm());
                       },
-                      child: MyColumn(
-                        children: [
-                          Image.asset(
-                            "assets/caller.png",
-                            width: 30,
-                            height: 35,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.white,
+                          image: const DecorationImage(
+                            image: AssetImage('assets/frame/Frame 6.png'),
+                            fit: BoxFit.cover,
                           ),
-                          const Text('Help'),
-                        ],
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: MyColumn(
+                          children: [
+                            Image.asset(
+                              "assets/caller.png",
+                              width: 30,
+                              height: 35,
+                            ),
+                            const Text('Help'),
+                          ],
+                        ),
                       ),
                     ),
                     if (kDebugMode ||
@@ -608,30 +683,56 @@ class ProfileScreen extends StatelessWidget {
                         onTap: () {
                           navigatorPush(context, const AdminPanel());
                         },
-                        child: const MyColumn(
-                          children: [
-                            Icon(
-                              Icons.admin_panel_settings_rounded,
-                              size: 30,
-                              color: Colors.green,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.white,
+                            image: const DecorationImage(
+                              image: AssetImage('assets/frame/Frame 7.png'),
+                              fit: BoxFit.cover,
                             ),
-                            Text('Admin Panel'),
-                          ],
+                            border: Border.all(
+                              color: Colors.black,
+                            ),
+                          ),
+                          child: const MyColumn(
+                            children: [
+                              Icon(
+                                Icons.admin_panel_settings_rounded,
+                                size: 30,
+                                color: Colors.green,
+                              ),
+                              Text('Admin Panel'),
+                            ],
+                          ),
                         ),
                       ),
                     InkWell(
                       onTap: () {
                         navigatorPush(context, const About());
                       },
-                      child: MyColumn(
-                        children: [
-                          Image.asset(
-                            "assets/info 2.png",
-                            width: 30,
-                            height: 35,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.white,
+                          image: const DecorationImage(
+                            image: AssetImage('assets/frame/Frame 8.png'),
+                            fit: BoxFit.cover,
                           ),
-                          const Text('About'),
-                        ],
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: MyColumn(
+                          children: [
+                            Image.asset(
+                              "assets/info 2.png",
+                              width: 30,
+                              height: 35,
+                            ),
+                            const Text('About'),
+                          ],
+                        ),
                       ),
                     ),
                   ],
