@@ -18,19 +18,18 @@ UserModel currentUser = UserModel(name: "", photo: "", email: "", country: "");
 late final SharedPreferences prefs;
 
 // Server Addresses
-// String chatServer = "https://rkncpgkx-3000.inc1.devtunnels.ms";
+String chatServer = "https://rkncpgkx-3000.inc1.devtunnels.ms";
 // keep this without trailing slash
 
-// const String momentsServer = "https://rkncpgkx-3007.inc1.devtunnels.ms";
+const String momentsServer = "https://rkncpgkx-3007.inc1.devtunnels.ms";
 // const String momentsServer = "https://f82a-103-137-198-235.ngrok-free.app";
 // const String momentsServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
-const String chatServer = "https://3.7.66.245:3000";
-const String momentsServer = "https://3.7.66.245:3007";
-const String websocketUrl = "https://3.7.66.245:8080";
+// const String chatServer = "https://3.7.66.245:3000";
+// const String momentsServer = "http://3.7.66.245:3007";
+// const String websocketUrl = "http://3.7.66.245:8080";
 
-// The below represents the server address of the server running the socket.io server
 // const String websocketUrl = "https://v9nm4hsv-8080.asse.devtunnels.ms";
-// const String websocketUrl = "https://rkncpgkx-8080.inc1.devtunnels.ms";
+const String websocketUrl = "https://rkncpgkx-8080.inc1.devtunnels.ms";
 
 OverlayEntry? entry;
 Offset offset = Offset(220.sp, 600.sp);

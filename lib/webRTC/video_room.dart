@@ -6,6 +6,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:gif/gif.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/screens/audio_page.dart';
@@ -26,7 +27,7 @@ class VideoRoom extends StatefulWidget {
   State<VideoRoom> createState() => _VideoRoomState();
 }
 
-class _VideoRoomState extends State<VideoRoom> {
+class _VideoRoomState extends State<VideoRoom> with TickerProviderStateMixin {
   final _controller = TextEditingController();
 
   @override
@@ -1181,6 +1182,9 @@ class _VideoRoomState extends State<VideoRoom> {
                                 color: Colors.black45,
                               ),
                               suffixIcon: GestureDetector(
+                                onTap:(){
+                                    gifBottom(context);
+                                },
                                   child: Image.asset('assets/smile.png')),
                               contentPadding: EdgeInsets.symmetric(
                                 horizontal: width / 30,
@@ -1273,5 +1277,135 @@ class _VideoRoomState extends State<VideoRoom> {
         );
       },
     );
+  } gifBottom(BuildContext context) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          IconData selectedIcon = Icons.animation_rounded;
+          return Scaffold(
+              bottomNavigationBar: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  // GestureDetector(
+                  //     onTap: () {
+                  //       setState(() {
+                  //         Navigator.pop(context);
+                  //         emojiShowing = !emojiShowing;
+                  //       });
+                  //     },
+                  //     child: const Icon(Icons.emoji_emotions)),
+                  GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedIcon = Icons.animation_rounded;
+                        });
+                      },
+                      child: const Icon(Icons.animation_rounded)),
+                  // GestureDetector(
+                  //     onTap: () {
+                  //       setState(() {
+                  //         selectedIcon = Icons.gif;
+                  //       });
+                  //     },
+                  //     child: const Icon(Icons.gif)),
+                  // GestureDetector(
+                  //     onTap: () {
+                  //       setState(() {
+                  //         selectedIcon = Icons.gif_box;
+                  //       });
+                  //     },
+                  //     child: const Icon(Icons.gif_box)),
+                  // GestureDetector(
+                  //     onTap: () {
+                  //       setState(() {
+                  //         selectedIcon = Icons.gif_box_sharp;
+                  //       });
+                  //     },
+                  //     child: const Icon(Icons.gif_box_sharp)),
+                  // GestureDetector(
+                  //     onTap: () {
+                  //       setState(() {
+                  //         selectedIcon = Icons.gif_outlined;
+                  //       });
+                  //     },
+                  //     child: const Icon(Icons.gif_outlined)),
+                ],
+              ),
+              appBar: AppBar(
+                title: const Text(
+                  'Choose an option:',
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                ),
+              ),
+              body: buildBody(selectedIcon));
+        });
+  }
+
+  buildBody(IconData selectedIcon) {
+    // if (selectedIcon == Icons.gif) {
+    //   return const Center(
+    //     child: Text(
+    //       'Hello World for GIF',
+    //       style: TextStyle(fontSize: 20.0),
+    //     ),
+    //   );
+    // } else if (selectedIcon == Icons.gif_box) {
+    //   return const Center(
+    //     child: Text(
+    //       'Hello World for GIF Box',
+    //       style: TextStyle(fontSize: 20.0),
+    //     ),
+    //   );
+    // } else if (selectedIcon == Icons.gif_box_sharp) {
+    //   return const Center(
+    //     child: Text(
+    //       'Hello World for GIF Box Sharp',
+    //       style: TextStyle(fontSize: 20.0),
+    //     ),
+    //   );
+    // } else if (selectedIcon == Icons.gif_outlined) {
+    //   return const Center(
+    //     child: Text(
+    //       'Hello World for GIF Outlined',
+    //       style: TextStyle(fontSize: 20.0),
+    //     ),
+    //   );
+    // } else {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: GridView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 4,
+          crossAxisSpacing: 8.0,
+          mainAxisSpacing: 8.0,
+        ),
+        itemCount: gifList.length, // Replace with your item count
+        itemBuilder: (BuildContext context, int index) {
+          return GestureDetector(
+            onTap: () {
+              sendMessage(
+                "\$#${currentUser.id.toString()}_$index",
+                widget.room.id,
+              );
+              Navigator.of(context).pop();
+            },
+            child: Gif(
+              fps: 30,
+              controller: GifController(
+                vsync: this,
+              ),
+              repeat: ImageRepeat.repeat,
+              autostart: Autostart.loop,
+              image: AssetImage(
+                gifList[index],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+    // }
   }
 }
