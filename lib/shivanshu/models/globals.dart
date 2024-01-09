@@ -7,6 +7,8 @@ import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/wave/wave_painter.dart';
 
+import 'package:gif/gif.dart';
+
 /// Instead of creating multiple instances of the same object
 /// I created then altogether here
 final auth = FirebaseAuth.instance;
@@ -78,4 +80,50 @@ void showOverlay(context, Widget widget) {
   });
   final overlay = Overlay.of(context);
   overlay.insert(entry!);
+}
+
+OverlayEntry? entry1;
+
+void showImages(
+    String imageUrl, BuildContext context, GifController controller) {
+  entry1 = OverlayEntry(builder: (context) {
+    return GestureDetector(
+      onDoubleTap: () {
+        entry1!.remove();
+      },
+      onTap: () {
+        entry1!.remove();
+      },
+      child: Card(
+        color: Colors.transparent,
+        elevation: 0,
+        child: Container(
+          height: 100.sp,
+          width: 100.sp,
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            border: Border.all(
+              color: Colors.transparent,
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(50),
+          ),
+          child: Gif(
+            repeat: ImageRepeat.repeat,
+            autostart: Autostart.loop,
+            fps: 30,
+            controller: controller,
+            image: const AssetImage('assets/gifsticker/1.gif'),
+          ),
+        ),
+      ),
+    );
+  });
+
+  final overlay1 = Overlay.of(context);
+  overlay1.insert(entry1!);
+
+  Future.delayed(const Duration(seconds: 2), () {
+    entry1!.remove();
+  });
 }

@@ -78,7 +78,6 @@ class _MomentsState extends State<Moments> {
                         style: TextStyle(
                           fontSize: height / 50,
                           fontWeight: FontWeight.bold,
-                          // letterSpacing: 2,
                           color: Colors.grey,
                         ),
                       ),
@@ -87,7 +86,6 @@ class _MomentsState extends State<Moments> {
                         style: TextStyle(
                           fontSize: height / 50,
                           fontWeight: FontWeight.bold,
-                          // letterSpacing: 2,
                           color: Colors.grey,
                         ),
                       ),
