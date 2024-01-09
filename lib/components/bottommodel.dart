@@ -1,4 +1,3 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:spinner_try/components/common_elevatedButton.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
@@ -575,9 +574,10 @@ class _NewBottomModelState extends State<NewBottomModel> {
                 itemCount: hotAssest.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 12,
+                  mainAxisExtent: 80,
                 ),
+                shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return CommonElevatedButton(
                       image: hotAssest[index],
@@ -623,6 +623,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
+                  mainAxisExtent: 80,
                 ),
                 itemBuilder: (context, index) {
                   return CommonElevatedButton(
@@ -669,6 +670,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
+                  mainAxisExtent: 80,
                 ),
                 itemBuilder: (context, index) {
                   return CommonElevatedButton(
@@ -716,6 +718,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
+                  mainAxisExtent: 80,
                 ),
                 itemBuilder: (context, index) {
                   return CommonElevatedButton(
@@ -762,6 +765,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
+                  mainAxisExtent: 80,
                 ),
                 itemBuilder: (context, index) {
                   return CommonElevatedButton(
@@ -808,6 +812,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
+                  mainAxisExtent: 80,
                 ),
                 itemBuilder: (context, index) {
                   return CommonElevatedButton(

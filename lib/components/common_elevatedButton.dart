@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:spinner_try/shivanshu/utils.dart';
 
-class CommonElevatedButton extends StatelessWidget {
+class CommonElevatedButton extends StatefulWidget {
   final String image;
   final String diamond;
   final String text;
-  final Function onPressed;
+  final Function() onPressed;
   const CommonElevatedButton(
       {super.key,
       required this.image,
@@ -13,33 +14,46 @@ class CommonElevatedButton extends StatelessWidget {
       required this.onPressed});
 
   @override
+  State<CommonElevatedButton> createState() => _CommonElevatedButtonState();
+}
+
+class _CommonElevatedButtonState extends State<CommonElevatedButton> {
+  @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed(),
+      onPressed: widget.onPressed,
       style: ElevatedButton.styleFrom(
         elevation: 0,
+        backgroundColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        backgroundColor: Colors.transparent,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Image.asset(image, height: 90),
+          Image.asset(
+            widget.image,
+            height: 100.sp,
+            width: 100.sp,
+          ),
           Text(
-            text,
-            style: const TextStyle(color: Colors.white, fontSize: 15),
+            widget.text,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15.sp,
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset("assets/diamond.png", height: 15),
-              const SizedBox(
-                width: 5,
+              Image.asset(
+                "assets/diamond.png",
+                height: 10.sp,
               ),
               Text(
-                diamond,
+                widget.diamond,
                 style: const TextStyle(
                   color: Colors.grey,
                 ),
