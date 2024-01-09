@@ -1168,7 +1168,7 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                     onPressed: () {
                       showMsg(context, "In Developement");
                     },
-                    icon: Image.asset('assets/game_logo.png'),
+                    icon: Image.asset('assets/game_logo.png' ,height: 20.sp,),
                   ),
                   IconButton(
                     style: IconButton.styleFrom(
