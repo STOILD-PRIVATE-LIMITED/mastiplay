@@ -21,9 +21,9 @@ class _NewBottomModelState extends State<NewBottomModel> {
     'Hot',
     'Lucky',
     'Vip',
+    'Luxury',
     'Events',
     'Couple',
-    'Luxury'
   ];
   final List<String> imageAssest = [
     "assets/stickers/1.png",
@@ -67,6 +67,11 @@ class _NewBottomModelState extends State<NewBottomModel> {
     "assets/stickers/11.png",
     "assets/stickers/14.png",
   ];
+  final List<String> luckyAsset = [];
+  final List<String> vipAsset = [];
+  final List<String> eventsAsset = [];
+  final List<String> coupleAsset = [];
+
   int currentPageIndex = 0;
 
   @override
@@ -563,224 +568,188 @@ class _NewBottomModelState extends State<NewBottomModel> {
       );
     }
     if (category == "Lucky") {
-      return GridView.count(
-          crossAxisCount: 3,
-          padding: const EdgeInsets.all(4.0),
+      return NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification scrollInfo) {
+          if (scrollInfo.metrics.axis == Axis.horizontal) {
+            double maxScroll = scrollInfo.metrics.maxScrollExtent;
+            double currentScroll = scrollInfo.metrics.pixels;
+            double scrollPercentage = currentScroll / maxScroll;
+            _updateProgress(scrollPercentage);
+          }
+          return false;
+        },
+        child: Stack(
           children: [
-            CommonElevatedButton(
-              image: imageAssest[8],
-              diamond: '10',
-              text: 'Lucky',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[9],
-              diamond: '10',
-              text: 'Lucky',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[10],
-              diamond: '10',
-              text: 'Lucky',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[11],
-              diamond: '10',
-              text: 'Lucky',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[12],
-              diamond: '10',
-              text: 'Lucky',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[13],
-              diamond: '10',
-              text: 'Lucky',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[14],
-              diamond: '10',
-              text: 'Lucky',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[15],
-              diamond: '10',
-              text: 'Lucky',
-              onPressed: () {},
-            ),
-          ]);
+            GridView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.all(4.0),
+                itemCount: luckyAsset.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                ),
+                itemBuilder: (context, index) {
+                  return CommonElevatedButton(
+                      image: luckyAsset[index],
+                      diamond: '10',
+                      text: 'Lucky',
+                      onPressed: () {});
+                }),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                width: 75,
+                child: LinearProgressIndicator(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  value: _progress,
+                  backgroundColor: Colors.grey,
+                  valueColor:
+                      const AlwaysStoppedAnimation<Color>(Color(0xFFE05DD3)),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
     }
     if (category == "Vip") {
-      return GridView.count(
-          crossAxisCount: 3,
-          padding: const EdgeInsets.all(4.0),
+      return NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification scrollInfo) {
+          if (scrollInfo.metrics.axis == Axis.horizontal) {
+            double maxScroll = scrollInfo.metrics.maxScrollExtent;
+            double currentScroll = scrollInfo.metrics.pixels;
+            double scrollPercentage = currentScroll / maxScroll;
+            _updateProgress(scrollPercentage);
+          }
+          return false;
+        },
+        child: Stack(
           children: [
-            CommonElevatedButton(
-              image: imageAssest[16],
-              diamond: '10',
-              text: 'Vip',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[17],
-              diamond: '10',
-              text: 'Vip',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[18],
-              diamond: '10',
-              text: 'Vip',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[0],
-              diamond: '10',
-              text: 'Vip',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[0],
-              diamond: '10',
-              text: 'Vip',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[1],
-              diamond: '10',
-              text: 'Vip',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[2],
-              diamond: '10',
-              text: 'Vip',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[3],
-              diamond: '10',
-              text: 'Vip',
-              onPressed: () {},
-            ),
-          ]);
+            GridView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.all(4.0),
+                itemCount: vipAsset.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                ),
+                itemBuilder: (context, index) {
+                  return CommonElevatedButton(
+                      image: vipAsset[index],
+                      diamond: '10',
+                      text: 'VIP',
+                      onPressed: () {});
+                }),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                width: 75,
+                child: LinearProgressIndicator(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  value: _progress,
+                  backgroundColor: Colors.grey,
+                  valueColor:
+                      const AlwaysStoppedAnimation<Color>(Color(0xFFE05DD3)),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
     }
     if (category == "Events") {
-      return GridView.count(
-          crossAxisCount: 3,
-          padding: const EdgeInsets.all(4.0),
+      return NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification scrollInfo) {
+          if (scrollInfo.metrics.axis == Axis.horizontal) {
+            double maxScroll = scrollInfo.metrics.maxScrollExtent;
+            double currentScroll = scrollInfo.metrics.pixels;
+            double scrollPercentage = currentScroll / maxScroll;
+            _updateProgress(scrollPercentage);
+          }
+          return false;
+        },
+        child: Stack(
           children: [
-            CommonElevatedButton(
-              image: imageAssest[4],
-              diamond: '10',
-              text: 'Events',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[5],
-              diamond: '10',
-              text: 'Events',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[6],
-              diamond: '10',
-              text: 'Events',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[7],
-              diamond: '10',
-              text: 'Events',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[8],
-              diamond: '10',
-              text: 'Events',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[9],
-              diamond: '10',
-              text: 'Events',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[10],
-              diamond: '10',
-              text: 'Events',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[11],
-              diamond: '10',
-              text: 'Events',
-              onPressed: () {},
-            ),
-          ]);
+            GridView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.all(4.0),
+                itemCount: eventsAsset.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                ),
+                itemBuilder: (context, index) {
+                  return CommonElevatedButton(
+                      image: eventsAsset[index],
+                      diamond: '10',
+                      text: 'Events',
+                      onPressed: () {});
+                }),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                width: 75,
+                child: LinearProgressIndicator(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  value: _progress,
+                  backgroundColor: Colors.grey,
+                  valueColor:
+                      const AlwaysStoppedAnimation<Color>(Color(0xFFE05DD3)),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
     }
     if (category == "Couple") {
-      return GridView.count(
-          crossAxisCount: 3,
-          padding: const EdgeInsets.all(4.0),
+      return NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification scrollInfo) {
+          if (scrollInfo.metrics.axis == Axis.horizontal) {
+            double maxScroll = scrollInfo.metrics.maxScrollExtent;
+            double currentScroll = scrollInfo.metrics.pixels;
+            double scrollPercentage = currentScroll / maxScroll;
+            _updateProgress(scrollPercentage);
+          }
+          return false;
+        },
+        child: Stack(
           children: [
-            CommonElevatedButton(
-              image: imageAssest[0],
-              diamond: '10',
-              text: 'Luxury',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[1],
-              diamond: '10',
-              text: 'Luxury',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[2],
-              diamond: '10',
-              text: 'Luxury',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[3],
-              diamond: '10',
-              text: 'Luxury',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[4],
-              diamond: '10',
-              text: 'Luxury',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[5],
-              diamond: '10',
-              text: 'Luxury',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[6],
-              diamond: '10',
-              text: 'Luxury',
-              onPressed: () {},
-            ),
-            CommonElevatedButton(
-              image: imageAssest[7],
-              diamond: '10',
-              text: 'Luxury',
-              onPressed: () {},
-            ),
-          ]);
+            GridView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.all(4.0),
+                itemCount: coupleAsset.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                ),
+                itemBuilder: (context, index) {
+                  return CommonElevatedButton(
+                      image: coupleAsset[index],
+                      diamond: '10',
+                      text: 'Couple',
+                      onPressed: () {});
+                }),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                width: 75,
+                child: LinearProgressIndicator(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  value: _progress,
+                  backgroundColor: Colors.grey,
+                  valueColor:
+                      const AlwaysStoppedAnimation<Color>(Color(0xFFE05DD3)),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
     }
     if (category == "Luxury") {
       return GridView.builder(
