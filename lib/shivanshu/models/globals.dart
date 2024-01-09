@@ -21,7 +21,7 @@ late final SharedPreferences prefs;
 // KEEP ALL SERVER ADRESSES WITHOUT A TRAILING SLASH
 
 // Chat Server -----------------------------------------------------
-const String chatServer = "http://3.7.66.245:3000";
+const String chatServer = "http://3.7.66.245:3001";
 // const String chatServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
 // const String chatServer = "https://rkncpgkx-3000.inc1.devtunnels.ms";
 
@@ -108,12 +108,25 @@ void showImages(
             ),
             borderRadius: BorderRadius.circular(50),
           ),
-          child: Gif(
-            repeat: ImageRepeat.repeat,
-            autostart: Autostart.loop,
-            fps: 30,
-            controller: controller,
-            image: const AssetImage('assets/gifsticker/1.gif'),
+          child: EmptyEffect(
+            borderColor: Colors.pink,
+            outerMostCircleEndRadius: 100,
+            outerMostCircleStartRadius: 20,
+            numberOfCircles: 3,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: Image.asset(
+                imageUrl,
+                fit: BoxFit.cover,
+              ),
+            ),
+            // child: Gif(
+            //   repeat: ImageRepeat.repeat,
+            //   autostart: Autostart.loop,
+            //   fps: 30,
+            //   controller: controller,
+            //   image: const AssetImage('assets/gifsticker/1.gif'),
+            // ),
           ),
         ),
       ),

@@ -46,74 +46,72 @@ class _NewBottomModelState extends State<NewBottomModel>
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        leading: const SizedBox(
-          height: 0,
-          width: 0,
+        leading: const Icon(
+          Icons.abc,
+          size: 0,
         ),
-        centerTitle: false,
-        title: Row(
-          children: [
-            Container(
-              width: 170,
-              height: 60,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: ShapeDecoration(
-                color: Colors.grey,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40),
+        centerTitle: true,
+        title: Container(
+          width: 200.sp,
+          height: 60.sp,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: ShapeDecoration(
+            // color: Colors.grey,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
+            ),
+          ),
+          child: ListView.builder(
+            itemCount: widget.users.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return Container(
+                width: 40,
+                height: 40,
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+                decoration: ShapeDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(widget.users[index].photo.isEmpty
+                        ? 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'
+                        : widget.users[index].photo),
+                    fit: BoxFit.contain,
+                  ),
+                  shape: const CircleBorder(),
                 ),
-              ),
-              child: ListView.builder(
-                itemCount: widget.users.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: 40,
-                    height: 40,
-                    margin: const EdgeInsets.symmetric(horizontal: 5),
-                    decoration: ShapeDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(widget.users[index].photo.isEmpty
-                            ? 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'
-                            : widget.users[index].photo),
-                        fit: BoxFit.contain,
-                      ),
-                      shape: const CircleBorder(),
+              );
+            },
+          ),
+        ),
+        actions: [
+          Container(
+            width: 70,
+            alignment: Alignment.center,
+            child: DropdownButton<String>(
+                isExpanded: true,
+                underline: const SizedBox(),
+                icon: Image.asset(
+                  'assets/dropdownimage.png',
+                  height: 10,
+                ),
+                onChanged: (String? value) {
+                  setState(() {
+                    selectedValue = value!;
+                  });
+                },
+                items: value.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: const TextStyle(fontSize: 10),
                     ),
                   );
-                },
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Container(
-              width: 70,
-              alignment: Alignment.center,
-              child: DropdownButton<String>(
-                  isExpanded: true,
-                  underline: const SizedBox(),
-                  icon: Image.asset(
-                    'assets/dropdownimage.png',
-                    height: 10,
-                  ),
-                  onChanged: (String? value) {
-                    setState(() {
-                      selectedValue = value!;
-                    });
-                  },
-                  items: value.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: const TextStyle(fontSize: 10),
-                      ),
-                    );
-                  }).toList()),
-            ),
-          ],
-        ),
+                }).toList()),
+          ),
+          const SizedBox(
+            width: 5,
+          )
+        ],
         bottom: PreferredSize(
           preferredSize: Size(width, 30.sp),
           child: Row(
