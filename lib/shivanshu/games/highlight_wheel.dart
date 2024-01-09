@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:spinner_try/shivanshu/models/room.dart';
 
 class HighlightWheel extends StatefulWidget {
   HighlightWheel({
@@ -104,35 +103,35 @@ class _HighlightWheelState extends State<HighlightWheel>
               );
             },
           ),
-          Timer(
-            startTime: DateTime.now(),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 30,
-            ),
-          ),
-          // Positioned(
-          //   // left: widget.radius - 20,
-          //   // top: widget.radius - 20,
-          //   child: IconButton(
-          //     onPressed: () {
-          //       _animation = Tween<double>(
-          //         begin: 0,
-          //         end: widget.random.nextDouble() * pi * 2 +
-          //             2 * pi * widget.minRotations,
-          //       ).animate(
-          //         CurvedAnimation(
-          //           parent: _controller,
-          //           curve: Curves.easeInOut,
-          //         ),
-          //       );
-          //       _controller.reset();
-          //       _controller.forward();
-          //     },
+          // Timer(
+          //   startTime: DateTime.now(),
+          //   style: const TextStyle(
           //     color: Colors.white,
-          //     icon: const Icon(Icons.rotate_right),
+          //     fontSize: 30,
           //   ),
           // ),
+          Positioned(
+            // left: widget.radius - 20,
+            // top: widget.radius - 20,
+            child: IconButton(
+              onPressed: () {
+                _animation = Tween<double>(
+                  begin: 0,
+                  end: widget.random.nextDouble() * pi * 2 +
+                      2 * pi * widget.minRotations,
+                ).animate(
+                  CurvedAnimation(
+                    parent: _controller,
+                    curve: Curves.easeInOut,
+                  ),
+                );
+                _controller.reset();
+                _controller.forward();
+              },
+              color: Colors.white,
+              icon: const Icon(Icons.rotate_right),
+            ),
+          ),
         ],
       ),
     );
