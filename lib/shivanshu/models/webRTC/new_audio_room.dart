@@ -744,6 +744,7 @@ class _NewAudioRoomState extends State<NewAudioRoom>
       builder: (context) {
         return NewBottomModel(
           users: users,
+          room: widget.room
         );
       },
     );

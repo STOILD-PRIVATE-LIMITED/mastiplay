@@ -25,8 +25,9 @@ const String chatServer = "http://3.7.66.245:3001";
 
 // Moments Server --------------------------------------------------
 // const String momentsServer = "https://92v8xmgw-3007.inc1.devtunnels.ms";
-const String momentsServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
-// const String momentsServer = "http://3.7.66.245:3007";
+// const String momentsServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
+const String momentsServer = "http://3.7.66.245:3007";
+// const String momentsServer = "https://92v8xmgw-3007.inc1.devtunnels.ms";
 // const String momentsServer = "https://rkncpgkx-3007.inc1.devtunnels.ms";
 
 // WebRTC Server --------------------------------------------------
