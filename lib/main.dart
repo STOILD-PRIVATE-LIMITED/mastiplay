@@ -70,8 +70,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'assets/fontsSofiaProRegular.ttf',
       ),
-      // home: const NewAuth(),
-      home: const SpinnerPage(),
+      home: const NewAuth(),
+      // home: const SpinnerPage(),a
     );
   }
 }
