@@ -10,6 +10,7 @@ import 'package:spinner_try/screen/profile_edit.dart';
 import 'package:spinner_try/screen/setting.dart';
 import 'package:spinner_try/screen/store.dart';
 import 'package:spinner_try/shivanshu/admin_panel/admin_panel.dart';
+import 'package:spinner_try/shivanshu/games/spinner_page.dart';
 import 'package:spinner_try/shivanshu/models/agency/agency.dart';
 import 'package:spinner_try/shivanshu/models/agent/agent.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
@@ -730,6 +731,54 @@ class ProfileScreen extends StatelessWidget {
                               height: 35,
                             ),
                             const Text('About'),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // if (kDebugMode)
+                    InkWell(
+                      onTap: () {
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          barrierColor: Colors.black54,
+                          builder: (context) {
+                            return const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 150.0),
+                              child: SpinnerPage(),
+                            );
+                          },
+                        );
+                        // showGamePopup(
+                        //     context,
+                        //     SizedBox(
+                        //       height: height / 2,
+                        //       child: const Card(child: SpinnerPage()),
+                        //     ));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.white,
+                          image: const DecorationImage(
+                            image: AssetImage('assets/frame/Frame 8.png'),
+                            fit: BoxFit.cover,
+                          ),
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
+                        ),
+                        child: MyColumn(
+                          children: [
+                            Image.asset(
+                              "assets/info 2.png",
+                              width: 30,
+                              height: 35,
+                            ),
+                            const Text(
+                              'Spinner Game',
+                              textAlign: TextAlign.center,
+                            ),
                           ],
                         ),
                       ),

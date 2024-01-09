@@ -16,7 +16,6 @@ import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/screens/gender_screen.dart';
 import 'package:spinner_try/shivanshu/screens/home_live.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
-import 'package:spinner_try/shivanshu/widgets/highlight_wheel.dart';
 import 'package:spinner_try/user_model.dart';
 
 import 'firebase_options.dart';
@@ -70,8 +69,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'assets/fontsSofiaProRegular.ttf',
       ),
-      // home: const NewAuth(),
-      home: const SpinnerPage(),
+      home: const NewAuth(),
+      // home: const SpinnerPage(),
     );
   }
 }
@@ -207,61 +206,6 @@ class _NewAuthState extends State<NewAuth> {
         }
         return const Login();
       },
-    );
-  }
-}
-
-class SpinnerPage extends StatelessWidget {
-  const SpinnerPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final animals = ['🐰', '🐱', '🐶', '🐵', '🐬', '🐼', '🦅', '🦁'];
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/bg_img.webp'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Center(
-          child: HighlightWheel(
-            childWidth: 40,
-            childHeight: 40,
-            minRotations: 0.5,
-            duration: 10,
-            highlightedItemBuilder: (index) {
-              return CircleAvatar(
-                backgroundColor: Colors.red,
-                child: Text(
-                  animals[index],
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              );
-            },
-            onComplete: (index) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('You got ${animals[index]}'),
-                ),
-              );
-            },
-            items: animals
-                .map(
-                  (e) => CircleAvatar(
-                    child: Text(
-                      e,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
-        ),
-      ),
     );
   }
 }

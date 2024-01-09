@@ -68,6 +68,9 @@ flutter:
     - assets/back/
     - assets/frame/
     - assets/stickers/
+    - assets/games/
+    - assets/games/animals/
+    - assets/games/menu_buttons/
   fonts:
     - family: Sofia Pro
       fonts:
