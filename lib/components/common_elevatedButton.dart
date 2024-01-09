@@ -22,21 +22,28 @@ class CommonElevatedButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
         ),
         backgroundColor: Colors.transparent,
-        minimumSize: const Size(400, 400),
-        maximumSize: const Size(400, 400),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(image, height: 70),
+          Image.asset(image, height: 90),
           Text(
             text,
             style: const TextStyle(color: Colors.white, fontSize: 15),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset("assets/diamond.png", height: 10),
-              Text(diamond),
+              Image.asset("assets/diamond.png", height: 15),
+              const SizedBox(
+                width: 5,
+              ),
+              Text(
+                diamond,
+                style: const TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
             ],
           )
         ],
