@@ -81,10 +81,13 @@ class NewAuth extends StatefulWidget {
   State<NewAuth> createState() => _NewAuthState();
 }
 
+BuildContext? newAuthPagecontext;
+
 class _NewAuthState extends State<NewAuth> {
   @override
   void initState() {
     super.initState();
+    newAuthPagecontext = context;
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       final messageData = message.data['message'];
       final msg = MessageData.fromJson(jsonDecode(messageData));
@@ -95,6 +98,12 @@ class _NewAuthState extends State<NewAuth> {
         _load();
       }
     });
+  }
+
+  @override
+  void dispose() {
+    newAuthPagecontext = null;
+    super.dispose();
   }
 
   bool _loading = false;

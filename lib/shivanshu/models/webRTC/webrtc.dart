@@ -211,7 +211,7 @@ class WebRTCRoom {
               {
                 'urls': [
                   'stun:stun1.l.google.com:19302',
-                  // 'stun:stun2.l.google.com:19302'
+                  'stun:stun2.l.google.com:19302'
                 ]
               }
             ]
@@ -240,6 +240,7 @@ class WebRTCRoom {
           peerId: RTCVideoRenderer(),
         });
         await _remoteRTCVideoRenderers[peerId]!.initialize();
+        log("event.streams.length: ${event.streams.length}");
         _remoteRTCVideoRenderers[peerId]!.srcObject = event.streams[0];
       } else {
         await _remoteRTCVideoRenderers[peerId]!.initialize();
@@ -448,9 +449,19 @@ class WebRTCRoom {
 
   void addAudioStream(MediaStream mediaStream) {
     mediaStream.getTracks().forEach((track) {
-      for (var element in _peers.entries) {
-        _peers[element.key]!.addTrack(track, mediaStream);
-      }
+      log("Adding Stream Track: $track");
+      // _peers.forEach((key, value) {
+      //   value.removeStream(_localStream!);
+      // });
+      // _localStream!.getAudioTracks().forEach((element) {
+      //   _localStream!.removeTrack(element);
+      // });
+      // _localStream!.addTrack(track);
+      mediaStream.getTracks().forEach((track) {
+        _peers.forEach((key, value) {
+          value.addTrack(track, mediaStream);
+        });
+      });
     });
   }
 }

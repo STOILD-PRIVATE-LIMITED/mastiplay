@@ -274,7 +274,12 @@ Future<String?> askUser(
     if (custom != null)
       ...custom.entries.map(
         (entry) => TextButton.icon(
-          label: Text(entry.key.toPascalCase()),
+          label: Text(
+            entry.key.toPascalCase(),
+            style: TextStyle(
+              color: entry.value.color,
+            ),
+          ),
           onPressed: () {
             Navigator.of(context).pop(entry.key);
           },

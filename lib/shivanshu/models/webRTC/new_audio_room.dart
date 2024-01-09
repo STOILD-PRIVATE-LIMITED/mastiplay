@@ -2,14 +2,16 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as math;
-import 'package:dropdown_button2/dropdown_button2.dart';
+
 import 'package:audioplayers/audioplayers.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:gif/gif.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
+import 'package:spinner_try/shivanshu/models/overlay_helper.dart';
 import 'package:spinner_try/shivanshu/models/room.dart';
 import 'package:spinner_try/shivanshu/models/webRTC/room_users.dart';
 import 'package:spinner_try/shivanshu/models/webRTC/webrtc.dart';
@@ -21,7 +23,8 @@ import 'package:video_player/video_player.dart';
 
 class NewAudioRoom extends StatefulWidget {
   final Room room;
-  const NewAudioRoom({super.key, required this.room});
+  bool connected;
+  NewAudioRoom({super.key, required this.room, this.connected = false});
 
   @override
   State<NewAudioRoom> createState() => _NewAudioRoomState();
@@ -29,7 +32,6 @@ class NewAudioRoom extends StatefulWidget {
 
 class _NewAudioRoomState extends State<NewAudioRoom>
     with TickerProviderStateMixin {
-  bool connected = false;
   Map<String, bool> isMuted = {};
   List<String?> seats = List.generate(8, (index) => null);
   final TextEditingController _controller = TextEditingController();
@@ -37,11 +39,14 @@ class _NewAudioRoomState extends State<NewAudioRoom>
   // final controllerr = PageController(initialPage: 0);
   List<Widget> items = [];
   List<UserModel> users = [];
+  late AudioPlayer _audioPlayer;
+  late MediaStream _mediaStream;
 
   @override
   void initState() {
     super.initState();
-    log("Initializing WebRTCRoom. This Should be called only once");
+    _audioPlayer = AudioPlayer();
+
     WebRTCRoom.instance.roomId = widget.room.id;
     WebRTCRoom.instance.isVideoOn = false;
     WebRTCRoom.instance.onSeatsChanged = (seats) {
@@ -81,7 +86,7 @@ class _NewAudioRoomState extends State<NewAudioRoom>
       if (context.mounted) {
         WebRTCRoom.instance.getUsers();
         setState(() {
-          connected = true;
+          widget.connected = true;
         });
       }
     };
@@ -127,7 +132,7 @@ class _NewAudioRoomState extends State<NewAudioRoom>
       }
     };
     // WebRTCRoom.instance.onExit = () => showMsg(context, "You exited!");
-    WebRTCRoom.instance.connectToServer(widget.room.id);
+    if (!widget.connected) WebRTCRoom.instance.connectToServer(widget.room.id);
 
     _controllerr = VideoPlayerController.asset('assets/videoo.mp4')
       ..initialize().then((_) {
@@ -164,7 +169,7 @@ class _NewAudioRoomState extends State<NewAudioRoom>
   void dispose() {
     _controller.dispose();
     _controllerr.dispose();
-    WebRTCRoom.instance.disconnect();
+    // WebRTCRoom.instance.disconnect();
     WebRTCRoom.instance.onSeatsChanged = null;
     WebRTCRoom.instance.onLocalStreamAdded = null;
     WebRTCRoom.instance.onRemoteRemoved = null;
@@ -248,9 +253,16 @@ class _NewAudioRoomState extends State<NewAudioRoom>
     return WillPopScope(
       onWillPop: () async {
         if (await askUser(context, 'Do you really want to exit the room?',
-                yes: true, no: true) !=
-            'yes') {
-          return false;
+                custom: {
+                  "exit": const Icon(Icons.close, color: Colors.red),
+                  "keep": const Icon(Icons.close_fullscreen_rounded,
+                      color: Colors.blue)
+                }) !=
+            'exit') {
+          if (context.mounted) {
+            await showBubble(context, widget.room);
+          }
+          return true;
         }
         WebRTCRoom.instance.disconnect();
         return true;
@@ -487,7 +499,7 @@ class _NewAudioRoomState extends State<NewAudioRoom>
                   ),
                 ),
               ),
-              body: connected
+              body: widget.connected
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
@@ -669,10 +681,10 @@ class _NewAudioRoomState extends State<NewAudioRoom>
                         playAudio();
                       },
                       onDoubleTap: () async {
-                        await audioPlayer.pause();
+                        await _audioPlayer.pause();
                       },
                       onLongPress: () async {
-                        await audioPlayer.stop();
+                        await _audioPlayer.stop();
                       },
                       child: Padding(
                         padding: EdgeInsets.only(left: 8.0.sp),
@@ -1079,7 +1091,6 @@ class _NewAudioRoomState extends State<NewAudioRoom>
 
   String filePath = '';
   // bool emojiShowing = false;
-  AudioPlayer audioPlayer = AudioPlayer();
 
   Future<void> playAudio() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -1090,13 +1101,13 @@ class _NewAudioRoomState extends State<NewAudioRoom>
     if (result != null) {
       final file = File(result.files.single.path!);
       Uint8List mp3Data = await file.readAsBytes();
-      MediaStream mediaStream = await navigator.mediaDevices.getUserMedia({
+      _mediaStream = await navigator.mediaDevices.getUserMedia({
         'audio': {
           'audioData': mp3Data,
         },
       });
-      await audioPlayer.play(DeviceFileSource(file.path));
-      WebRTCRoom.instance.addAudioStream(mediaStream);
+      await _audioPlayer.play(DeviceFileSource(file.path));
+      WebRTCRoom.instance.addAudioStream(_mediaStream);
     }
   }
 }

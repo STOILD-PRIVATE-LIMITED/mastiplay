@@ -50,6 +50,7 @@ dependencies:
   # emoji_picker_flutter: ^1.6.3
   wakelock_plus: ^1.1.4
   dropdown_button2: ^2.3.9
+  dash_bubble: ^2.0.0
 
 dev_dependencies:
   flutter_test:
