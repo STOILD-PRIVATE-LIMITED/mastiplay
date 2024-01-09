@@ -146,6 +146,7 @@ Future<List<Room>> getAllRooms(int limit, int start) async {
   return rooms;
 }
 
+// ignore: must_be_immutable
 class Timer extends StatefulWidget {
   DateTime? startTime;
   TextStyle? style;

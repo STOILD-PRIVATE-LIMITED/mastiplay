@@ -53,10 +53,7 @@ Future<void> showBubble(BuildContext context, Room room) async {
         } else {
           navigatorPush(
             newAuthPagecontext!,
-            NewAudioRoom(
-              room: room,
-              connected: true,
-            ),
+            NewAudioRoom(room: room),
           );
         }
       },

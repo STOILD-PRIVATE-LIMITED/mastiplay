@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class EmptyEffect extends StatefulWidget {
   Widget child;
   double outerMostCircleStartRadius;
@@ -45,6 +47,7 @@ class EmptyEffect extends StatefulWidget {
     delay = delay;
   }
   @override
+  // ignore: library_private_types_in_public_api
   _EmptyEffectState createState() => _EmptyEffectState();
 }
 

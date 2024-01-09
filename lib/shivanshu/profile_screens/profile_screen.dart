@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:spinner_try/screen/about.dart';
 import 'package:spinner_try/screen/agency_center.dart';
 import 'package:spinner_try/screen/agent_panel.dart';
-import 'package:spinner_try/screen/creator_page.dart';
 import 'package:spinner_try/screen/help_form.dart';
 import 'package:spinner_try/screen/inv_friends.dart';
 import 'package:spinner_try/screen/nobel_center.dart';

@@ -32,7 +32,7 @@ class _CallChoserState extends State<CallChoser> {
               .map(
                 (user) => DropdownMenuItem(
                   value: user.email,
-                  child: Text(user.name ?? user.email),
+                  child: Text(user.name),
                 ),
               )
               .toList(),
@@ -51,7 +51,7 @@ class _CallChoserState extends State<CallChoser> {
               launchUrl(Uri.parse("tel:+91${defaultUser.phoneNumber}"));
               final user = widget.users.firstWhere(
                   (element) => element.phoneNumber == defaultUser.phoneNumber);
-              showMsg(context, 'Calling ${user.name ?? user.email}');
+              showMsg(context, 'Calling ${user.name}');
             },
             icon: const Icon(Icons.call_rounded))
       ],

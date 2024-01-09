@@ -37,7 +37,14 @@ class WebRTCRoom {
     RTCVideoView myVideoView,
   )? builder;
 
-  WebRTCRoom._();
+  WebRTCRoom._() {
+    socket = io(
+        websocketUrl,
+        OptionBuilder()
+            .setTransports(['websocket'])
+            .disableAutoConnect()
+            .build());
+  }
 
   static final instance = WebRTCRoom._();
 
@@ -45,6 +52,7 @@ class WebRTCRoom {
   final _localRTCVideoRenderer = RTCVideoRenderer();
   MediaStream? _localStream;
   final Map<String, RTCPeerConnection> _peers = {};
+  final Map<String, RTCDataChannel> _dataChannels = {};
   final Map<String, RTCVideoRenderer> _remoteRTCVideoRenderers = {};
   bool isAudioOn = true, isVideoOn = true, isFrontCameraSelected = true;
 
@@ -220,6 +228,21 @@ class WebRTCRoom {
       ],
     );
     _peersData.addAll({peerId: userdata});
+    _peers[peerId]!
+        .createDataChannel('myDataChannel', RTCDataChannelInit())
+        .then((dataChannel) {
+      _dataChannels.addAll({peerId: dataChannel});
+      _dataChannels[peerId]!.onMessage = (RTCDataChannelMessage data) {
+        log("Data Channel Message: ${data.text}");
+      };
+      _dataChannels[peerId]!.messageStream.listen((event) {
+        log("Data Channel Message Stream: ${event.text}");
+      });
+      _dataChannels[peerId]!.onDataChannelState = (state) {
+        log('Data channel state: $state');
+        // You can handle channel state changes here
+      };
+    });
 
     log("Created local peer connection object peerId: $peerId");
     _peers[peerId]!.onIceCandidate = (RTCIceCandidate candidate) {
@@ -374,7 +397,6 @@ class WebRTCRoom {
       });
       await _localStream?.dispose();
       _localStream = null;
-      _peers.clear();
       for (final entry in _remoteRTCVideoRenderers.entries) {
         entry.value.srcObject?.getTracks().forEach((track) {
           track.stop();
@@ -393,6 +415,7 @@ class WebRTCRoom {
         _peers[peerId.key]!.close();
         _peers[peerId.key]!.dispose();
         _peers[peerId.key]!.restartIce();
+        _dataChannels[peerId.key]?.close();
         _peers.remove(peerId);
         _remoteRTCVideoRenderers[peerId]?.dispose();
         _remoteRTCVideoRenderers.remove(peerId);
@@ -447,21 +470,12 @@ class WebRTCRoom {
     onUsersChanged?.call(users);
   }
 
-  void addAudioStream(MediaStream mediaStream) {
-    mediaStream.getTracks().forEach((track) {
-      log("Adding Stream Track: $track");
-      // _peers.forEach((key, value) {
-      //   value.removeStream(_localStream!);
-      // });
-      // _localStream!.getAudioTracks().forEach((element) {
-      //   _localStream!.removeTrack(element);
-      // });
-      // _localStream!.addTrack(track);
-      mediaStream.getTracks().forEach((track) {
-        _peers.forEach((key, value) {
-          value.addTrack(track, mediaStream);
-        });
-      });
+  void addAudioData(String message) {
+    RTCDataChannelMessage data =
+        RTCDataChannelMessage.fromBinary(utf8.encode(message));
+    _dataChannels.forEach((key, value) {
+      log("sent data: ${data.text}");
+      value.send(data);
     });
   }
 }

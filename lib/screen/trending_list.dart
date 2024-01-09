@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spinner_try/shivanshu/widgets/another_tab_view.dart';
 
+// ignore: must_be_immutable
 class TrendingList extends StatefulWidget {
   int selectedTab = 0;
 

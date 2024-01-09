@@ -80,6 +80,7 @@ class _HighlightWheelState extends State<HighlightWheel>
       child: Stack(
         clipBehavior: Clip.none,
         fit: StackFit.loose,
+        alignment: Alignment.center,
         children: [
           Image.asset('assets/circle.png'),
           ...widget.items.map(
@@ -103,8 +104,8 @@ class _HighlightWheelState extends State<HighlightWheel>
             },
           ),
           Positioned(
-            left: widget.radius - 20,
-            top: widget.radius - 20,
+            // left: widget.radius - 20,
+            // top: widget.radius - 20,
             child: IconButton(
               onPressed: () {
                 _animation = Tween<double>(

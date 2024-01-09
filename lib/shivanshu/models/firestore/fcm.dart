@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:spinner_try/chat/models/chat.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/settings.dart';
 
@@ -28,7 +28,7 @@ Future<void> sendFCMToken(String fcmToken) async {
 Future<void> setupFCMTokenMangement() async {
   final notificationSettings =
       await FirebaseMessaging.instance.requestPermission(provisional: true);
-  print(
+  debugPrint(
       'User granted notification permission: ${notificationSettings.authorizationStatus}');
   if (notificationSettings.authorizationStatus == AuthorizationStatus.denied ||
       notificationSettings.authorizationStatus ==

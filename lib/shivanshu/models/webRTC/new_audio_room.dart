@@ -5,9 +5,7 @@ import 'dart:math' as math;
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:gif/gif.dart';
 import 'package:spinner_try/shivanshu/models/globals.dart';
 import 'package:spinner_try/shivanshu/models/overlay_helper.dart';
@@ -24,8 +22,7 @@ import '../../../components/bottommodel.dart';
 
 class NewAudioRoom extends StatefulWidget {
   final Room room;
-  bool connected;
-  NewAudioRoom({super.key, required this.room, this.connected = false});
+  const NewAudioRoom({super.key, required this.room});
 
   @override
   State<NewAudioRoom> createState() => _NewAudioRoomState();
@@ -41,17 +38,26 @@ class _NewAudioRoomState extends State<NewAudioRoom>
   List<Widget> items = [];
   List<UserModel> users = [];
   late AudioPlayer _audioPlayer;
-  late MediaStream _mediaStream;
+  bool _firstFetch = true;
 
   @override
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer();
-
-    WebRTCRoom.instance.roomId = widget.room.id;
-    WebRTCRoom.instance.isVideoOn = false;
+    if (!WebRTCRoom.instance.socket.connected) {
+      WebRTCRoom.instance.roomId = widget.room.id;
+      WebRTCRoom.instance.isVideoOn = false;
+    } else {
+      _firstFetch = false;
+    }
     WebRTCRoom.instance.onSeatsChanged = (seats) {
       log("SetState for function: onSeatsChanged");
+      if (_firstFetch) {
+        _firstFetch = false;
+        if (seats[0] == null) {
+          WebRTCRoom.instance.inviteUser(currentUser.id!, 0);
+        }
+      }
       if (context.mounted) {
         setState(() {
           this.seats = seats;
@@ -86,9 +92,7 @@ class _NewAudioRoomState extends State<NewAudioRoom>
       log("SetState for function: onConnect");
       if (context.mounted) {
         WebRTCRoom.instance.getUsers();
-        setState(() {
-          widget.connected = true;
-        });
+        WebRTCRoom.instance.getSeats();
       }
     };
     WebRTCRoom.instance.onConnectError = () {
@@ -133,16 +137,18 @@ class _NewAudioRoomState extends State<NewAudioRoom>
       }
     };
     // WebRTCRoom.instance.onExit = () => showMsg(context, "You exited!");
-    if (!widget.connected) WebRTCRoom.instance.connectToServer(widget.room.id);
+    if (!WebRTCRoom.instance.socket.connected) {
+      WebRTCRoom.instance.connectToServer(widget.room.id);
+    }
 
     _controllerr = VideoPlayerController.asset('assets/videoo.mp4')
       ..initialize().then((_) {
-        print("video initialized");
+        debugPrint("video initialized");
         _controllerr.play();
         _controllerr.setLooping(true);
         setState(() {});
       }).catchError((error) {
-        print("Error in video initialization: $error");
+        debugPrint("Error in video initialization: $error");
       });
   }
 
@@ -503,7 +509,7 @@ class _NewAudioRoomState extends State<NewAudioRoom>
                   ),
                 ),
               ),
-              body: widget.connected
+              body: WebRTCRoom.instance.socket.connected
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
@@ -796,7 +802,7 @@ class _NewAudioRoomState extends State<NewAudioRoom>
                 'userdata': currentUser.toJson(),
                 'gif': index,
               });
-              print(gifList[index]);
+              debugPrint(gifList[index]);
               Navigator.of(context).pop();
             },
             child: Gif(
@@ -828,14 +834,12 @@ class _NewAudioRoomState extends State<NewAudioRoom>
     );
     if (result != null) {
       final file = File(result.files.single.path!);
-      Uint8List mp3Data = await file.readAsBytes();
-      _mediaStream = await navigator.mediaDevices.getUserMedia({
-        'audio': {
-          'audioData': mp3Data,
-        },
-      });
       await _audioPlayer.play(DeviceFileSource(file.path));
-      WebRTCRoom.instance.addAudioStream(_mediaStream);
+      _audioPlayer.onPositionChanged.listen((position) async {
+        final chunk = await _audioPlayer.getCurrentPosition();
+        const encodedChunk = "Hello World";
+        WebRTCRoom.instance.addAudioData(encodedChunk);
+      });
     }
   }
 }
