@@ -19,6 +19,8 @@ import 'package:spinner_try/shivanshu/utils/loading_icon_button.dart';
 import 'package:spinner_try/user_model.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../components/common_elevatedButton.dart';
+
 class NewAudioRoom extends StatefulWidget {
   final Room room;
   const NewAudioRoom({super.key, required this.room});
@@ -719,6 +721,27 @@ class _NewAudioRoomState extends State<NewAudioRoom>
     );
   }
 
+  final List<String> imageAssest = [
+    "assets/stickers/1.png",
+    "assets/stickers/2.png",
+    "assets/stickers/3.png",
+    "assets/stickers/4.png",
+    "assets/stickers/5.png",
+    "assets/stickers/6.png",
+    "assets/stickers/7.png",
+    "assets/stickers/8.png",
+    "assets/stickers/9.png",
+    "assets/stickers/10.png",
+    "assets/stickers/11.png",
+    "assets/stickers/12.png",
+    "assets/stickers/13.png",
+    "assets/stickers/14.png",
+    "assets/stickers/15.png",
+    "assets/stickers/16.png",
+    "assets/stickers/17.png",
+    "assets/stickers/18.png",
+    "assets/stickers/19.png",
+  ];
   giftBottom(BuildContext context) {
     List<String> value = ['all in the room', 'all on mic'];
     String? selectedValue;
@@ -736,6 +759,58 @@ class _NewAudioRoomState extends State<NewAudioRoom>
       context: context,
       builder: (context) {
         return Scaffold(
+          appBar: AppBar(
+            leading: Container(height: 1),
+            centerTitle: false,
+            title: Row(
+              children: [
+                Container(
+                  width: 240,
+                  height: 60,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: ListView.builder(
+                    itemCount: users.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        width: 40,
+                        height: 40,
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        decoration: ShapeDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(users[index].photo.isEmpty
+                                ? 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'
+                                : users[index].photo),
+                            fit: BoxFit.contain,
+                          ),
+                          shape: const CircleBorder(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                DropdownButtonHideUnderline(
+                  child: DropdownButton2(
+                    customButton:
+                        Image.asset("assets/dropdownimage.png", height: 10),
+                    items: value
+                        .map(
+                          (item) => DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              item,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ],
+            ),
+          ),
           // body: Container(
           //   width: MediaQuery.of(context).size.width,
           //   clipBehavior: Clip.antiAlias,
@@ -760,58 +835,8 @@ class _NewAudioRoomState extends State<NewAudioRoom>
           //             borderRadius: BorderRadius.circular(20),
           //             color: const Color(0xFFA69F9F),
           //           ),
-          //           child: Row(
-          //             children: [
-          //               Container(
-          //                 width: 250,
-          //                 height: 60,
-          //                 padding: const EdgeInsets.symmetric(horizontal: 10),
-          //                 child: ListView.builder(
-          //                   itemCount: users.length,
-          //                   scrollDirection: Axis.horizontal,
-          //                   itemBuilder: (context, index) {
-          //                     return Container(
-          //                       width: 40,
-          //                       height: 40,
-          //                       margin:
-          //                           const EdgeInsets.symmetric(horizontal: 5),
-          //                       decoration: ShapeDecoration(
-          //                         image: DecorationImage(
-          //                           image: NetworkImage(users[index]
-          //                                   .photo
-          //                                   .isEmpty
-          //                               ? 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'
-          //                               : users[index].photo),
-          //                           fit: BoxFit.contain,
-          //                         ),
-          //                         shape: const CircleBorder(),
-          //                       ),
-          //                     );
-          //                   },
-          //                 ),
-          //               ),
-          //               const SizedBox(
-          //                 width: 10,
-          //               ),
-          //               DropdownButtonHideUnderline(
-          //                 child: DropdownButton2(
-          //                   customButton: Image.asset(
-          //                       "assets/dropdownimage.png",
-          //                       height: 10),
-          //                   items: value
-          //                       .map(
-          //                         (item) => DropdownMenuItem<String>(
-          //                           value: item,
-          //                           child: Text(
-          //                             item,
-          //                           ),
-          //                         ),
-          //                       )
-          //                       .toList(),
-          //                 ),
-          //               ),
-          //             ],
-          //           ),
+          //           child:
+
           //         ),
           //       ),
           //       Row(
@@ -921,39 +946,61 @@ class _NewAudioRoomState extends State<NewAudioRoom>
           //     ],
           //   ),
           // ),
-          body: PageView(
-            controller: PageController(initialPage: currentPageIndex),
-            onPageChanged: (index) {
-              setState(() {
-                currentPageIndex = index;
-              });
-            },
-            children: List.generate(
-                categories.length, (index) => buildPage(categories[index])),
+          body: Container(
+            width: MediaQuery.of(context).size.width,
+            clipBehavior: Clip.antiAlias,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment(-0.78, -0.63),
+                end: Alignment(0.78, 0.63),
+                colors: [
+                  Color(0xFF3E3B6F),
+                  Color(0xE22C2B3B),
+                  Color(0xFF090909)
+                ],
+              ),
+            ),
+            child: PageView(
+              controller: PageController(initialPage: currentPageIndex),
+              onPageChanged: (index) {
+                setState(() {
+                  currentPageIndex = index;
+                });
+              },
+              children: List.generate(
+                categories.length,
+                (index) => buildPage(
+                  categories[index],
+                ),
+              ),
+            ),
           ),
           extendBody: true,
           bottomNavigationBar: Card(
             color: Colors.transparent,
             child: Row(
               children: [
-                Row(
-                  children: [
-                    Image.asset("assets/diamond.png", height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text('${currentUser.diamonds}',
-                          style: const TextStyle(color: Colors.white)),
-                    ),
-                    Image.asset("assets/chevron down.png", height: 20),
-                  ],
+                SizedBox(
+                  width: 150.sp,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Image.asset("assets/diamond.png", height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text('${currentUser.diamonds}',
+                            style: const TextStyle(color: Colors.white)),
+                      ),
+                      Image.asset("assets/chevron down.png", height: 20),
+                    ],
+                  ),
                 ),
-                // Container()
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      width: 64,
-                      height: 30,
+                      width: 75.sp,
+                      height: 30.sp,
                       alignment: Alignment.center,
                       clipBehavior: Clip.antiAlias,
                       decoration: ShapeDecoration(
@@ -966,15 +1013,15 @@ class _NewAudioRoomState extends State<NewAudioRoom>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const Text(
+                          Text(
                             '1',
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 10,
+                              fontSize: 10.sp,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          const SizedBox(width: 13),
+                          SizedBox(width: 13.sp),
                           Container(
                             width: 25,
                             height: 25,
@@ -997,10 +1044,10 @@ class _NewAudioRoomState extends State<NewAudioRoom>
                         ],
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10.sp),
                     Container(
-                      width: 64,
-                      height: 30,
+                      width: 75.sp,
+                      height: 30.sp,
                       clipBehavior: Clip.antiAlias,
                       decoration: ShapeDecoration(
                         color: const Color(0xFFE05DD3),
@@ -1031,9 +1078,70 @@ class _NewAudioRoomState extends State<NewAudioRoom>
   }
 
   Widget buildPage(String category) {
-    return Container(
-      child: Text(category),
-    );
+    // return Text(category);
+    if (category == "Hot") {
+      return GridView.count(
+          crossAxisCount: 3,
+          padding: const EdgeInsets.all(4.0),
+          children: [
+            CommonElevatedButton(
+              image: imageAssest[0],
+              diamond: '10',
+              text: 'Hot',
+              onPressed: () {},
+            ),
+            CommonElevatedButton(
+              image: imageAssest[1],
+              diamond: '10',
+              text: 'Hot',
+              onPressed: () {},
+            ),
+            CommonElevatedButton(
+              image: imageAssest[2],
+              diamond: '10',
+              text: 'Hot',
+              onPressed: () {},
+            ),
+            CommonElevatedButton(
+              image: imageAssest[3],
+              diamond: '10',
+              text: 'Hot',
+              onPressed: () {},
+            ),
+            CommonElevatedButton(
+              image: imageAssest[4],
+              diamond: '10',
+              text: 'Hot',
+              onPressed: () {},
+            ),
+            CommonElevatedButton(
+              image: imageAssest[5],
+              diamond: '10',
+              text: 'Hot',
+              onPressed: () {},
+            ),
+            CommonElevatedButton(
+              image: imageAssest[6],
+              diamond: '10',
+              text: 'Hot',
+              onPressed: () {},
+            ),
+            CommonElevatedButton(
+              image: imageAssest[7],
+              diamond: '10',
+              text: 'Hot',
+              onPressed: () {},
+            ),
+            CommonElevatedButton(
+              image: imageAssest[8],
+              diamond: '10',
+              text: 'Hot',
+              onPressed: () {},
+            ),
+          ]);
+    } else {
+      return const Icon(Icons.email);
+    }
   }
 
   gifBottom(BuildContext context) {
