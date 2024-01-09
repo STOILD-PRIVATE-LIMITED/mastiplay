@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:spinner_try/components/common_elevatedButton.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 
+import '../shivanshu/models/game/gift.dart';
 import '../shivanshu/models/globals.dart';
+import '../shivanshu/models/room.dart';
 import '../user_model.dart';
 
 class NewBottomModel extends StatefulWidget {
   final List<UserModel> users;
-  const NewBottomModel({super.key, required this.users});
+  final Room room;
+  const NewBottomModel({super.key, required this.users, required this.room});
 
   @override
   State<NewBottomModel> createState() => _NewBottomModelState();
@@ -583,7 +586,13 @@ class _NewBottomModelState extends State<NewBottomModel> {
                       image: hotAssest[index],
                       diamond: '10',
                       text: 'Hot',
-                      onPressed: () {});
+                      onPressed: () async {
+                        sendGift(
+                          widget.room.admin!,
+                          currentUser.id!,
+                          10,
+                        );
+                      });
                 }),
             Align(
               alignment: Alignment.bottomCenter,
