@@ -512,11 +512,46 @@ class _NewBottomModelState extends State<NewBottomModel> {
     );
   }
 
-  double _progress = 0.0;
+  double _hotprogress = 0.0;
+  double _luckyprogress = 0.0;
+  double _vipprogress = 0.0;
+  double _luxuryprogress = 0.0;
+  double _eventsprogress = 0.0;
+  double _coupleprogress = 0.0;
 
-  void _updateProgress(double value) {
+  void _updateHotProgress(double value) {
     setState(() {
-      _progress = value;
+      _hotprogress = value;
+    });
+  }
+
+  void _updateLuckyProgress(double value) {
+    setState(() {
+      _luckyprogress = value;
+    });
+  }
+
+  void _updateVipProgress(double value) {
+    setState(() {
+      _vipprogress = value;
+    });
+  }
+
+  void _updateLuxuryProgress(double value) {
+    setState(() {
+      _luxuryprogress = value;
+    });
+  }
+
+  void _updateEventsProgress(double value) {
+    setState(() {
+      _eventsprogress = value;
+    });
+  }
+
+  void _updateCoupleProgress(double value) {
+    setState(() {
+      _coupleprogress = value;
     });
   }
 
@@ -528,7 +563,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
             double maxScroll = scrollInfo.metrics.maxScrollExtent;
             double currentScroll = scrollInfo.metrics.pixels;
             double scrollPercentage = currentScroll / maxScroll;
-            _updateProgress(scrollPercentage);
+            _updateHotProgress(scrollPercentage);
           }
           return false;
         },
@@ -556,7 +591,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
                 width: 75,
                 child: LinearProgressIndicator(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  value: _progress,
+                  value: _hotprogress,
                   backgroundColor: Colors.grey,
                   valueColor:
                       const AlwaysStoppedAnimation<Color>(Color(0xFFE05DD3)),
@@ -574,7 +609,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
             double maxScroll = scrollInfo.metrics.maxScrollExtent;
             double currentScroll = scrollInfo.metrics.pixels;
             double scrollPercentage = currentScroll / maxScroll;
-            _updateProgress(scrollPercentage);
+            _updateLuckyProgress(scrollPercentage);
           }
           return false;
         },
@@ -602,7 +637,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
                 width: 75,
                 child: LinearProgressIndicator(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  value: _progress,
+                  value: _luckyprogress,
                   backgroundColor: Colors.grey,
                   valueColor:
                       const AlwaysStoppedAnimation<Color>(Color(0xFFE05DD3)),
@@ -620,7 +655,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
             double maxScroll = scrollInfo.metrics.maxScrollExtent;
             double currentScroll = scrollInfo.metrics.pixels;
             double scrollPercentage = currentScroll / maxScroll;
-            _updateProgress(scrollPercentage);
+            _updateVipProgress(scrollPercentage);
           }
           return false;
         },
@@ -637,10 +672,11 @@ class _NewBottomModelState extends State<NewBottomModel> {
                 ),
                 itemBuilder: (context, index) {
                   return CommonElevatedButton(
-                      image: vipAsset[index],
-                      diamond: '10',
-                      text: 'VIP',
-                      onPressed: () {});
+                    image: vipAsset[index],
+                    diamond: '10',
+                    text: 'VIP',
+                    onPressed: () {},
+                  );
                 }),
             Align(
               alignment: Alignment.bottomCenter,
@@ -648,7 +684,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
                 width: 75,
                 child: LinearProgressIndicator(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  value: _progress,
+                  value: _vipprogress,
                   backgroundColor: Colors.grey,
                   valueColor:
                       const AlwaysStoppedAnimation<Color>(Color(0xFFE05DD3)),
@@ -666,7 +702,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
             double maxScroll = scrollInfo.metrics.maxScrollExtent;
             double currentScroll = scrollInfo.metrics.pixels;
             double scrollPercentage = currentScroll / maxScroll;
-            _updateProgress(scrollPercentage);
+            _updateEventsProgress(scrollPercentage);
           }
           return false;
         },
@@ -694,7 +730,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
                 width: 75,
                 child: LinearProgressIndicator(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  value: _progress,
+                  value: _eventsprogress,
                   backgroundColor: Colors.grey,
                   valueColor:
                       const AlwaysStoppedAnimation<Color>(Color(0xFFE05DD3)),
@@ -712,7 +748,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
             double maxScroll = scrollInfo.metrics.maxScrollExtent;
             double currentScroll = scrollInfo.metrics.pixels;
             double scrollPercentage = currentScroll / maxScroll;
-            _updateProgress(scrollPercentage);
+            _updateCoupleProgress(scrollPercentage);
           }
           return false;
         },
@@ -740,7 +776,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
                 width: 75,
                 child: LinearProgressIndicator(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  value: _progress,
+                  value: _coupleprogress,
                   backgroundColor: Colors.grey,
                   valueColor:
                       const AlwaysStoppedAnimation<Color>(Color(0xFFE05DD3)),
@@ -752,22 +788,51 @@ class _NewBottomModelState extends State<NewBottomModel> {
       );
     }
     if (category == "Luxury") {
-      return GridView.builder(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.all(4.0),
-          itemCount: luxuryAsset.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-          ),
-          itemBuilder: (context, index) {
-            return CommonElevatedButton(
-                image: luxuryAsset[index],
-                diamond: '10',
-                text: 'Luxury',
-                onPressed: () {});
-          });
-    } else {
-      return Container(alignment: Alignment.center, child: const Text("Empty"));
+      return NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification scrollInfo) {
+          if (scrollInfo.metrics.axis == Axis.horizontal) {
+            double maxScroll = scrollInfo.metrics.maxScrollExtent;
+            double currentScroll = scrollInfo.metrics.pixels;
+            double scrollPercentage = currentScroll / maxScroll;
+            _updateLuxuryProgress(scrollPercentage);
+          }
+          return false;
+        },
+        child: Stack(
+          children: [
+            GridView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.all(4.0),
+                itemCount: luxuryAsset.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                ),
+                itemBuilder: (context, index) {
+                  return CommonElevatedButton(
+                      image: luxuryAsset[index],
+                      diamond: '10',
+                      text: 'Couple',
+                      onPressed: () {});
+                }),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                width: 75,
+                child: LinearProgressIndicator(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  value: _luxuryprogress,
+                  backgroundColor: Colors.grey,
+                  valueColor:
+                      const AlwaysStoppedAnimation<Color>(Color(0xFFE05DD3)),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
     }
+    return Container(alignment: Alignment.center, child: const Text("Empty"));
   }
 }
