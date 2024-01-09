@@ -355,7 +355,11 @@ class WebRTCRoom {
     _localStream?.getAudioTracks().forEach((track) {
       track.enabled = isAudioOn;
     });
-    sendMessage("", roomId!, {'isAudioOn': isAudioOn});
+    sendMessage(
+      "",
+      roomId!,
+      {'isAudioOn': isAudioOn},
+    );
   }
 
   toggleCamera(bool value) {

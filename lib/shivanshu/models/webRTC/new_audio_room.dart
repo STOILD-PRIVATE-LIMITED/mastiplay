@@ -248,7 +248,7 @@ class _NewAudioRoomState extends State<NewAudioRoom>
                     onTap: () {
                       WebRTCRoom.instance
                           .toggleMic(!WebRTCRoom.instance.isAudioOn);
-                      showMsg(context, "Muted");
+                      // showMsg(context, "Muted");
                       setState(() {});
                     },
                     muted: isMuted[seats[i]] ?? false,
@@ -796,11 +796,10 @@ class _NewAudioRoomState extends State<NewAudioRoom>
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              WebRTCRoom.instance.sendMessage(null, widget.room.id, {
+              WebRTCRoom.instance.sendMessage(" ", widget.room.id, {
                 'userdata': currentUser.toJson(),
                 'gif': index,
               });
-              debugPrint(gifList[index]);
               Navigator.of(context).pop();
             },
             child: Gif(

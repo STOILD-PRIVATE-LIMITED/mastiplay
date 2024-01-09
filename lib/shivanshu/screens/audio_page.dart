@@ -1377,7 +1377,7 @@ class _AudioUserTileState extends State<AudioUserTile>
     with TickerProviderStateMixin {
   bool isMuted = false;
   GifController? gifController;
-  int _repeat = 2;
+  int _repeat = 1;
 
   @override
   void initState() {
@@ -1385,18 +1385,20 @@ class _AudioUserTileState extends State<AudioUserTile>
     gifController = GifController(
       vsync: this,
     );
-    gifController!.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _repeat--;
-        if (_repeat > 0) {
-          gifController!.repeat();
-        } else if (context.mounted) {
-          setState(() {
-            widget.gifIndex = null;
-          });
+    gifController!.addStatusListener(
+      (status) {
+        if (status == AnimationStatus.completed) {
+          _repeat--;
+          if (_repeat > 0) {
+            gifController!.repeat();
+          } else if (context.mounted) {
+            setState(() {
+              widget.gifIndex = null;
+            });
+          }
         }
-      }
-    });
+      },
+    );
   }
 
   @override
@@ -1433,11 +1435,11 @@ class _AudioUserTileState extends State<AudioUserTile>
                     : ProfileImage(user: widget.user),
                 if (widget.gifIndex != null)
                   Positioned(
-                    top: 18.sp,
-                    left: 14.sp,
+                    top: 14.sp,
+                    left: 19.sp,
                     child: SizedBox(
-                      height: 55.sp,
-                      width: 55.sp,
+                      height: 50.sp,
+                      width: 50.sp,
                       child: Gif(
                         fps: 30,
                         controller: gifController,
@@ -1453,7 +1455,19 @@ class _AudioUserTileState extends State<AudioUserTile>
                     ),
                   ),
                 if (widget.muted)
-                  const Icon(Icons.mic_off_outlined, color: Colors.white),
+                  const Positioned(
+                    bottom: 10,
+                    right: 15,
+                    child: CircleAvatar(
+                      radius: 10,
+                      backgroundColor: Colors.grey,
+                      child: Icon(
+                        Icons.mic_off_outlined,
+                        color: Colors.black,
+                        size: 14,
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
