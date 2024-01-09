@@ -748,10 +748,7 @@ class _NewAudioRoomState extends State<NewAudioRoom>
     return showModalBottomSheet(
       context: context,
       builder: (context) {
-        return NewBottomModel(
-          users: users,
-          room: widget.room
-        );
+        return NewBottomModel(users: users, room: widget.room);
       },
     );
   }

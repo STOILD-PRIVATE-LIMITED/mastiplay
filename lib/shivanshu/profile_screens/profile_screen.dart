@@ -26,6 +26,7 @@ import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/utils/profile_image.dart';
 import 'package:spinner_try/user_model.dart';
 
+import '../../screen/bd_center.dart';
 import '../../screen/creator_center.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -484,9 +485,28 @@ class ProfileScreen extends StatelessWidget {
                         title: const Text('User level center'),
                       ),
                     ),
-                    // const SizedBox(
-                    //   height: 10,
-                    // ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        image: DecorationImage(
+                          image: AssetImage('assets/back/7.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: ListTile(
+                        onTap: () {
+                          navigatorPush(context, const BDCenter());
+                        },
+                        leading: Image.asset(
+                          'assets/level up.png',
+                          width: 20,
+                        ),
+                        title: const Text('Bd Center'),
+                      ),
+                    ),
                   ],
                 ),
               ),

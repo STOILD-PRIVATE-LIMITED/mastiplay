@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gif/gif.dart';
 import 'package:spinner_try/components/common_elevatedButton.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 
@@ -16,7 +17,8 @@ class NewBottomModel extends StatefulWidget {
   State<NewBottomModel> createState() => _NewBottomModelState();
 }
 
-class _NewBottomModelState extends State<NewBottomModel> {
+class _NewBottomModelState extends State<NewBottomModel>
+    with TickerProviderStateMixin {
   String selectedValue = 'all in the room';
   List<String> value = ['all in the room', 'all on mic'];
   final List<String> categories = [
@@ -27,54 +29,15 @@ class _NewBottomModelState extends State<NewBottomModel> {
     'Events',
     'Couple',
   ];
-  final List<String> imageAssest = [
-    "assets/stickers/1.png",
-    "assets/stickers/2.png",
-    "assets/stickers/3.png",
-    "assets/stickers/4.png",
-    "assets/stickers/5.png",
-    "assets/stickers/6.png",
-    "assets/stickers/7.png",
-    "assets/stickers/8.png",
-    "assets/stickers/9.png",
-    "assets/stickers/10.png",
-    "assets/stickers/11.png",
-    "assets/stickers/12.png",
-    "assets/stickers/13.png",
-    "assets/stickers/14.png",
-    "assets/stickers/15.png",
-    "assets/stickers/16.png",
-    "assets/stickers/17.png",
-    "assets/stickers/18.png",
-    "assets/stickers/19.png",
-  ];
-  final List<String> hotAssest = [
-    "assets/stickers/1.png",
-    "assets/stickers/2.png",
-    "assets/stickers/3.png",
-    "assets/stickers/4.png",
-    "assets/stickers/5.png",
-    "assets/stickers/6.png",
-    "assets/stickers/7.png",
-    "assets/stickers/8.png",
-    "assets/stickers/12.png",
-    "assets/stickers/15.png",
-    "assets/stickers/16.png",
-    "assets/stickers/17.png",
-    "assets/stickers/18.png",
-    "assets/stickers/19.png",
-  ];
-  final List<String> luxuryAsset = [
-    "assets/stickers/10.png",
-    "assets/stickers/11.png",
-    "assets/stickers/14.png",
-  ];
-  final List<String> luckyAsset = [];
-  final List<String> vipAsset = [];
-  final List<String> eventsAsset = [];
-  final List<String> coupleAsset = [];
 
   int currentPageIndex = 0;
+
+  late GifController gifController;
+  @override
+  void initState() {
+    super.initState();
+    gifController = GifController(vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -407,9 +370,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
             },
             children: List.generate(
               categories.length,
-              (index) => buildPage(
-                categories[index],
-              ),
+              (index) => buildPage(categories[index], gifController),
             ),
           ),
         ),
@@ -557,7 +518,7 @@ class _NewBottomModelState extends State<NewBottomModel> {
     });
   }
 
-  Widget buildPage(String category) {
+  Widget buildPage(String category, GifController gifController) {
     if (category == "Hot") {
       return NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification scrollInfo) {
@@ -587,11 +548,18 @@ class _NewBottomModelState extends State<NewBottomModel> {
                       diamond: '10',
                       text: 'Hot',
                       onPressed: () async {
+                        showImages(
+                          hotAssest[index],
+                          context,
+                          gifController,
+                        );
                         sendGift(
                           widget.room.admin!,
                           currentUser.id!,
                           10,
                         );
+
+                        Navigator.of(context).pop();
                       });
                 }),
             Align(
@@ -850,3 +818,50 @@ class _NewBottomModelState extends State<NewBottomModel> {
     return Container(alignment: Alignment.center, child: const Text("Empty"));
   }
 }
+
+final List<String> imageAssest = [
+  "assets/stickers/1.png",
+  "assets/stickers/2.png",
+  "assets/stickers/3.png",
+  "assets/stickers/4.png",
+  "assets/stickers/5.png",
+  "assets/stickers/6.png",
+  "assets/stickers/7.png",
+  "assets/stickers/8.png",
+  "assets/stickers/9.png",
+  "assets/stickers/10.png",
+  "assets/stickers/11.png",
+  "assets/stickers/12.png",
+  "assets/stickers/13.png",
+  "assets/stickers/14.png",
+  "assets/stickers/15.png",
+  "assets/stickers/16.png",
+  "assets/stickers/17.png",
+  "assets/stickers/18.png",
+  "assets/stickers/19.png",
+];
+final List<String> hotAssest = [
+  "assets/stickers/1.png",
+  "assets/stickers/2.png",
+  "assets/stickers/3.png",
+  "assets/stickers/4.png",
+  "assets/stickers/5.png",
+  "assets/stickers/6.png",
+  "assets/stickers/7.png",
+  "assets/stickers/8.png",
+  "assets/stickers/12.png",
+  "assets/stickers/15.png",
+  "assets/stickers/16.png",
+  "assets/stickers/17.png",
+  "assets/stickers/18.png",
+  "assets/stickers/19.png",
+];
+final List<String> luxuryAsset = [
+  "assets/stickers/10.png",
+  "assets/stickers/11.png",
+  "assets/stickers/14.png",
+];
+final List<String> luckyAsset = [];
+final List<String> vipAsset = [];
+final List<String> eventsAsset = [];
+final List<String> coupleAsset = [];
