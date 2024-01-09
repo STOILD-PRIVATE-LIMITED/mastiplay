@@ -1443,7 +1443,7 @@ class _AudioUserTileState extends State<AudioUserTile>
                         controller: gifController,
                         useCache: true,
                         autostart: Autostart.once,
-                        repeat: ImageRepeat.noRepeat,
+                        // repeat: ImageRepeat.noRepeat,
                         placeholder: (context) =>
                             const Center(child: CircularProgressIndicator()),
                         image: AssetImage(
