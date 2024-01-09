@@ -1122,11 +1122,12 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                           fontSize: height / 50,
                           color: Colors.black45,
                         ),
-                        suffixIcon: GestureDetector(
-                            onTap: () {
-                              gifBottom(context);
-                            },
-                            child: Image.asset('assets/smile.png')),
+                        suffix: GestureDetector(
+                          onTap: () {
+                            gifBottom(context);
+                          },
+                          child: Image.asset('assets/smile.png'),
+                        ),
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: width / 30,
                           vertical: height / 100,
@@ -1168,7 +1169,10 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                     onPressed: () {
                       showMsg(context, "In Developement");
                     },
-                    icon: Image.asset('assets/game_logo.png'),
+                    icon: Image.asset(
+                      'assets/game_logo.png',
+                      height: 20.sp,
+                    ),
                   ),
                   IconButton(
                     style: IconButton.styleFrom(
@@ -1187,41 +1191,6 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
       ),
     );
   }
-
-  // body: Padding(
-  //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-  //   child: GridView.builder(
-  //     scrollDirection: Axis.vertical,
-  //     shrinkWrap: true,
-  //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-  //       crossAxisCount: 4,
-  //       crossAxisSpacing: 8.0,
-  //       mainAxisSpacing: 8.0,
-  //     ),
-  //     itemCount: gifList.length, // Replace with your item count
-  //     itemBuilder: (BuildContext context, int index) {
-  //       return GestureDetector(
-  //         onTap: () {
-  //           Navigator.of(context).pop();
-  //           sendMessage(
-  //             "\$#${currentUser.id.toString()}_$index",
-  //             widget.room.id,
-  //           );
-  //         },
-  //         child: Gif(
-  //           controller: GifController(
-  //             vsync: this,
-  //           ),
-  //           repeat: ImageRepeat.repeat,
-  //           autostart: Autostart.loop,
-  //           image: AssetImage(
-  //             gifList[index],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   ),
-  // ),
 
   gifBottom(BuildContext context) {
     return showModalBottomSheet(

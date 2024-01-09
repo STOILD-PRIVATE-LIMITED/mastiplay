@@ -21,6 +21,9 @@ import 'package:spinner_try/shivanshu/utils/loading_icon_button.dart';
 import 'package:spinner_try/user_model.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../components/bottommodel.dart';
+import '../../../components/common_elevatedButton.dart';
+
 class NewAudioRoom extends StatefulWidget {
   final Room room;
   bool connected;
@@ -710,7 +713,10 @@ class _NewAudioRoomState extends State<NewAudioRoom>
                       onPressed: () {
                         showMsg(context, "In Developement");
                       },
-                      icon: Image.asset('assets/game_logo.png'),
+                      icon: Image.asset(
+                        'assets/game_logo.png',
+                      height: 20.sp,
+                      ),
                     ),
                     IconButton(
                       style: IconButton.styleFrom(
@@ -731,291 +737,12 @@ class _NewAudioRoomState extends State<NewAudioRoom>
     );
   }
 
-  List<String> value = ['all in the room', 'all on mic'];
-  String? selectedValue;
   giftBottom(BuildContext context) {
     return showModalBottomSheet(
       context: context,
       builder: (context) {
-        return Scaffold(
-          body: Container(
-              width: MediaQuery.of(context).size.width,
-              clipBehavior: Clip.antiAlias,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment(-0.78, -0.63),
-                  end: Alignment(0.78, 0.63),
-                  colors: [
-                    Color(0xFF3E3B6F),
-                    Color(0xE22C2B3B),
-                    Color(0xFF090909)
-                  ],
-                ),
-              ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: const Color(0xFFA69F9F),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 250,
-                            height: 60,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: ListView.builder(
-                              itemCount: users.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  width: 40,
-                                  height: 40,
-                                  margin:
-                                      const EdgeInsets.symmetric(horizontal: 5),
-                                  decoration: ShapeDecoration(
-                                    image: DecorationImage(
-                                      image: NetworkImage(users[index]
-                                              .photo
-                                              .isEmpty
-                                          ? 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'
-                                          : users[index].photo),
-                                      fit: BoxFit.contain,
-                                    ),
-                                    shape: const CircleBorder(),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          DropdownButtonHideUnderline(
-                            child: DropdownButton2(
-                              customButton: Image.asset(
-                                  "assets/dropdownimage.png",
-                                  height: 10),
-                              items: value
-                                  .map(
-                                    (item) => DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(
-                                        item,
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      const SizedBox(
-                        width: 258,
-                        height: 15,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              left: 0,
-                              top: 0,
-                              child: Text(
-                                'Hot',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontFamily: 'Sofia Pro',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 32,
-                              top: 0,
-                              child: Text(
-                                'Lucky',
-                                style: TextStyle(
-                                  color: Color(0xFF9B8F8F),
-                                  fontSize: 14,
-                                  fontFamily: 'Sofia Pro',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 78,
-                              top: 0,
-                              child: Text(
-                                'Vip',
-                                style: TextStyle(
-                                  color: Color(0xFF9B8F8F),
-                                  fontSize: 14,
-                                  fontFamily: 'Sofia Pro',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 160,
-                              top: 0,
-                              child: Text(
-                                'Events',
-                                style: TextStyle(
-                                  color: Color(0xFF9B8F8F),
-                                  fontSize: 14,
-                                  fontFamily: 'Sofia Pro',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 212,
-                              top: 1,
-                              child: Text(
-                                'Couple',
-                                style: TextStyle(
-                                  color: Color(0xFF9B8F8F),
-                                  fontSize: 14,
-                                  fontFamily: 'Sofia Pro',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 107,
-                              top: 0,
-                              child: Text(
-                                'Luxury',
-                                style: TextStyle(
-                                  color: Color(0xFF9B8F8F),
-                                  fontSize: 14,
-                                  fontFamily: 'Sofia Pro',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Image.asset(
-                        "assets/shopping bag 1.png",
-                        height: 20,
-                      )
-                    ],
-                  )
-                ],
-              )),
-          extendBody: true,
-          bottomNavigationBar: Card(
-            color: Colors.transparent,
-            child: Row(
-              children: [
-                Row(
-                  children: [
-                    Image.asset("assets/diamond.png", height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text('${currentUser.diamonds}',
-                          style: const TextStyle(color: Colors.white)),
-                    ),
-                    Image.asset("assets/chevron down.png", height: 20),
-                  ],
-                ),
-                // Container()
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 64,
-                      height: 30,
-                      alignment: Alignment.center,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            '1',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          const SizedBox(width: 13),
-                          Container(
-                            width: 25,
-                            height: 25,
-                            clipBehavior: Clip.antiAlias,
-                            alignment: Alignment.center,
-                            decoration: ShapeDecoration(
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  width: 0.50,
-                                  color: Color(0xFFE05DD3),
-                                ),
-                                borderRadius: BorderRadius.circular(55),
-                              ),
-                            ),
-                            child: const Icon(
-                              Icons.upgrade_rounded,
-                              color: Color(0xFFE05DD3),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      width: 64,
-                      height: 30,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFFE05DD3),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'Send',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontFamily: 'Sofia Pro',
-                          fontWeight: FontWeight.w400,
-                          letterSpacing: 0.50,
-                        ),
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
+        return NewBottomModel(
+          users: users,
         );
       },
     );
