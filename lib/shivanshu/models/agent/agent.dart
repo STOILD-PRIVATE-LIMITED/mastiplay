@@ -26,7 +26,7 @@ class AgentData {
     return AgentData(
       id: json['id'] ?? "",
       resellerOf: json['resellerOf'],
-      diamonds: json['diamonds'] ?? 0,
+      diamonds: json['diamondsCount'] ?? 0,
       paymentMethods: json['paymentMethods'] == null
           ? []
           : List<String>.from(json['paymentMethods']),
@@ -39,7 +39,7 @@ class AgentData {
     return {
       'id': id,
       'resellerOf': resellerOf,
-      'diamonds': diamonds,
+      'diamondsCount': diamonds,
       'paymentMethods': paymentMethods,
       'status': status,
       'monthlyDiamonds': monthlyDiamonds,
@@ -85,7 +85,7 @@ Future<UserModel> fetchAgentData(String id) async {
 
 Future<List<UserModel>> fetchAgentsAll(int start, int limit) async {
   final response = await http.get(
-    Uri.parse('$momentsServer/api/agent/all?start=$start&limit=$limit'),
+    Uri.parse('$momentsServer/api/agents/all?start=$start&limit=$limit'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

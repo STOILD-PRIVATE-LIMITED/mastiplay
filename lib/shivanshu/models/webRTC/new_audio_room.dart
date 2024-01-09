@@ -4,7 +4,6 @@ import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,6 @@ import 'package:spinner_try/user_model.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../components/bottommodel.dart';
-import '../../../components/common_elevatedButton.dart';
 
 class NewAudioRoom extends StatefulWidget {
   final Room room;
@@ -255,20 +253,23 @@ class _NewAudioRoomState extends State<NewAudioRoom>
 
     return WillPopScope(
       onWillPop: () async {
-        if (await askUser(context, 'Do you really want to exit the room?',
-                custom: {
-                  "exit": const Icon(Icons.close, color: Colors.red),
-                  "keep": const Icon(Icons.close_fullscreen_rounded,
-                      color: Colors.blue)
-                }) !=
-            'exit') {
+        final response = await askUser(
+            context, 'Do you really want to exit the room?',
+            custom: {
+              "exit": const Icon(Icons.close, color: Colors.red),
+              "keep":
+                  const Icon(Icons.close_fullscreen_rounded, color: Colors.blue)
+            });
+        if (response == 'keep') {
           if (context.mounted) {
             await showBubble(context, widget.room);
           }
           return true;
+        } else if (response == 'exit') {
+          WebRTCRoom.instance.disconnect();
+          return true;
         }
-        WebRTCRoom.instance.disconnect();
-        return true;
+        return false;
       },
       child: Scaffold(
         body: Stack(
@@ -715,7 +716,7 @@ class _NewAudioRoomState extends State<NewAudioRoom>
                       },
                       icon: Image.asset(
                         'assets/game_logo.png',
-                      height: 20.sp,
+                        height: 20.sp,
                       ),
                     ),
                     IconButton(

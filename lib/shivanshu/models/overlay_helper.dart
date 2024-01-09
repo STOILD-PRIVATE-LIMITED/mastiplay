@@ -43,7 +43,7 @@ Future<void> showBubble(BuildContext context, Room room) async {
         DashBubble.instance.stopBubble();
         if (newAuthPagecontext == null) {
           WebRTCRoom.instance.disconnect();
-        } else if (room.roomType == RoomType.audio) {
+        } else if (room.roomType == RoomType.video) {
           navigatorPush(
             newAuthPagecontext!,
             VideoRoom(
