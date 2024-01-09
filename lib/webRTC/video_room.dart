@@ -16,6 +16,7 @@ import 'package:spinner_try/user_model.dart';
 import 'package:spinner_try/webRTC/live_chat_widget.dart';
 import 'package:spinner_try/webRTC/web_rtc.dart';
 
+import '../components/bottommodel.dart';
 import '../shivanshu/models/webRTC/webrtc.dart';
 import '../shivanshu/utils/loading_icon_button.dart';
 import 'audio_room.dart';
@@ -31,7 +32,7 @@ class VideoRoom extends StatefulWidget {
 
 class _VideoRoomState extends State<VideoRoom> with TickerProviderStateMixin {
   final _controller = TextEditingController();
-
+  List<UserModel> users = [];
   @override
   Widget build(BuildContext context) {
     final iAmAdmin = widget.room.admin == auth.currentUser!.email!;
@@ -1388,7 +1389,7 @@ class _VideoRoomState extends State<VideoRoom> with TickerProviderStateMixin {
                             backgroundColor: Colors.black12,
                           ),
                           onPressed: () {
-                            showMsg(context, "In Developement");
+                            giftBottom(context);
                           },
                           icon: Image.asset('assets/gift.png'),
                         ),
@@ -1400,6 +1401,15 @@ class _VideoRoomState extends State<VideoRoom> with TickerProviderStateMixin {
             ),
           ),
         );
+      },
+    );
+  }
+
+  giftBottom(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return NewBottomModel(users: users, room: widget.room);
       },
     );
   }
