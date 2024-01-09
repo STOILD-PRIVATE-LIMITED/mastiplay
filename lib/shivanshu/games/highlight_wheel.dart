@@ -1,13 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:spinner_try/shivanshu/models/room.dart';
 
 class HighlightWheel extends StatefulWidget {
   HighlightWheel({
     super.key,
     this.radius = 100,
-    this.childHeight = 30,
-    this.childWidth = 30,
+    this.childHeight = 100,
+    this.childWidth = 100,
     this.duration = 5,
     this.minRotations = 2,
     this.curve = Curves.easeInOut,
@@ -82,7 +83,7 @@ class _HighlightWheelState extends State<HighlightWheel>
         fit: StackFit.loose,
         alignment: Alignment.center,
         children: [
-          Image.asset('assets/circle.png'),
+          Image.asset('assets/games/animals/bg_circle.png'),
           ...widget.items.map(
             (e) {
               i += 1;
@@ -103,28 +104,35 @@ class _HighlightWheelState extends State<HighlightWheel>
               );
             },
           ),
-          Positioned(
-            // left: widget.radius - 20,
-            // top: widget.radius - 20,
-            child: IconButton(
-              onPressed: () {
-                _animation = Tween<double>(
-                  begin: 0,
-                  end: widget.random.nextDouble() * pi * 2 +
-                      2 * pi * widget.minRotations,
-                ).animate(
-                  CurvedAnimation(
-                    parent: _controller,
-                    curve: Curves.easeInOut,
-                  ),
-                );
-                _controller.reset();
-                _controller.forward();
-              },
+          Timer(
+            startTime: DateTime.now(),
+            style: const TextStyle(
               color: Colors.white,
-              icon: const Icon(Icons.rotate_right),
+              fontSize: 30,
             ),
           ),
+          // Positioned(
+          //   // left: widget.radius - 20,
+          //   // top: widget.radius - 20,
+          //   child: IconButton(
+          //     onPressed: () {
+          //       _animation = Tween<double>(
+          //         begin: 0,
+          //         end: widget.random.nextDouble() * pi * 2 +
+          //             2 * pi * widget.minRotations,
+          //       ).animate(
+          //         CurvedAnimation(
+          //           parent: _controller,
+          //           curve: Curves.easeInOut,
+          //         ),
+          //       );
+          //       _controller.reset();
+          //       _controller.forward();
+          //     },
+          //     color: Colors.white,
+          //     icon: const Icon(Icons.rotate_right),
+          //   ),
+          // ),
         ],
       ),
     );
