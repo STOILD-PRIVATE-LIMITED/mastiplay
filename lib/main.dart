@@ -60,17 +60,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        navigatorKey: navigatorKey,
-        debugShowCheckedModeBanner: false,
-        title: 'Masti Play',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 224, 93, 211),
-          ),
-          useMaterial3: true,
-          fontFamily: 'assets/fontsSofiaProRegular.ttf',
+      navigatorKey: navigatorKey,
+      debugShowCheckedModeBanner: false,
+      title: 'Masti Play',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 224, 93, 211),
         ),
-        home: const NewAuth());
+        useMaterial3: true,
+        fontFamily: 'assets/fontsSofiaProRegular.ttf',
+      ),
+      // home: const NewAuth(),
+      home: const SpinnerPage(),
+    );
   }
 }
 
@@ -227,8 +229,8 @@ class SpinnerPage extends StatelessWidget {
           child: HighlightWheel(
             childWidth: 40,
             childHeight: 40,
-            minRotations: 1,
-            duration: 4,
+            minRotations: 0.5,
+            duration: 10,
             highlightedItemBuilder: (index) {
               return CircleAvatar(
                 backgroundColor: Colors.red,

@@ -14,15 +14,12 @@ class SearchPosts extends StatefulWidget {
 }
 
 class _SearchPostsState extends State<SearchPosts> {
-  final TextEditingController _controller = TextEditingController();
   TextEditingController mindCotroller = TextEditingController();
   List<String> chosenTags = [];
 
   String searchValue = "";
 
   final TextEditingController _tagController = TextEditingController();
-
-  final _titleController = TextEditingController();
 
   bool chooseUser = false;
 

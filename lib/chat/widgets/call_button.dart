@@ -42,12 +42,12 @@ class CallButton extends StatelessWidget {
             if (users.length == 1) {
               final String url = "tel:${users[0].phoneNumber}";
               if (await askUser(context,
-                      'Do you want to call ${users[0].name ?? users[0].email} (${users[0].phoneNumber})?',
+                      'Do you want to call ${users[0].name} (${users[0].phoneNumber})?',
                       yes: true, cancel: true) ==
                   'yes') {
                 if (context.mounted) {
                   showMsg(context,
-                      'Calling ${users[0].name ?? users[0].email} (${users[0].phoneNumber})');
+                      'Calling ${users[0].name} (${users[0].phoneNumber})');
                 }
                 await launchUrl(Uri.parse(url));
               }

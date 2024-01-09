@@ -4,6 +4,7 @@ import 'package:spinner_try/shivanshu/screens/home_live_screen.dart';
 import 'package:spinner_try/shivanshu/utils.dart';
 import 'package:spinner_try/shivanshu/widgets/tab_view.dart';
 
+// ignore: must_be_immutable
 class HomePage extends StatefulWidget {
   int selectedTab = 0;
   HomePage({

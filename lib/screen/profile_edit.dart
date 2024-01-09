@@ -30,7 +30,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   String photoUrl = '';
   String userEmail = '';
   int userGender = 0;
-  var userAge;
+  dynamic userAge;
 
   int age = 0;
 
@@ -324,7 +324,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                             body: SizedBox(
                               height: height / 2,
                               child: ScrollDatePicker(
-                                selectedDate: _selectedDate ?? DateTime.now(),
+                                selectedDate: _selectedDate,
                                 locale: const Locale('en'),
                                 options: const DatePickerOptions(
                                   isLoop: false,

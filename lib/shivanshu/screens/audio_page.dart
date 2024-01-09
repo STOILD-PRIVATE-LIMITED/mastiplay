@@ -107,12 +107,12 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
     super.initState();
     _controllerr = VideoPlayerController.asset('assets/videoo.mp4')
       ..initialize().then((_) {
-        print("video initialized");
+        debugPrint("video initialized");
         _controllerr.play();
         _controllerr.setLooping(true);
         setState(() {});
       }).catchError((error) {
-        print("Error in video initialization: $error");
+        debugPrint("Error in video initialization: $error");
       });
     // itemss();
     autoScroll(2000);
@@ -1305,7 +1305,7 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
                 "\$#${currentUser.id.toString()}_$index",
                 widget.room.id,
               );
-              print(gifList[index]);
+              debugPrint(gifList[index]);
               Navigator.of(context).pop();
             },
             child: Gif(
@@ -1353,6 +1353,7 @@ class _AudioPageState extends State<AudioPage> with TickerProviderStateMixin {
   }
 }
 
+// ignore: must_be_immutable
 class AudioUserTile extends StatefulWidget {
   final UserModel user;
   final void Function()? onTap;

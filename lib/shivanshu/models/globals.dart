@@ -19,7 +19,7 @@ late final SharedPreferences prefs;
 // KEEP ALL SERVER ADRESSES WITHOUT A TRAILING SLASH
 
 // Chat Server -----------------------------------------------------
-const String chatServer = "http://3.7.66.245:3001";
+const String chatServer = "http://3.7.66.245:3000";
 // const String chatServer = "https://v9nm4hsv-3007.asse.devtunnels.ms";
 // const String chatServer = "https://rkncpgkx-3000.inc1.devtunnels.ms";
 

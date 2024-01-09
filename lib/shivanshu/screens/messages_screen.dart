@@ -15,12 +15,6 @@ class MessageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imgUrls = [
-      'https://static.vecteezy.com/system/resources/previews/028/853/913/non_2x/young-indian-man-black-white-cartoon-avatar-icon-brunette-short-hair-editable-2d-character-user-portrait-linear-flat-illustration-face-profile-outline-person-head-and-shoulders-vector.jpg',
-      'https://static.vecteezy.com/system/resources/previews/028/595/343/non_2x/brunette-asian-woman-black-white-cartoon-avatar-icon-long-hair-pretty-face-editable-2d-character-user-portrait-linear-flat-illustration-face-profile-outline-person-head-and-shoulders-vector.jpg',
-      'https://static.vecteezy.com/system/resources/previews/029/773/746/non_2x/low-bun-hairstyle-elderly-woman-smirking-black-and-white-2d-avatar-illustration-senior-indian-woman-outline-cartoon-character-face-isolated-flat-user-profile-image-portrait-female-vector.jpg',
-      'https://static.vecteezy.com/system/resources/previews/023/558/341/non_2x/phone-user-disconnected-from-network-bw-spot-illustration-girl-with-phone-problem-2d-cartoon-flat-line-monochromatic-character-on-white-for-web-ui-design-editable-isolated-outline-hero-image-vector.jpg',
-    ];
     return Scaffold(
       appBar: AppBar(
         title: const Text('Messages'),
