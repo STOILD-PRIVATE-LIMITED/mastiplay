@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'assets/fontsSofiaProRegular.ttf',
       ),
       home: const NewAuth(),
-      // home: const SpinnerPage(),a
+      // home: const SpinnerPage(),
     );
   }
 }
